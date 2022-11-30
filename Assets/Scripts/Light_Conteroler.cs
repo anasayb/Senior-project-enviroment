@@ -7,36 +7,47 @@ public class Light_Conteroler : MonoBehaviour
     public Component[] standingLights;
     public Component[] upLLights;
 
+    public bool[] flag = {true, false, false}; 
+
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < standingLights.Length; i++)
-        {
-            if (standingLights[i].name == "Red")
-            {
-                standingLights[i].gameObject.SetActive(true);
-            }
-            else
-            {
-                standingLights[i].gameObject.SetActive(false);
-            }
-        }
-        for (int i = 0; i < upLLights.Length; i++)
-        {
-            if (upLLights[i].name == "Red")
-            {
-                upLLights[i].gameObject.SetActive(true);
-            }
-            else
-            {
-                upLLights[i].gameObject.SetActive(false);
-            }
-        }
+        
+       
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void FixedUpdate()
+    {   
+        // Update the traffic light singals
+        Lights();
+
+        // If the traffic light is green, disable colide box
+        if (flag[2])
+        {
+            GetComponent<BoxCollider>().enabled = false;
+        }
+    }
+
+    /*
+    * Input: NONE
+    * Output: void
+    * This function update the traffic singals light according to the values of the flag array
+    * 
+    */
+    private void Lights()
+    {
+        for (int i = 0; i < standingLights.Length; i++)
+        {
+
+            standingLights[i].gameObject.SetActive(flag[i]);
+            upLLights[i].gameObject.SetActive(flag[i]);
+
+        }
     }
 }

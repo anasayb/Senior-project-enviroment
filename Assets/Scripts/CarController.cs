@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-
+    
     public WheelCollider[] wheels;
     public float MAX_SPEED = 40f;
 
@@ -28,23 +28,31 @@ public class CarController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
+        // Check if the car colide with something or not
         checkColide();
 
         if (!colide) {
             
+            // If a colide is NOT detected
+
+            // If the car speed reached the maximum, stop incresing the speed
             Rigidbody speed = GetComponent<Rigidbody>();
             if (speed.velocity.magnitude > MAX_SPEED)
             {
                 return;
             }
+
+            // Increase the speed
             for (int i = 0; i < wheels.Length; i++)
             {
+                wheels[i].brakeTorque = 0;
                 wheels[i].motorTorque = MAX_SPEED;
             }
+
         }
         else
-        {
+        {   
+            // A colide IS detected, stop the car
             for (int i = 0; i < wheels.Length; i++)
             {
                 wheels[i].brakeTorque = 500;
@@ -53,17 +61,35 @@ public class CarController : MonoBehaviour
 
     }
 
+
+    /*
+     * Input: NONE
+     * Output: void
+     * This function check weather there is a colide infront of the car.
+     * If yes the function going to chang the value of "colide" variable.
+     * 
+     */
     private void checkColide()
     {
 
         RaycastHit hit;
+
+        // The Ray start postion
         Vector3 pos = transform.position;
+
+        // The direction of the Ray (on the z axis)
         Vector3 test = new Vector3(0f, 0f, 1f);
+
+        // If a colide is detected
         if (Physics.Raycast(pos, test, out hit, sensorLength))
         {
-            print("hello its me the freaking "+transform.gameObject.name);
-            colide = true;
-            return;
+               
+                //Debug Code
+                //print("hello its me the freaking " + transform.gameObject.name);
+
+                colide = true;
+                return;
+           
         }
 
         //Debug Code
