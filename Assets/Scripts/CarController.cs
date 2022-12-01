@@ -8,10 +8,10 @@ public class CarController : MonoBehaviour
 {
     
     public WheelCollider[] wheels;
-    public float MAX_SPEED = 40f;
+    public float MAX_SPEED = 200f;
 
     [Header("Sensors")]
-    public float sensorLength = 25f;
+    public float sensorLength = 30f;
     private bool colide = false;
 
     // Start is called before the first frame update
@@ -78,10 +78,10 @@ public class CarController : MonoBehaviour
         Vector3 pos = transform.position;
 
         // The direction of the Ray (on the z axis)
-        Vector3 test = new Vector3(0f, 0f, 1f);
+        Vector3 dir = transform.forward;
 
         // If a colide is detected
-        if (Physics.Raycast(pos, test, out hit, sensorLength))
+        if (Physics.Raycast(pos, transform.forward, out hit, sensorLength))
         {
                
                 //Debug Code
@@ -93,7 +93,7 @@ public class CarController : MonoBehaviour
         }
 
         //Debug Code
-        //Debug.DrawRay(transform.position, test*10, Color.red);
+        Debug.DrawRay(transform.position, transform.forward*10, Color.red);
 
         colide = false;
 
