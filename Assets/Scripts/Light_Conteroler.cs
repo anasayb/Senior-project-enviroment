@@ -7,7 +7,7 @@ public class Light_Conteroler : MonoBehaviour
     public Component[] standingLights;
     public Component[] upLLights;
 
-    public bool[] flag = {true, false, false}; 
+    private bool[] flag = {true, false, false}; 
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +32,18 @@ public class Light_Conteroler : MonoBehaviour
         {
             GetComponent<BoxCollider>().enabled = false;
         }
+    }
+
+    public void chagneGreen()
+    {
+        flag[0] = false;
+        flag[2] = true;
+    }
+
+    public void chagneRed()
+    {
+        flag[2] = false;
+        flag[0] = true;
     }
 
     /*
