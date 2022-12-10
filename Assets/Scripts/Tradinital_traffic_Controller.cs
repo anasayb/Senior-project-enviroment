@@ -1,33 +1,46 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 
 public class Tradinital_traffic_Controller : MonoBehaviour
 {
     public Component[] trafficLights;
-    public int time;
+    public float time;
+    public float delay = 2;
 
+    [Header("Cameras")]
+    public GameObject[] cameras;
+
+    private float timeVariable = 0;
+    private int direction = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        
-       
+        ChangeLightGreen(direction);
+        direction++;
     }
 
     // Update is called once per frame
     void Update()
     {
  
-            ChangeLight(1);
-            float temp = time;
-            do{
-                temp -= Time.deltaTime;
- 
-            }while (temp > 0);
-            ChangeLight(2);
+        timeVariable += Time.deltaTime;
+        if (timeVariable >= time - delay)
+        {
+            ChangeLightRed(direction);
+        }
+        if (timeVariable >= time)
+        {
+            ChangeLightGreen(direction);
+            direction++;
+            direction %= 4;
+            timeVariable= 0;
+        }
+
     }
 
     private void FixedUpdate()
@@ -37,26 +50,43 @@ public class Tradinital_traffic_Controller : MonoBehaviour
 
     }
 
-    /*
-    * Input: NONE
-    * Output: void
-    * This function update the traffic singals light according to the values of the flag array
-    * 
-    */
-    private void ChangeLight(int to)
+    /// <summary>
+    /// Method <c>ChangeLightRed</c> make the next traffic light red.
+    /// </summary>
+    /// <param name="to">the next traffic light to be red</param>
+    private void ChangeLightRed(int to)
     {
 
-        if (to-2 < 0)
+        if (to == 0)
         {
-            trafficLights[3].GetComponent<Light_Conteroler>().chagneRed();
+            trafficLights[3].GetComponent<Light_Conteroler>().chagneToRed();
         }
         else
         {
-            trafficLights[to - 2].GetComponent<Light_Conteroler>().chagneRed();
+            trafficLights[to - 1].GetComponent<Light_Conteroler>().chagneToRed();
         }
-       
 
-        trafficLights[to - 1].GetComponent<Light_Conteroler>().chagneGreen();
-     
+    }
+
+    /// <summary>
+    /// Method <c>ChangeLightGreen</c> make the next traffic light green.
+    /// </summary>
+    /// <param name="to">the next traffic light to be green</param>
+    private void ChangeLightGreen(int to)
+    {
+
+        trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
+
+        if (to == 0)
+        {
+            cameras[3].SetActive(false); ;
+        }
+        else
+        {
+            cameras[to - 1].SetActive(false); ;
+        }
+
+        cameras[to].SetActive(true);
+        
     }
 }
