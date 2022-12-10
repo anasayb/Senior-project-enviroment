@@ -20,6 +20,10 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        for (int i = 0; i < cameras.Length; i++)
+        {
+            cameras[i].SetActive(false); 
+        }
         ChangeLightGreen(direction);
         direction++;
     }
@@ -29,11 +33,11 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     {
  
         timeVariable += Time.deltaTime;
-        if (timeVariable >= time - delay)
+        if (timeVariable >= time)
         {
             ChangeLightRed(direction);
         }
-        if (timeVariable >= time)
+        if (timeVariable >= time+delay)
         {
             ChangeLightGreen(direction);
             direction++;

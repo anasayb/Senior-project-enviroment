@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -14,7 +15,11 @@ public class CarController : MonoBehaviour
     [Header("Sensors")]
     public float sensorLength = 10f;
     private float colide = -1;
+
+    [Header("Wating Time")]
+    public LayerMask lay;
     
+    public float waitngTime = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +38,10 @@ public class CarController : MonoBehaviour
         // Check if the car colide with something or not
         checkColide();
 
+        // Calculate the wating time of the car
+        calculateWatingTime();
+
+        // movement of the car
         move();
 
     }
@@ -108,9 +117,33 @@ public class CarController : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Method <c>calculateWatingTime</c> This function calculate the waiting time of a car form a full stop at red light till it passes the traffic light.
+    /// </summary>
+    private void calculateWatingTime()
+    {
 
+        Ray ray = new Ray(transform.position, transform.forward);
 
-    void move()
+        if (Physics.Raycast(ray, 200, ~lay))
+        {
+            Rigidbody speed = GetComponent<Rigidbody>();
+            if (speed.velocity.magnitude >= 0)
+            {
+                waitngTime += Time.deltaTime;
+            }
+
+        }
+
+        // Debug code
+        // Debug.DrawRay(ray.origin, transform.forward*200, Color.blue);
+
+    }
+
+    /// <summary>
+    /// Method <c>move</c> This function Controll the movment of a car form speeding up to stopping.
+    /// </summary>
+    private void move()
     {
         if (colide == -1)
         {
