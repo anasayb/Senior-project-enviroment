@@ -389,7 +389,7 @@ GameObject:
   - component: {fileID: 23673063}
   - component: {fileID: 23673062}
   - component: {fileID: 23673061}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -433,6 +433,10 @@ MonoBehaviour:
   - {fileID: 2019034723}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &23673062
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3069,7 +3073,7 @@ GameObject:
   - component: {fileID: 170889660}
   - component: {fileID: 170889659}
   - component: {fileID: 170889658}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3113,6 +3117,10 @@ MonoBehaviour:
   - {fileID: 1819635330}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &170889659
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9161,7 +9169,7 @@ GameObject:
   - component: {fileID: 472837845}
   - component: {fileID: 472837844}
   - component: {fileID: 472837843}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Police Car
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9176,7 +9184,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 472837841}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -16.25, y: 0, z: 87.3}
+  m_LocalPosition: {x: -15.97, y: 0, z: 87.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9205,6 +9213,10 @@ MonoBehaviour:
   - {fileID: 555721719}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &472837844
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9246,7 +9258,7 @@ GameObject:
   - component: {fileID: 473681871}
   - component: {fileID: 473681870}
   - component: {fileID: 473681872}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9319,6 +9331,10 @@ MonoBehaviour:
   - {fileID: 1748999605}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!1 &473777928
 GameObject:
   m_ObjectHideFlags: 0
@@ -9393,7 +9409,7 @@ GameObject:
   - component: {fileID: 475538996}
   - component: {fileID: 475538995}
   - component: {fileID: 475538994}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9437,6 +9453,10 @@ MonoBehaviour:
   - {fileID: 473777930}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &475538995
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10891,7 +10911,7 @@ GameObject:
   - component: {fileID: 563612349}
   - component: {fileID: 563612348}
   - component: {fileID: 563612351}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10964,6 +10984,10 @@ MonoBehaviour:
   - {fileID: 1824169717}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!1 &571383973
 GameObject:
   m_ObjectHideFlags: 0
@@ -14896,7 +14920,7 @@ GameObject:
   - component: {fileID: 772489422}
   m_Layer: 0
   m_Name: Traffic Signals East
-  m_TagString: Untagged
+  m_TagString: Traffic Light
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19932,7 +19956,7 @@ GameObject:
   - component: {fileID: 997492966}
   - component: {fileID: 997492965}
   - component: {fileID: 997492967}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20005,6 +20029,10 @@ MonoBehaviour:
   - {fileID: 362745231}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!1 &1004696587
 GameObject:
   m_ObjectHideFlags: 0
@@ -20749,7 +20777,7 @@ GameObject:
   - component: {fileID: 1052352549}
   m_Layer: 0
   m_Name: Traffic Signals South
-  m_TagString: Untagged
+  m_TagString: Traffic Light
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20818,7 +20846,7 @@ GameObject:
   - component: {fileID: 1054227468}
   - component: {fileID: 1054227467}
   - component: {fileID: 1054227466}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20862,6 +20890,10 @@ MonoBehaviour:
   - {fileID: 1722852029}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &1054227467
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23169,7 +23201,7 @@ GameObject:
   - component: {fileID: 1162001462}
   - component: {fileID: 1162001461}
   - component: {fileID: 1162001460}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 16
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23213,6 +23245,10 @@ MonoBehaviour:
   - {fileID: 740909410}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &1162001461
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -25423,7 +25459,7 @@ GameObject:
   - component: {fileID: 1252566734}
   - component: {fileID: 1252566733}
   - component: {fileID: 1252566732}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25467,6 +25503,10 @@ MonoBehaviour:
   - {fileID: 459033773}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &1252566733
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -25893,6 +25933,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1268232177}
+  - component: {fileID: 1268232178}
   m_Layer: 0
   m_Name: Cars
   m_TagString: Untagged
@@ -25927,6 +25968,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1268232178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1268232176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7cdca49192e11446b9e6c63e4b68f5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Avg_wating: 0
 --- !u!1 &1269530459
 GameObject:
   m_ObjectHideFlags: 0
@@ -30436,7 +30490,7 @@ GameObject:
   - component: {fileID: 1499664218}
   - component: {fileID: 1499664217}
   - component: {fileID: 1499664216}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Truck 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30484,6 +30538,10 @@ MonoBehaviour:
   - {fileID: 650304384}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &1499664217
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -31196,7 +31254,7 @@ GameObject:
   - component: {fileID: 1548060839}
   - component: {fileID: 1548060838}
   - component: {fileID: 1548060837}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31240,6 +31298,10 @@ MonoBehaviour:
   - {fileID: 1837191342}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &1548060838
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -31799,7 +31861,7 @@ GameObject:
   - component: {fileID: 1579643779}
   - component: {fileID: 1579643778}
   - component: {fileID: 1579643777}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31843,6 +31905,10 @@ MonoBehaviour:
   - {fileID: 1920775607}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &1579643778
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -38367,7 +38433,7 @@ GameObject:
   - component: {fileID: 1806955828}
   - component: {fileID: 1806955827}
   - component: {fileID: 1806955826}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38411,6 +38477,10 @@ MonoBehaviour:
   - {fileID: 832184775}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &1806955827
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -39182,7 +39252,7 @@ GameObject:
   - component: {fileID: 1847633240}
   - component: {fileID: 1847633239}
   - component: {fileID: 1847633238}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39226,6 +39296,10 @@ MonoBehaviour:
   - {fileID: 144223597}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &1847633239
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -40518,7 +40592,7 @@ GameObject:
   - component: {fileID: 1939091701}
   - component: {fileID: 1939091700}
   - component: {fileID: 1939091699}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40562,6 +40636,10 @@ MonoBehaviour:
   - {fileID: 505468450}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &1939091700
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -41508,7 +41586,7 @@ GameObject:
   - component: {fileID: 1975092477}
   - component: {fileID: 1975092476}
   - component: {fileID: 1975092478}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41581,6 +41659,10 @@ MonoBehaviour:
   - {fileID: 433260538}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!1 &1983272016
 GameObject:
   m_ObjectHideFlags: 0
@@ -42184,7 +42266,7 @@ GameObject:
   - component: {fileID: 2014448206}
   m_Layer: 0
   m_Name: Traffic Signals West
-  m_TagString: Untagged
+  m_TagString: Traffic Light
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -42929,7 +43011,7 @@ GameObject:
   - component: {fileID: 2040683779}
   - component: {fileID: 2040683778}
   - component: {fileID: 2040683777}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42973,6 +43055,10 @@ MonoBehaviour:
   - {fileID: 1671746876}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &2040683778
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -45075,7 +45161,7 @@ GameObject:
   - component: {fileID: 2137313852}
   - component: {fileID: 2137313851}
   - component: {fileID: 2137313850}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45119,6 +45205,10 @@ MonoBehaviour:
   - {fileID: 76916476}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!65 &2137313851
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -45290,7 +45380,7 @@ GameObject:
   - component: {fileID: 2147049749}
   - component: {fileID: 2147049748}
   - component: {fileID: 2147049750}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Car 3
   m_TagString: Car
   m_Icon: {fileID: 0}
@@ -45363,6 +45453,10 @@ MonoBehaviour:
   - {fileID: 1742618408}
   MAX_SPEED: 200
   sensorLength: 10
+  lay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
 --- !u!1 &1377175384867530
 GameObject:
   m_ObjectHideFlags: 0
