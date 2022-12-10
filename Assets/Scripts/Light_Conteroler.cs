@@ -34,24 +34,31 @@ public class Light_Conteroler : MonoBehaviour
         }
     }
 
-    public void chagneGreen()
+
+    /// <summary>
+    /// Method <c>changeToGreen</c> change the light of the traffic light to green.
+    /// </summary>
+    public void chagneToGreen()
     {
         flag[0] = false;
         flag[2] = true;
     }
 
-    public void chagneRed()
+
+    /// <summary>
+    /// Method <c>chagneToRed</c> change the light of the traffic light to red.
+    /// </summary>
+    public void chagneToRed()
     {
         flag[2] = false;
         flag[0] = true;
+        GetComponent<BoxCollider>().enabled = true;
     }
 
-    /*
-    * Input: NONE
-    * Output: void
-    * This function update the traffic singals light according to the values of the flag array
-    * 
-    */
+
+    /// <summary>
+    /// Method <c>Lights</c> update the traffic singals light according to the values of the flag array.
+    /// </summary>
     private void Lights()
     {
         for (int i = 0; i < standingLights.Length; i++)
