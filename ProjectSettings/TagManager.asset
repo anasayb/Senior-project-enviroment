@@ -6,11 +6,14 @@ TagManager:
   tags:
   - Car
   - Traffic Light
+  - IntersectionArea
+  - Turning
+  - Truck
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Turning layer
   - Water
   - UI
   - Cars
