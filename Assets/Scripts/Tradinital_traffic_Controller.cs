@@ -13,9 +13,11 @@ public class Tradinital_traffic_Controller : MonoBehaviour
 
     [Header("Cameras")]
     public GameObject[] cameras;
+    public GameObject CameraController;
 
     private float timeVariable = 0;
     private int direction = 0;
+
 
     // Start is called before the first frame update
     void Start()
@@ -36,13 +38,16 @@ public class Tradinital_traffic_Controller : MonoBehaviour
         if (timeVariable >= time)
         {
             ChangeLightRed(direction);
+            
         }
         if (timeVariable >= time+delay)
         {
-            ChangeLightGreen(direction);
-            direction++;
-            direction %= 4;
-            timeVariable= 0;
+ 
+                ChangeLightGreen(direction);
+                direction++;
+                direction %= 4;
+                timeVariable = 0;
+
         }
 
     }
@@ -81,15 +86,13 @@ public class Tradinital_traffic_Controller : MonoBehaviour
 
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
 
-        if (to == 0)
+        for (int i = 0; i < cameras.Length; i++)
         {
-            cameras[3].SetActive(false); ;
-        }
-        else
-        {
-            cameras[to - 1].SetActive(false); ;
+            cameras[i].SetActive(false);
         }
 
+
+        CameraController.GetComponent<User_Camera_Controll>().updateCameras(to);
         cameras[to].SetActive(true);
         
     }

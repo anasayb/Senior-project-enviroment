@@ -28,7 +28,6 @@ public class CarController : MonoBehaviour
     public float sensorLength = 10f;
 
     private float tempSensorLength;
-
     private float colide = -1;
 
     [Header("Wating Time")]
