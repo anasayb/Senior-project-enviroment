@@ -140,13 +140,21 @@ public class CarController : MonoBehaviour
         
 
         // Turning Code
-        if (Physics.Raycast(posForwardCenter, -(transform.up), out hit, sensorLength) && hit.collider.tag == "IntersectionArea")
+        if (Physics.Raycast(posForwardCenter, -(transform.up), out hit, sensorLength))
         {
-            turning = true;
+            if (hit.collider.tag == "IntersectionArea")
+            {
+                turning = true;
+            }
+            else
+            {
+                turning = false;
+            }
+           
         }
         else
         {
-            turning = false;
+            Destroy(gameObject);
         }
 
         // Debug Code
@@ -281,8 +289,8 @@ public class CarController : MonoBehaviour
         wheels[1].steerAngle = stear;
         if (transform.tag == "Truck")
         {
-            wheels[2].steerAngle = stear;
-            wheels[3].steerAngle = stear;
+            wheels[2].steerAngle = stear-5;
+            wheels[3].steerAngle = stear-5;
         }
 
         if (nextPoint.magnitude <= distanceFromPath)

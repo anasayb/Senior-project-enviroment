@@ -439,7 +439,7 @@ MonoBehaviour:
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &23673062
 BoxCollider:
@@ -3246,12 +3246,12 @@ MonoBehaviour:
   MAX_SPEED: 100
   left: 0
   right: 0
-  pathGourp: {fileID: 1072619883}
+  pathGourp: {fileID: 202636116}
   distanceFromPath: 2
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &170889659
 BoxCollider:
@@ -9560,14 +9560,14 @@ MonoBehaviour:
   - {fileID: 1601024354}
   - {fileID: 555721719}
   MAX_SPEED: 100
-  left: 0
+  left: 1
   right: 0
-  pathGourp: {fileID: 1072619883}
+  pathGourp: {fileID: 202636116}
   distanceFromPath: 2
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &472837844
 BoxCollider:
@@ -9689,7 +9689,7 @@ MonoBehaviour:
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!1 &473777928
 GameObject:
@@ -9808,14 +9808,14 @@ MonoBehaviour:
   - {fileID: 1453981682}
   - {fileID: 473777930}
   MAX_SPEED: 100
-  left: 1
+  left: 0
   right: 0
   pathGourp: {fileID: 1072619883}
   distanceFromPath: 2
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &475538995
 BoxCollider:
@@ -20628,14 +20628,14 @@ MonoBehaviour:
   - {fileID: 827548908}
   - {fileID: 362745231}
   MAX_SPEED: 100
-  left: 1
+  left: 0
   right: 0
   pathGourp: {fileID: 1029171685}
   distanceFromPath: 2
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!1 &1004696587
 GameObject:
@@ -21550,7 +21550,7 @@ MonoBehaviour:
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &1054227467
 BoxCollider:
@@ -23959,7 +23959,7 @@ MonoBehaviour:
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &1162001461
 BoxCollider:
@@ -26287,7 +26287,7 @@ MonoBehaviour:
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &1252566733
 BoxCollider:
@@ -31503,7 +31503,7 @@ MonoBehaviour:
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &1499664217
 BoxCollider:
@@ -32262,12 +32262,12 @@ MonoBehaviour:
   MAX_SPEED: 100
   left: 0
   right: 0
-  pathGourp: {fileID: 1072619883}
+  pathGourp: {fileID: 202636116}
   distanceFromPath: 2
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &1548060838
 BoxCollider:
@@ -32878,7 +32878,7 @@ MonoBehaviour:
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &1579643778
 BoxCollider:
@@ -39511,12 +39511,12 @@ MonoBehaviour:
   MAX_SPEED: 100
   left: 0
   right: 0
-  pathGourp: {fileID: 1072619883}
+  pathGourp: {fileID: 202636116}
   distanceFromPath: 2
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &1806955827
 BoxCollider:
@@ -40339,7 +40339,7 @@ MonoBehaviour:
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &1847633239
 BoxCollider:
@@ -41676,14 +41676,14 @@ MonoBehaviour:
   - {fileID: 957356008}
   - {fileID: 505468450}
   MAX_SPEED: 100
-  left: 0
+  left: 1
   right: 0
-  pathGourp: {fileID: 1072619883}
+  pathGourp: {fileID: 1029171685}
   distanceFromPath: 2
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &1939091700
 BoxCollider:
@@ -42741,7 +42741,7 @@ MonoBehaviour:
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!1 &1983272016
 GameObject:
@@ -44136,12 +44136,12 @@ MonoBehaviour:
   MAX_SPEED: 100
   left: 0
   right: 0
-  pathGourp: {fileID: 1072619883}
+  pathGourp: {fileID: 1029171685}
   distanceFromPath: 2
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &2040683778
 BoxCollider:
@@ -46326,7 +46326,7 @@ MonoBehaviour:
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!65 &2137313851
 BoxCollider:
@@ -46578,7 +46578,7 @@ MonoBehaviour:
   sensorLength: 10
   CarLay:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   waitngTime: 0
 --- !u!1 &1377175384867530
 GameObject:
