@@ -1,32 +1,70 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Avg_wating_time : MonoBehaviour
 {
 
-    public float Avg_wating = 0;
+    public static float Avg_wating = 0;
+    public GameObject Text;
+
+    private static Dictionary<string, float> waitingTimes;
+    private static float numberOfCars = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        waitingTimes= new Dictionary<string, float>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        Cal();
 
-        GameObject[] cars = GameObject.FindGameObjectsWithTag("Car");
-
-        float temp = 0;
-        for (int i = 0; i < cars.Length; i++)
+        string t = "Average Waiting Time:\n" + Avg_wating.ToString() + " Seconds";
+        Text.GetComponent<TMP_Text>().text = t;
+        if (numberOfCars == waitingTimes.Count)
         {
-            temp += cars[i].GetComponent<CarController>().waitngTime;
+            Text.GetComponent<TMP_Text>().color = new Color(0.039f, 0.545f, 0.039f);
+        }
+    }
+
+    public static void updateAvg(string name, float waitingTime)
+    {
+        if (waitingTimes.ContainsKey(name))
+        {
+            waitingTimes[name]= waitingTime;
+        }
+        else
+        {
+            waitingTimes.Add(name, waitingTime);
+        }
+       
+
+    }
+
+    public static void increaseCarNumber()
+    {
+        numberOfCars++;
+
+    }
+
+    private void Cal()
+    {
+        if (waitingTimes.Count == 0)
+        {
+            Avg_wating = 0;
+            return;
         }
 
-        Avg_wating = temp/cars.Length;
-
-
+        float sum = 0;
+        foreach(var item in waitingTimes)
+        {
+            sum+= item.Value;
+        }
+        
+        Avg_wating = sum / waitingTimes.Count;
     }
 }
