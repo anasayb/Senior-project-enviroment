@@ -8,6 +8,7 @@ using UnityEngine;
 public class Tradinital_traffic_Controller : MonoBehaviour
 {
     public Component[] trafficLights;
+    
     public float time;
     public float delay = 2;
 
@@ -22,6 +23,7 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        time = Scence_Manger.providedTime;
         for (int i = 0; i < cameras.Length; i++)
         {
             cameras[i].SetActive(false); 

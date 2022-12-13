@@ -98,6 +98,7 @@ public class CarController : MonoBehaviour
         Rigidbody speed = GetComponent<Rigidbody>();
 
         // If a colide is detected
+        bool findHit = false;
         if (Physics.Raycast(posForwardCenter, dir, out hit, (sensorLength + speed.velocity.magnitude) * 1.25f) 
             || Physics.Raycast(posForwardRight,  dir, out hit, (sensorLength + speed.velocity.magnitude) * 1.25f) 
             || Physics.Raycast(posForwardleft,  dir, out hit, (sensorLength + speed.velocity.magnitude) * 1.25f)  
@@ -111,11 +112,15 @@ public class CarController : MonoBehaviour
                 //Debug Code
                 //print("hello its me the freaking " + transform.gameObject.name);
 
-                Debug.DrawRay(posForwardCenter, dir * (sensorLength + speed.velocity.magnitude), Color.red);
-                Debug.DrawRay(posForwardRight, dir * (sensorLength + speed.velocity.magnitude), Color.red);
-                Debug.DrawRay(posForwardleft, dir * (sensorLength + speed.velocity.magnitude), Color.red);
-                // Debug.DrawRay(posRight, rightDir * (6.5f / 2.0f), Color.red);
-                // Debug.DrawRay(posLeft, leftDir * (6.5f / 2.0f), Color.red);
+                //Debug.DrawRay(posForwardCenter, dir * (sensorLength + speed.velocity.magnitude), Color.red);
+                //Debug.DrawRay(posForwardRight, dir * (sensorLength + speed.velocity.magnitude), Color.red);
+                //Debug.DrawRay(posForwardleft, dir * (sensorLength + speed.velocity.magnitude), Color.red);
+                //Debug.DrawRay(posRight, rightDir * (6.5f / 2.0f), Color.red);
+                //Debug.DrawRay(posLeft, leftDir * (6.5f / 2.0f), Color.red);
+                findHit = true;
+                DrawLine(posForwardCenter, dir * (sensorLength + speed.velocity.magnitude), Color.red);
+                DrawLine(posForwardRight, dir * (sensorLength + speed.velocity.magnitude), Color.red);
+                DrawLine(posForwardleft, dir * (sensorLength + speed.velocity.magnitude), Color.red);
 
                 colide = hit.distance;
                
@@ -123,14 +128,19 @@ public class CarController : MonoBehaviour
             
 
         }
-        else
-        {
-            //Debug Code
-            Debug.DrawRay(posForwardCenter, dir * (sensorLength + speed.velocity.magnitude), Color.green);
-            Debug.DrawRay(posForwardRight, dir * (sensorLength + speed.velocity.magnitude), Color.green);
-            Debug.DrawRay(posForwardleft, dir * (sensorLength + speed.velocity.magnitude), Color.green);
-            // Debug.DrawRay(posRight, rightDir * (6.5f / 2.0f), Color.green);
-            // Debug.DrawRay(posLeft, leftDir * (6.5f / 2.0f), Color.green);
+
+        if (!findHit) { 
+
+            // Debug Code
+            //Debug.DrawRay(posForwardCenter, dir * (sensorLength + speed.velocity.magnitude), Color.green);
+            //Debug.DrawRay(posForwardRight, dir * (sensorLength + speed.velocity.magnitude), Color.green);
+            //Debug.DrawRay(posForwardleft, dir * (sensorLength + speed.velocity.magnitude), Color.green);
+            //Debug.DrawRay(posRight, rightDir * (6.5f / 2.0f), Color.green);
+            //Debug.DrawRay(posLeft, leftDir * (6.5f / 2.0f), Color.green);
+
+            DrawLine(posForwardCenter, dir * (sensorLength + speed.velocity.magnitude), Color.green);
+            DrawLine(posForwardRight, dir * (sensorLength + speed.velocity.magnitude), Color.green);
+            DrawLine(posForwardleft, dir * (sensorLength + speed.velocity.magnitude), Color.green);
 
             // Reset colide
             colide = -1;
@@ -153,6 +163,8 @@ public class CarController : MonoBehaviour
         }
         else
         {
+            // End of the map, no road under you
+            Avg_wating_time.increaseCarNumber();
             Destroy(gameObject);
         }
 
@@ -171,12 +183,15 @@ public class CarController : MonoBehaviour
         if (Physics.Raycast(ray, 200, ~CarLay))
         {
             Rigidbody speed = GetComponent<Rigidbody>();
-            if (speed.velocity.magnitude >= 0)
+            if (speed.velocity.magnitude < 1)
             {
                 waitngTime += Time.deltaTime;
             }
 
+            
         }
+
+        Avg_wating_time.updateAvg(transform.name, waitngTime);
 
         // Debug code
         // Debug.DrawRay(ray.origin, transform.forward*200, Color.blue);
@@ -325,5 +340,20 @@ public class CarController : MonoBehaviour
             wheels[i].steerAngle= 0;
         }
     }
+
+    private void DrawLine(Vector3 start, Vector3 length, Color color, float duration = 0.1f)
+    {
+        GameObject myLine = new GameObject();
+        myLine.transform.position = start;
+        myLine.AddComponent<LineRenderer>();
+        LineRenderer lr = myLine.GetComponent<LineRenderer>();
+        lr.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
+        lr.startColor = color; lr.endColor = color;
+        lr.startWidth = 0.1f; lr.endWidth = 0.1f;
+        lr.SetPosition(0, start);
+        lr.SetPosition(1, start+length);
+        GameObject.Destroy(myLine, duration);
+    }
+
 
 }
