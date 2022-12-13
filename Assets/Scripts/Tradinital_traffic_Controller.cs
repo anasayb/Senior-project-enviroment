@@ -9,7 +9,7 @@ public class Tradinital_traffic_Controller : MonoBehaviour
 {
     public Component[] trafficLights;
     
-    public float time;
+    public float[] time;
     public float delay = 2;
 
     [Header("Cameras")]
@@ -29,7 +29,7 @@ public class Tradinital_traffic_Controller : MonoBehaviour
             cameras[i].SetActive(false); 
         }
         ChangeLightGreen(direction);
-        direction++;
+       
     }
 
     // Update is called once per frame
@@ -37,18 +37,17 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     {
  
         timeVariable += Time.deltaTime;
-        if (timeVariable >= time)
+        if (timeVariable >= time[direction])
         {
             ChangeLightRed(direction);
             
         }
-        if (timeVariable >= time+delay)
+        if (timeVariable >= time[direction] +delay)
         {
- 
-                ChangeLightGreen(direction);
-                direction++;
-                direction %= 4;
-                timeVariable = 0;
+            direction++;
+            direction %= 4;
+            ChangeLightGreen(direction);    
+            timeVariable = 0;
 
         }
 
@@ -68,14 +67,7 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     private void ChangeLightRed(int to)
     {
 
-        if (to == 0)
-        {
-            trafficLights[3].GetComponent<Light_Conteroler>().chagneToRed();
-        }
-        else
-        {
-            trafficLights[to - 1].GetComponent<Light_Conteroler>().chagneToRed();
-        }
+            trafficLights[to].GetComponent<Light_Conteroler>().chagneToRed();
 
     }
 
