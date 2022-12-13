@@ -9,20 +9,25 @@ public class Scence_Manger : MonoBehaviour
 {
     // Shared variables with other scence
     [HideInInspector]
-    public static int providedTime = 10;
+    public static float[] providedTime;
 
-    public GameObject timeInput;
+    public GameObject[] timeInputs;
 
     public void startprogram()
     {
-       string input = timeInput.GetComponent<TMP_InputField>().text;
-
-        // Try to parse, if not take defualt value of the variable
-        if (!int.TryParse(input, out providedTime))
+        providedTime = new float[timeInputs.Length];
+        for (int i = 0; i < timeInputs.Length; i++)
         {
-            providedTime = 10;
+            string input = timeInputs[i].GetComponent<TMP_InputField>().text;
+
+            // Try to parse, if not take defualt value of the variable
+            if (!float.TryParse(input, out providedTime[i]))
+            {
+                providedTime[i] = 10f;
+            }
         }
-       
+
+
         SceneManager.LoadScene("SampleScene");
      
     }
