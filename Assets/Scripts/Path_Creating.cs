@@ -27,6 +27,10 @@ public class Path_Creating : MonoBehaviour
 
     }
 
+
+    /// <summary>
+    /// Method <c>getObjects</c> get the path.
+    /// </summary>
     void getObjects()
     {
         int count = transform.childCount;
@@ -36,6 +40,8 @@ public class Path_Creating : MonoBehaviour
         }
     }
 
+
+  
     private void OnDrawGizmosSelected() 
     {
         getObjects();
