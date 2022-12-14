@@ -128,6 +128,9 @@ public class User_Camera_Controll : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Method <c>updateCameras</c> activate the corect camera.
+    /// </summary>
     public void updateCameras(int cam)
     {
 

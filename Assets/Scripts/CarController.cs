@@ -14,11 +14,11 @@ public class CarController : MonoBehaviour
     public float MAX_SPEED = 100f;
 
     [Header("Turning")]
-    private float MAX_TURNING_ANGLE = 20f;
     public bool left = false, right = false;
     public Transform pathGourp;
     public float distanceFromPath = 2f;
 
+    private float MAX_TURNING_ANGLE = 20f;
     private List<Transform> Path = new List<Transform>();
     private float FORCE_STOP = 600f;
     private bool turning = false;
@@ -67,26 +67,26 @@ public class CarController : MonoBehaviour
     /// </summary>
     private void checkColide()
     {
-
+        // Store hit inforamtion
         RaycastHit hit;
 
         // The Ray start postion
         Vector3 posForwardCenter = transform.position;
 
         Vector3 posForwardRight = transform.position;
-        posForwardRight += (gameObject.GetComponent<BoxCollider>().size.x / 2 * transform.right);
+        posForwardRight += (GetComponent<BoxCollider>().size.x / 2 * transform.right);
 
         Vector3 posForwardleft = transform.position;
-        posForwardleft += (gameObject.GetComponent<BoxCollider>().size.x / 2 * (-1 * transform.right));
+        posForwardleft += (GetComponent<BoxCollider>().size.x / 2 * (-1 * transform.right));
 
         Vector3 posRight = transform.position;
-        posRight += (gameObject.GetComponent<BoxCollider>().size.z/2 * transform.forward);
-        posRight += (gameObject.GetComponent<BoxCollider>().size.x/2 * transform.right);
+        posRight += (GetComponent<BoxCollider>().size.z/2 * transform.forward);
+        posRight += (GetComponent<BoxCollider>().size.x/2 * transform.right);
 
 
         Vector3 posLeft = transform.position;
-        posLeft += (gameObject.GetComponent<BoxCollider>().size.z / 2 * transform.forward);
-        posLeft += (gameObject.GetComponent<BoxCollider>().size.x / 2 * (-1 * transform.right));
+        posLeft += (GetComponent<BoxCollider>().size.z / 2 * transform.forward);
+        posLeft += (GetComponent<BoxCollider>().size.x / 2 * (-1 * transform.right));
 
 
         // The direction of the Ray (on the z axis)
@@ -94,12 +94,12 @@ public class CarController : MonoBehaviour
         Vector3 rightDir = (transform.forward + transform.right);
         Vector3 leftDir =  (transform.forward + -1*transform.right);
 
-        //speed
+        // Speed
         Rigidbody speed = GetComponent<Rigidbody>();
 
         // If a colide is detected
         bool findHit = false;
-        if (Physics.Raycast(posForwardCenter, dir, out hit, (sensorLength + speed.velocity.magnitude) * 1.25f) 
+        if (   Physics.Raycast(posForwardCenter, dir, out hit, (sensorLength + speed.velocity.magnitude) * 1.25f) 
             || Physics.Raycast(posForwardRight,  dir, out hit, (sensorLength + speed.velocity.magnitude) * 1.25f) 
             || Physics.Raycast(posForwardleft,  dir, out hit, (sensorLength + speed.velocity.magnitude) * 1.25f)  
             // || Physics.Raycast(posRight, rightDir, out hit, (6.5f / 2.0f)) 
@@ -117,6 +117,7 @@ public class CarController : MonoBehaviour
                 //Debug.DrawRay(posForwardleft, dir * (sensorLength + speed.velocity.magnitude), Color.red);
                 //Debug.DrawRay(posRight, rightDir * (6.5f / 2.0f), Color.red);
                 //Debug.DrawRay(posLeft, leftDir * (6.5f / 2.0f), Color.red);
+                
                 findHit = true;
                 DrawLine(posForwardCenter, dir * (sensorLength + speed.velocity.magnitude), Color.red);
                 DrawLine(posForwardRight, dir * (sensorLength + speed.velocity.magnitude), Color.red);
@@ -129,6 +130,7 @@ public class CarController : MonoBehaviour
 
         }
 
+        // If no hit is found
         if (!findHit) { 
 
             // Debug Code
@@ -150,7 +152,9 @@ public class CarController : MonoBehaviour
 
         // Turning Code
         if (Physics.Raycast(posForwardCenter, -(transform.up), out hit, sensorLength))
-        {
+        {   
+
+            // If the car enter the intersection sqaure 
             if (hit.collider.tag == "IntersectionArea")
             {
                 turning = true;
@@ -214,8 +218,8 @@ public class CarController : MonoBehaviour
         else
         {
             sensorLength = tempSensorLength;
-            gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
-            gameObject.GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezePosition;
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+            GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezePosition;
             var rotationVector = transform.rotation.eulerAngles;
 
             rotationVector.x = 0;
@@ -278,6 +282,10 @@ public class CarController : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Method <c>getPath</c> This function add the path of the left turn to the "Path" list.
+    /// </summary>
     void getPath()
     {
         int count = pathGourp.childCount;
@@ -288,25 +296,35 @@ public class CarController : MonoBehaviour
        
     }
 
+
+    /// <summary>
+    /// Method <c>turnLeft</c> This function make the car turn left.
+    /// </summary>
     void turnLeft()
     {
-   
+        
+        // The postion of the car
         Vector3 currentPos = transform.position;
+
+        // The distance between the car and the next point in the path
         Vector3 nextPoint = transform.InverseTransformPoint(Path[currentIndex].position.x, transform.position.y, Path[currentIndex].position.z);
-        //print(currentIndex);
-        //print(nextPoint.magnitude);
+        
+        // Calculate the stear angle
         float stear = MAX_TURNING_ANGLE *(nextPoint.x / nextPoint.magnitude);
         
-
-        gameObject.GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezeAll;
+        // Unfreez the roation contrain
+        GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezeAll;
         wheels[0].steerAngle = stear;
         wheels[1].steerAngle = stear;
+
+        // if the object is a truk increase the stear angle
         if (transform.tag == "Truck")
         {
             wheels[2].steerAngle = stear-5;
             wheels[3].steerAngle = stear-5;
         }
 
+        // if the distance to teh point is less than the specifed distance go to next point
         if (nextPoint.magnitude <= distanceFromPath)
         {
             currentIndex++;
@@ -320,9 +338,14 @@ public class CarController : MonoBehaviour
        
     }
 
+
+    /// <summary>
+    /// Method <c>roundToFullAngle</c> This function round the angle to the nearest corner angle.
+    /// </summary>
+    /// <param name="angle">the angle value to which need to be round/param>
     private float roundToFullAngle(float angle)
     {
-        float m = Math.Min(Math.Abs(angle - 90), Math.Min(Math.Abs(angle - 180), Math.Min(Math.Abs(angle - 270), Math.Abs(angle - 0))));
+        float m = Math.Min(Math.Abs(angle - 90), Math.Min(Math.Abs(angle - 180), Math.Min(Math.Abs(angle - 270), Math.Abs(angle))));
         if (angle+m == 90 || angle+m == 180 || angle+m == 270 || angle+m == 0)
         {
             return angle + m;
@@ -333,6 +356,10 @@ public class CarController : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Method <c>roundToFullAngle</c> This function reset the stear angle to zeros.
+    /// </summary>
     private void resetAllWheelsAngles()
     {
         for (int i = 0; i < wheels.Length; i++)
@@ -341,6 +368,14 @@ public class CarController : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Method <c>DrawLine</c> This function Draw ray lines in the game mode.
+    /// </summary>
+    /// <param name="start">the vector where the length start</param>
+    /// <param name="length">the lien length</param>
+    /// <param name="start">the clor of the line</param>
+    /// <param name="duration">the duration on which the line apears in the screen</param>
     private void DrawLine(Vector3 start, Vector3 length, Color color, float duration = 0.1f)
     {
         GameObject myLine = new GameObject();

@@ -20,17 +20,28 @@ public class Avg_wating_time : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {   
+        // Calculate the Average waiting time
         Cal();
 
+        // Prepare the string to print
         string t = "Average Waiting Time:\n" + Avg_wating.ToString() + " Seconds";
+        Text.GetComponent<TMP_Text>().color = new Color(0f, 0f, 0f);
         Text.GetComponent<TMP_Text>().text = t;
-        if (numberOfCars == waitingTimes.Count)
+
+        // If all cars are disapeared chagn the color of the text to green
+        if (numberOfCars-1 == waitingTimes.Count)
         {
             Text.GetComponent<TMP_Text>().color = new Color(0.039f, 0.545f, 0.039f);
         }
     }
 
+
+    /// <summary>
+    /// Method <c>updateAvg</c> update the value of the wating time of the car in the Dictionary.
+    /// </summary>
+    /// <param name="name">the name of the car to update its watining time</param>
+    /// <param name="waitingTime">the new waiting time</param>
     public static void updateAvg(string name, float waitingTime)
     {
         if (waitingTimes.ContainsKey(name))
@@ -45,12 +56,20 @@ public class Avg_wating_time : MonoBehaviour
 
     }
 
+
+    /// <summary>
+    /// Method <c>increaseCarNumber</c> increase the number of cars that are destroyed.
+    /// </summary>
     public static void increaseCarNumber()
     {
         numberOfCars++;
 
     }
 
+
+    /// <summary>
+    /// Method <c>Cal</c> calulate the avrage waiting time.
+    /// </summary>
     private void Cal()
     {
         if (waitingTimes.Count == 0)

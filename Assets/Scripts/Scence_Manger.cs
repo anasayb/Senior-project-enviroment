@@ -13,6 +13,10 @@ public class Scence_Manger : MonoBehaviour
 
     public GameObject[] timeInputs;
 
+
+    /// <summary>
+    /// Method <c>startprogram</c> getting the times form the user and setting the global values.
+    /// </summary>
     public void startprogram()
     {
         providedTime = new float[timeInputs.Length];
