@@ -11,7 +11,7 @@ public class CarController : MonoBehaviour
 {
     
     public WheelCollider[] wheels;
-    public float MAX_SPEED = 100f;
+    public float MAX_SPEED = 30f;
 
     [Header("Turning")]
     public bool left = false, right = false;
@@ -20,7 +20,7 @@ public class CarController : MonoBehaviour
 
     private float MAX_TURNING_ANGLE = 20f;
     private List<Transform> Path = new List<Transform>();
-    private float FORCE_STOP = 600f;
+    private float FORCE_STOP = 1500f;
     private bool turning = false;
     private int currentIndex = 0;
 
@@ -72,12 +72,15 @@ public class CarController : MonoBehaviour
 
         // The Ray start postion
         Vector3 posForwardCenter = transform.position;
+        posForwardCenter.y = 1.5f;
 
         Vector3 posForwardRight = transform.position;
         posForwardRight += (GetComponent<BoxCollider>().size.x / 2 * transform.right);
+        posForwardRight.y = 1.5f;
 
         Vector3 posForwardleft = transform.position;
         posForwardleft += (GetComponent<BoxCollider>().size.x / 2 * (-1 * transform.right));
+        posForwardleft.y = 1.5f;
 
         Vector3 posRight = transform.position;
         posRight += (GetComponent<BoxCollider>().size.z/2 * transform.forward);
@@ -245,10 +248,13 @@ public class CarController : MonoBehaviour
             else
             {
                 // Increase the speed
-                for (int i = 0; i < wheels.Length; i++)
+                for (int i =0; i < wheels.Length; i++)
                 {
                     wheels[i].brakeTorque = 0;
-                    wheels[i].motorTorque = MAX_SPEED;
+                }
+                for (int i = 2; i < wheels.Length; i++)
+                {
+                    wheels[i].motorTorque = 200;
                 }
 
             }
@@ -262,7 +268,7 @@ public class CarController : MonoBehaviour
             // Calculate the force need tos top the car
             float force = 0;
 
-            if (colide <= sensorLength / 2)
+            if (colide <= sensorLength)
             {
                 force = FORCE_STOP;
             }
@@ -277,6 +283,7 @@ public class CarController : MonoBehaviour
             // Apply break torque on all wheels
             for (int i = 0; i < wheels.Length; i++)
             {
+                wheels[i].motorTorque = 0;
                 wheels[i].brakeTorque = force;
             }
         }
@@ -378,6 +385,7 @@ public class CarController : MonoBehaviour
     /// <param name="duration">the duration on which the line apears in the screen</param>
     private void DrawLine(Vector3 start, Vector3 length, Color color, float duration = 0.1f)
     {
+       
         GameObject myLine = new GameObject();
         myLine.transform.position = start;
         myLine.AddComponent<LineRenderer>();
@@ -388,6 +396,7 @@ public class CarController : MonoBehaviour
         lr.SetPosition(0, start);
         lr.SetPosition(1, start+length);
         GameObject.Destroy(myLine, duration);
+        
     }
 
 

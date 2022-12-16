@@ -9,7 +9,7 @@ public class Scence_Manger : MonoBehaviour
 {
     // Shared variables with other scence
     [HideInInspector]
-    public static float[] providedTime;
+    public static float[] providedTime = { 10, 10, 10, 10 };
 
     public GameObject[] timeInputs;
 
