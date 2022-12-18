@@ -83,12 +83,12 @@ MonoBehaviour:
   - {fileID: 5892631307769071381}
   - {fileID: 5892631307557082601}
   - {fileID: 5892631308878654421}
-  MAX_SPEED: 30
+  MAX_SPEED: 20
   left: 0
   right: 0
   pathGourp: {fileID: 0}
   distanceFromPath: 2
-  sensorLength: 10
+  sensorLength: 7
   CarLay:
     serializedVersion: 2
     m_Bits: 64

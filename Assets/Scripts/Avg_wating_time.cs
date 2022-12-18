@@ -16,11 +16,15 @@ public class Avg_wating_time : MonoBehaviour
     void Start()
     {
         waitingTimes= new Dictionary<string, float>();
+        
     }
 
     // Update is called once per frame
     void Update()
-    {   
+    {
+        //
+        calculateTheNumberOfCar();
+
         // Calculate the Average waiting time
         Cal();
 
@@ -30,7 +34,7 @@ public class Avg_wating_time : MonoBehaviour
         Text.GetComponent<TMP_Text>().text = t;
 
         // If all cars are disapeared chagn the color of the text to green
-        if (numberOfCars-1 == waitingTimes.Count)
+        if (numberOfCars == 0 && transform.GetComponent<Car_Generator>().CarsToGenerate == 0)
         {
             Text.GetComponent<TMP_Text>().color = new Color(0.039f, 0.545f, 0.039f);
         }
@@ -60,10 +64,17 @@ public class Avg_wating_time : MonoBehaviour
     /// <summary>
     /// Method <c>increaseCarNumber</c> increase the number of cars that are destroyed.
     /// </summary>
-    public static void increaseCarNumber()
+    public  void calculateTheNumberOfCar()
     {
-        numberOfCars++;
+        numberOfCars= 0;
+        foreach (Transform childe in transform)
+        {
+            foreach (Transform car in childe)
+            {
+                numberOfCars++;
+            }
 
+        }
     }
 
 

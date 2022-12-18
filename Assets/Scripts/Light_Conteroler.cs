@@ -12,8 +12,9 @@ public class Light_Conteroler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-       
+
+        Lights();
+
     }
 
     // Update is called once per frame
@@ -27,11 +28,6 @@ public class Light_Conteroler : MonoBehaviour
         // Update the traffic light singals
         Lights();
 
-        // If the traffic light is green, disable colide box
-        if (flag[2])
-        {
-            GetComponent<BoxCollider>().enabled = false;
-        }
     }
 
 
@@ -42,6 +38,7 @@ public class Light_Conteroler : MonoBehaviour
     {
         flag[0] = false;
         flag[2] = true;
+        GetComponent<BoxCollider>().enabled = false;
     }
 
 
@@ -61,6 +58,7 @@ public class Light_Conteroler : MonoBehaviour
     /// </summary>
     private void Lights()
     {
+
         for (int i = 0; i < standingLights.Length; i++)
         {
 

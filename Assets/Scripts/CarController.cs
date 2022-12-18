@@ -5,24 +5,29 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEditor.AssetImporters;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
     
     public WheelCollider[] wheels;
-    public float MAX_SPEED = 30f;
+    public float MAX_SPEED = 20f;
 
     [Header("Turning")]
-    public bool left = false, right = false;
-    public Transform pathGourp;
+    public bool left = false;
+    public bool right = false;
+    public Transform pathGourpLeft, pathGourpRight;
     public float distanceFromPath = 2f;
 
+    private bool doneTurning = false;
     private float MAX_TURNING_ANGLE = 20f;
-    private List<Transform> Path = new List<Transform>();
-    private float FORCE_STOP = 1500f;
+    private float MAX_TURNING_ANGLE_Right = 75f;
+    private List<Transform> LeftPath = new List<Transform>();
+    private List<Transform> RightPath = new List<Transform>();
+    private float FORCE_STOP = 1600f;
     private bool turning = false;
-    private int currentIndex = 0;
+    private int currentIndexLeft = 0, currentIndexRight = 0;
 
     [Header("Sensors")]
     public float sensorLength = 10f;
@@ -37,7 +42,7 @@ public class CarController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        getPath();
+        getPaths();
         tempSensorLength = sensorLength;
     }
 
@@ -52,11 +57,11 @@ public class CarController : MonoBehaviour
         // Check if the car colide with something or not
         checkColide();
 
-        // Calculate the wating time of the car
-        calculateWatingTime();
-
         // movement of the car
         move();
+
+        // Calculate the wating time of the car
+        calculateWatingTime();
 
     }
 
@@ -102,9 +107,9 @@ public class CarController : MonoBehaviour
 
         // If a colide is detected
         bool findHit = false;
-        if (   Physics.Raycast(posForwardCenter, dir, out hit, (sensorLength + speed.velocity.magnitude) * 1.25f) 
-            || Physics.Raycast(posForwardRight,  dir, out hit, (sensorLength + speed.velocity.magnitude) * 1.25f) 
-            || Physics.Raycast(posForwardleft,  dir, out hit, (sensorLength + speed.velocity.magnitude) * 1.25f)  
+        if (   Physics.Raycast(posForwardCenter, dir, out hit, (sensorLength + speed.velocity.magnitude)) 
+            || Physics.Raycast(posForwardRight,  dir, out hit, (sensorLength + speed.velocity.magnitude)) 
+            || Physics.Raycast(posForwardleft,  dir, out hit, (sensorLength + speed.velocity.magnitude))  
             // || Physics.Raycast(posRight, rightDir, out hit, (6.5f / 2.0f)) 
             // || Physics.Raycast(posLeft, leftDir, out hit, (6.5f / 2.0f))
             )
@@ -171,7 +176,6 @@ public class CarController : MonoBehaviour
         else
         {
             // End of the map, no road under you
-            Avg_wating_time.increaseCarNumber();
             Destroy(gameObject);
         }
 
@@ -210,95 +214,123 @@ public class CarController : MonoBehaviour
     /// </summary>
     private void move()
     {
-        Rigidbody speed = GetComponent<Rigidbody>();
+
+        if(colide != -1)
+        {
+
+            // If a colide is NOT detected
+            deaccelerate(0);
+            return;
+
+        }
+        
+
 
         // If you are in the area and the left flag is ON
-        if (turning && left)
+   
+        if (left)
         {
-            sensorLength = 2;
-            turnLeft();
-        }
-        else
-        {
-            sensorLength = tempSensorLength;
-            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
-            GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezePosition;
-            var rotationVector = transform.rotation.eulerAngles;
 
-            rotationVector.x = 0;
-            rotationVector.z = 0;
-            rotationVector.y = roundToFullAngle(rotationVector.y);
- 
-            transform.rotation = Quaternion.Euler(rotationVector);
-            resetAllWheelsAngles();
+            turnLeft();
+
         }
+        else if (right)
+        {
+            turnRight();
+        }
+        
+
 
 
         if (colide == -1)
         {
 
             // If a colide is NOT detected
+            accelerate();
 
-            // If the car speed reached the maximum, stop incresing the speed
-            
-            if (speed.velocity.magnitude > MAX_SPEED )
+
+        }
+ 
+    }
+
+
+    /// <summary>
+    /// Method <c>maccelerateove</c> This function Accelerate the car.
+    /// </summary>
+    private void accelerate()
+    {
+        Rigidbody speed = GetComponent<Rigidbody>();
+        speed.drag = 0;
+
+        // If the car speed reached the maximum, stop incresing the speed
+        if (speed.velocity.magnitude < MAX_SPEED)
+        {
+            // Increase the speed
+            for (int i = 0; i < wheels.Length; i++)
             {
-                return;
+                wheels[i].motorTorque = 150;
+                wheels[i].brakeTorque = 0;
             }
-            else
-            {
-                // Increase the speed
-                for (int i =0; i < wheels.Length; i++)
-                {
-                    wheels[i].brakeTorque = 0;
-                }
-                for (int i = 2; i < wheels.Length; i++)
-                {
-                    wheels[i].motorTorque = 200;
-                }
-
-            }
+        }
+        
+    }
 
 
+    /// <summary>
+    /// Method <c>deaccelerate</c> This function stop the car.
+    /// </summary>
+    /// <param name="finalSpeed">the target speed</param>
+    private void deaccelerate(float finalSpeed)
+    {
+        Rigidbody speed = GetComponent<Rigidbody>();
+        
+        
+        float force = 0;
+       
+
+        if (colide < sensorLength && sensorLength != 2)
+        {
+            force = FORCE_STOP;
         }
         else
         {
-            // A colide IS detected, stop the car
-
             // Calculate the force need tos top the car
-            float force = 0;
-
-            if (colide <= sensorLength)
-            {
-                force = FORCE_STOP;
-            }
-            else
-            {
-              
-                float engery = (1 / 2.0f) * speed.mass * (speed.velocity.magnitude) * (speed.velocity.magnitude);
-                force = engery / colide;
-            }
-
-
-            // Apply break torque on all wheels
-            for (int i = 0; i < wheels.Length; i++)
-            {
-                wheels[i].motorTorque = 0;
-                wheels[i].brakeTorque = force;
-            }
+            float acc = (finalSpeed - speed.velocity.magnitude) / colide;
+            force = -1 * speed.mass * acc;
         }
+
+        if (force < 0)
+        {
+            accelerate();
+            return;
+        }
+
+        // Apply break torque on all wheels
+        speed.drag = 1;
+        for (int i = 0; i < wheels.Length; i++)
+        {
+            wheels[i].motorTorque = 0;
+            wheels[i].brakeTorque = force/ wheels.Length;
+        }
+        
     }
 
 
     /// <summary>
     /// Method <c>getPath</c> This function add the path of the left turn to the "Path" list.
     /// </summary>
-    void getPath()
+    private void getPaths()
     {
-        int count = pathGourp.childCount;
+        int count = pathGourpLeft.childCount;
         for (int i = 0; i < count; i++)
         {
-            Path.Add(pathGourp.GetChild(i).transform);
+            LeftPath.Add(pathGourpLeft.GetChild(i).transform);          
+        }
+
+        count = pathGourpRight.childCount;
+        for (int i = 0; i < count; i++)
+        {
+            RightPath.Add(pathGourpRight.GetChild(i).transform);
         }
        
     }
@@ -307,42 +339,166 @@ public class CarController : MonoBehaviour
     /// <summary>
     /// Method <c>turnLeft</c> This function make the car turn left.
     /// </summary>
-    void turnLeft()
+    private void turnLeft()
     {
-        
-        // The postion of the car
-        Vector3 currentPos = transform.position;
 
-        // The distance between the car and the next point in the path
-        Vector3 nextPoint = transform.InverseTransformPoint(Path[currentIndex].position.x, transform.position.y, Path[currentIndex].position.z);
-        
-        // Calculate the stear angle
-        float stear = MAX_TURNING_ANGLE *(nextPoint.x / nextPoint.magnitude);
-        
-        // Unfreez the roation contrain
-        GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezeAll;
-        wheels[0].steerAngle = stear;
-        wheels[1].steerAngle = stear;
-
-        // if the object is a truk increase the stear angle
-        if (transform.tag == "Truck")
+        if (!turning)
         {
-            wheels[2].steerAngle = stear-5;
-            wheels[3].steerAngle = stear-5;
-        }
+           
+            if (transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude <= 30)
+            {   
+                Rigidbody speed = GetComponent<Rigidbody>();
+                if (speed.velocity.magnitude > 7)
+                {
+                    colide = transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude;
+                    deaccelerate(7);
+                }
+                
 
-        // if the distance to teh point is less than the specifed distance go to next point
-        if (nextPoint.magnitude <= distanceFromPath)
-        {
-            currentIndex++;
-            if (currentIndex >= Path.Count)
-            {
-                currentIndex = 0;
             }
+            else
+            {
+
+                sensorLength = tempSensorLength;
+                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+                GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezePosition;
+                var rotationVector = transform.rotation.eulerAngles;
+
+                rotationVector.x = 0;
+                rotationVector.z = 0;
+                rotationVector.y = roundToFullAngle(rotationVector.y);
+
+                transform.rotation = Quaternion.Euler(rotationVector);
+                resetAllWheelsAngles();
+
+            }
+
+
         }
-        
+        else
+        {
+
+            sensorLength = 2;
+
+            // The postion of the car
+            Vector3 currentPos = transform.position;
+
+            // The distance between the car and the next point in the path
+            Vector3 nextPoint = transform.InverseTransformPoint(LeftPath[currentIndexLeft].position.x, transform.position.y, LeftPath[currentIndexLeft].position.z);
+
+            // Calculate the stear angle
+            float stear = MAX_TURNING_ANGLE * (nextPoint.x / nextPoint.magnitude);
+
+            // Unfreez the roation contrain
+            GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezeAll;
+            wheels[0].steerAngle = stear;
+            wheels[1].steerAngle = stear;
+
+            // if the object is a truk increase the stear angle
+            if (transform.tag == "Truck")
+            {
+                wheels[0].steerAngle -= 5;
+                wheels[1].steerAngle -= 5;
+                wheels[2].steerAngle = stear - 5;
+                wheels[3].steerAngle = stear - 5;
+            }
+
+            // if the distance to teh point is less than the specifed distance go to next point
+            if (nextPoint.magnitude <= distanceFromPath)
+            {
+                currentIndexLeft++;
+                if (currentIndexLeft >= LeftPath.Count)
+                {
+                    currentIndexLeft = 0;
+                   
+                }
+            }
+           
+        }
+
+                     
        
-       
+    }
+
+
+    /// <summary>
+    /// Method <c>turnLeft</c> This function make the car turn left.
+    /// </summary>
+    private void turnRight()
+    {
+
+        if (!turning)
+        {
+
+            if (transform.InverseTransformPoint(RightPath[0].position.x, transform.position.y, RightPath[0].position.z).magnitude <= 20 && !doneTurning)
+            {
+                Rigidbody speed = GetComponent<Rigidbody>();
+                if (speed.velocity.magnitude > 4)
+                {
+                    colide = transform.InverseTransformPoint(RightPath[0].position.x, transform.position.y, RightPath[0].position.z).magnitude;
+                    deaccelerate(4);
+                }
+
+            }
+            else
+            {
+
+                sensorLength = tempSensorLength;
+                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+                GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezePosition;
+                var rotationVector = transform.rotation.eulerAngles;
+
+                rotationVector.x = 0;
+                rotationVector.z = 0;
+                rotationVector.y = roundToFullAngle(rotationVector.y);
+
+                transform.rotation = Quaternion.Euler(rotationVector);
+                resetAllWheelsAngles();
+
+            }
+
+        }
+        else
+        {
+            doneTurning = true;
+            sensorLength = 2;
+
+            // The postion of the car
+            Vector3 currentPos = transform.position;
+
+            // The distance between the car and the next point in the path
+            Vector3 nextPoint = transform.InverseTransformPoint(RightPath[currentIndexRight].position.x, transform.position.y, RightPath[currentIndexRight].position.z);
+
+            // Calculate the stear angle
+            float stear = MAX_TURNING_ANGLE_Right * (nextPoint.x / nextPoint.magnitude);
+
+            // Unfreez the roation contrain
+            GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezeAll;
+            wheels[0].steerAngle = stear;
+            wheels[1].steerAngle = stear;
+
+            // if the object is a truk increase the stear angle
+            if (transform.tag == "Truck")
+            {
+                wheels[0].steerAngle += 20;
+                wheels[1].steerAngle += 20;
+                wheels[2].steerAngle = stear + 20;
+                wheels[3].steerAngle = stear + 20;
+            }
+
+            // if the distance to teh point is less than the specifed distance go to next point
+            if (nextPoint.magnitude <= distanceFromPath)
+            {
+                currentIndexRight++;
+                if (currentIndexRight >= RightPath.Count)
+                {
+                    currentIndexRight = 0;
+                   
+                }
+            }
+            
+        }
+
     }
 
 
@@ -352,9 +508,13 @@ public class CarController : MonoBehaviour
     /// <param name="angle">the angle value to which need to be round/param>
     private float roundToFullAngle(float angle)
     {
-        float m = Math.Min(Math.Abs(angle - 90), Math.Min(Math.Abs(angle - 180), Math.Min(Math.Abs(angle - 270), Math.Abs(angle))));
-        if (angle+m == 90 || angle+m == 180 || angle+m == 270 || angle+m == 0)
+        float m = Math.Min(Math.Abs(angle - 0), Math.Min(Math.Abs(angle - 90), Math.Min(Math.Abs(angle - 180), Math.Min(Math.Abs(angle - 270), Math.Abs(angle - 360)))));
+        if (angle+m == 90 || angle+m == 180 || angle+m == 270 || angle+m == 360 || angle+m == 0)
         {
+            if (angle+m == 360)
+            {
+                return 0;
+            }
             return angle + m;
         }
         else
