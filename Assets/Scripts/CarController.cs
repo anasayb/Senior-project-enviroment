@@ -113,9 +113,27 @@ public class CarController : MonoBehaviour
             // || Physics.Raycast(posRight, rightDir, out hit, (6.5f / 2.0f)) 
             // || Physics.Raycast(posLeft, leftDir, out hit, (6.5f / 2.0f))
             )
-        {   
+        {
+
+            // If the colider is yellow light
+            if (hit.collider.isTrigger == true)
+            {
+                
+                // If the car needs more then 2 seconds to pass the intersection, the car will stop.
+                if (hit.distance/speed.velocity.magnitude >= 1.5f)
+                {
+                    findHit = true;
+                    DrawLine(posForwardCenter, dir * (sensorLength + speed.velocity.magnitude), Color.red);
+                    DrawLine(posForwardRight, dir * (sensorLength + speed.velocity.magnitude), Color.red);
+                    DrawLine(posForwardleft, dir * (sensorLength + speed.velocity.magnitude), Color.red);
+
+                    colide = hit.distance;
+
+                }
+            }
+
             // If its not the same object 
-            if (hit.collider.name != transform.name)
+            else if (hit.collider.name != transform.name)
             {
                 //Debug Code
                 //print("hello its me the freaking " + transform.gameObject.name);

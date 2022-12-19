@@ -11,6 +11,7 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     
     public float[] time;
     public float delay = 2;
+    public float yellowLightDuration = 3f;
 
     [Header("Cameras")]
     public GameObject[] cameras;
@@ -37,6 +38,10 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     {
  
         timeVariable += Time.deltaTime;
+        if (timeVariable >= time[direction] - yellowLightDuration && timeVariable < time[direction])
+        {
+            ChangeLightYellow(direction);
+        }
         if (timeVariable >= time[direction])
         {
             ChangeLightRed(direction);
@@ -61,13 +66,24 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     }
 
     /// <summary>
-    /// Method <c>ChangeLightRed</c> make the next traffic light red.
+    /// Method <c>ChangeLightRed</c> make the current traffic light red.
     /// </summary>
-    /// <param name="to">the next traffic light to be red</param>
+    /// <param name="to">the current traffic light to be red</param>
     private void ChangeLightRed(int to)
     {
-
+            
             trafficLights[to].GetComponent<Light_Conteroler>().chagneToRed();
+
+    }
+
+    /// <summary>
+    /// Method <c>ChangeLightYellow</c> make the current traffic light yellow.
+    /// </summary>
+    /// <param name="to">the current traffic light to be yellow</param>
+    private void ChangeLightYellow(int to)
+    {
+
+        trafficLights[to].GetComponent<Light_Conteroler>().chagneToYellow();
 
     }
 

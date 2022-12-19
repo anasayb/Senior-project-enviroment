@@ -47,9 +47,25 @@ public class Light_Conteroler : MonoBehaviour
     /// </summary>
     public void chagneToRed()
     {
-        flag[2] = false;
+        flag[1] = false;
         flag[0] = true;
-        GetComponent<BoxCollider>().enabled = true;
+        BoxCollider box = GetComponent<BoxCollider>();
+        box.enabled = true;
+        box.isTrigger = false;
+
+    }
+
+    /// <summary>
+    /// Method <c>chagneToYellow</c> change the light of the traffic light to yellow.
+    /// </summary>
+    public void chagneToYellow()
+    {
+        flag[2] = false;
+        flag[1] = true;
+        BoxCollider box = GetComponent<BoxCollider>();
+        box.enabled = true;
+        box.isTrigger = true;
+ 
     }
 
 
