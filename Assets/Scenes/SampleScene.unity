@@ -20240,6 +20240,7 @@ MonoBehaviour:
   - 10
   - 10
   delay: 2
+  yellowLightDuration: 3
   cameras:
   - {fileID: 2005066162}
   - {fileID: 1068679799}
