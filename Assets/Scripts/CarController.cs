@@ -34,6 +34,7 @@ public class CarController : MonoBehaviour
 
     private float tempSensorLength;
     private float colide = -1;
+    private float yellowLight = 1.5f;
 
     [Header("Wating Time")]
     public LayerMask CarLay;
@@ -120,7 +121,7 @@ public class CarController : MonoBehaviour
             {
                 
                 // If the car needs more then 2 seconds to pass the intersection, the car will stop.
-                if (hit.distance/speed.velocity.magnitude >= 1.5f)
+                if (hit.distance/speed.velocity.magnitude >= yellowLight)
                 {
                     findHit = true;
                     DrawLine(posForwardCenter, dir * (sensorLength + speed.velocity.magnitude), Color.red);
