@@ -124,10 +124,6 @@ public class CarController : MonoBehaviour
                 if (hit.distance/speed.velocity.magnitude >= yellowLight)
                 {
                     findHit = true;
-                    DrawLine(posForwardCenter, dir * (sensorLength + speed.velocity.magnitude), Color.red);
-                    DrawLine(posForwardRight, dir * (sensorLength + speed.velocity.magnitude), Color.red);
-                    DrawLine(posForwardleft, dir * (sensorLength + speed.velocity.magnitude), Color.red);
-
                     colide = hit.distance;
 
                 }
@@ -146,10 +142,6 @@ public class CarController : MonoBehaviour
                 //Debug.DrawRay(posLeft, leftDir * (6.5f / 2.0f), Color.red);
                 
                 findHit = true;
-                DrawLine(posForwardCenter, dir * (sensorLength + speed.velocity.magnitude), Color.red);
-                DrawLine(posForwardRight, dir * (sensorLength + speed.velocity.magnitude), Color.red);
-                DrawLine(posForwardleft, dir * (sensorLength + speed.velocity.magnitude), Color.red);
-
                 colide = hit.distance;
                
             }
@@ -166,10 +158,6 @@ public class CarController : MonoBehaviour
             //Debug.DrawRay(posForwardleft, dir * (sensorLength + speed.velocity.magnitude), Color.green);
             //Debug.DrawRay(posRight, rightDir * (6.5f / 2.0f), Color.green);
             //Debug.DrawRay(posLeft, leftDir * (6.5f / 2.0f), Color.green);
-
-            DrawLine(posForwardCenter, dir * (sensorLength + speed.velocity.magnitude), Color.green);
-            DrawLine(posForwardRight, dir * (sensorLength + speed.velocity.magnitude), Color.green);
-            DrawLine(posForwardleft, dir * (sensorLength + speed.velocity.magnitude), Color.green);
 
             // Reset colide
             colide = -1;
