@@ -1,7 +1,9 @@
 using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using TMPro;
 using UnityEngine;
 
 
@@ -12,6 +14,9 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     public float[] time;
     public float delay = 2;
     public float yellowLightDuration = 3f;
+
+    [Header("GUI")]
+    public GameObject text;
 
     [Header("Cameras")]
     public GameObject[] cameras;
@@ -38,9 +43,11 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     {
  
         timeVariable += Time.deltaTime;
+        text.GetComponent<TMP_Text>().text = "Time:\n"+Math.Max((Math.Ceiling(time[direction]-timeVariable)), 0).ToString();
         if (timeVariable >= time[direction] - yellowLightDuration && timeVariable < time[direction])
         {
             ChangeLightYellow(direction);
+            text.GetComponent<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
         }
         if (timeVariable >= time[direction])
         {
@@ -53,7 +60,7 @@ public class Tradinital_traffic_Controller : MonoBehaviour
             direction %= 4;
             ChangeLightGreen(direction);    
             timeVariable = 0;
-
+            text.GetComponent<TMP_Text>().color = new Color(0.02360218f, 0.3018868f, 0.01281594f);
         }
 
     }

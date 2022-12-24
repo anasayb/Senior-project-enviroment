@@ -9,14 +9,14 @@ public class Car_Generator : MonoBehaviour
 {
     public GameObject[] CarsPrefabs;
     public GameObject[] Streats;
-    public int CarsToGenerate = 10;
+    public int CarsToGenerate = 0;
 
     private bool[] postion = new bool[8];
     private Transform[] parents;
     private Transform[] TurningPathsLeft;
     private Transform[] TurningPathsRight;
     private float timeVariable;
-    private int CarNumber = 19;
+    private int CarNumber = 20;
     
 
     // Start is called before the first frame update
