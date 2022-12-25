@@ -520,9 +520,10 @@ GameObject:
   - component: {fileID: 30748708}
   - component: {fileID: 30748707}
   - component: {fileID: 30748710}
+  - component: {fileID: 30748711}
   m_Layer: 0
   m_Name: Streat
-  m_TagString: Untagged
+  m_TagString: SouthTrafficLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -618,6 +619,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.24737684, y: 1.892135, z: 1}
   m_Center: {x: 0.37630352, y: 0.4460675, z: 0.0000014952956}
+--- !u!114 &30748711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30748705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28c5308a952be94db85f1e78956694c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carsCounter: 0
 --- !u!1 &30828581
 GameObject:
   m_ObjectHideFlags: 0
@@ -6654,9 +6668,10 @@ GameObject:
   - component: {fileID: 402115698}
   - component: {fileID: 402115697}
   - component: {fileID: 402115700}
+  - component: {fileID: 402115701}
   m_Layer: 0
   m_Name: Streat
-  m_TagString: Untagged
+  m_TagString: EastTrafficLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6752,6 +6767,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0.000000059604645, y: 0, z: -0.000000059604645}
+--- !u!114 &402115701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402115695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28c5308a952be94db85f1e78956694c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carsCounter: 0
 --- !u!1 &406233733
 GameObject:
   m_ObjectHideFlags: 0
@@ -16377,7 +16405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28c5308a952be94db85f1e78956694c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  counterTemp: 0
+  carsCounter: 0
 --- !u!65 &936486430
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16389,8 +16417,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.24737684, y: 1.892135, z: 1}
-  m_Center: {x: 0.37630352, y: 0.4460675, z: 0.0000014952956}
+  m_Size: {x: 0.18371879, y: 1.892135, z: 1}
+  m_Center: {x: 0.40814298, y: 0.4460675, z: 0.0000016218141}
 --- !u!1 &939791129
 GameObject:
   m_ObjectHideFlags: 0
@@ -18965,10 +18993,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trafficLights: []
-  time: []
   delay: 2
   yellowLightDuration: 3
-  carNumber: 
   CarCount:
   - {fileID: 936486429}
   cameras: []
@@ -20304,6 +20330,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1113893983}
   - component: {fileID: 1113893984}
+  - component: {fileID: 1113893985}
   m_Layer: 0
   m_Name: Traffic Lights
   m_TagString: Untagged
@@ -20337,7 +20364,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1113893982}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 18cd3b26cfe89f9488ca22890a67dec5, type: 3}
   m_Name: 
@@ -20354,6 +20381,36 @@ MonoBehaviour:
   - 10
   delay: 2
   yellowLightDuration: 3
+  cameras:
+  - {fileID: 2005066162}
+  - {fileID: 1068679799}
+  - {fileID: 148924381}
+  - {fileID: 963194225}
+  CameraController: {fileID: 109345243}
+--- !u!114 &1113893985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1113893982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56182f5b57ad96240be4196c1a688174, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trafficLights:
+  - {fileID: 36986248}
+  - {fileID: 2014448205}
+  - {fileID: 1052352548}
+  - {fileID: 772489421}
+  delay: 2
+  yellowLightDuration: 3
+  CarCount:
+  - {fileID: 936486429}
+  - {fileID: 1460863852}
+  - {fileID: 30748711}
+  - {fileID: 402115701}
   cameras:
   - {fileID: 2005066162}
   - {fileID: 1068679799}
@@ -23640,7 +23697,7 @@ PrefabInstance:
     - target: {fileID: 5892631307132854032, guid: 42d70daf23d34a245bc1b4c2b3f6f445,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 253.6
+      value: 265.444
       objectReference: {fileID: 0}
     - target: {fileID: 5892631307132854032, guid: 42d70daf23d34a245bc1b4c2b3f6f445,
         type: 3}
@@ -23650,7 +23707,7 @@ PrefabInstance:
     - target: {fileID: 5892631307132854032, guid: 42d70daf23d34a245bc1b4c2b3f6f445,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.81
+      value: 6.8
       objectReference: {fileID: 0}
     - target: {fileID: 5892631307132854032, guid: 42d70daf23d34a245bc1b4c2b3f6f445,
         type: 3}
@@ -26718,9 +26775,10 @@ GameObject:
   - component: {fileID: 1460863849}
   - component: {fileID: 1460863848}
   - component: {fileID: 1460863851}
+  - component: {fileID: 1460863852}
   m_Layer: 0
   m_Name: Streat
-  m_TagString: Untagged
+  m_TagString: WestTrafficLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26816,6 +26874,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.24737684, y: 1.892135, z: 1}
   m_Center: {x: 0.37630352, y: 0.4460675, z: 0.0000014952956}
+--- !u!114 &1460863852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460863846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28c5308a952be94db85f1e78956694c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carsCounter: 0
 --- !u!1 &1462228921
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,61 +6,88 @@ public class Basic_algo : MonoBehaviour
 {
     public Component[] trafficLights;
 
-    public float[] time;
-    public float delay = 2;
-    public float yellowLightDuration = 3f;
+    private float[] time = { 0, 0, 0, 0 }; // i assumed we will show him without the menu because its not fixed as u know 
+    public float delay = 1; // im not sure if we need this 
+    public float yellowLightDuration = 2f;
     public static int carNumberNorth;
+    private float timeVariable = 0f;
+    private int direction = 0;
+    private bool oneTimeRun = true;
 
     [Header("Green Time Calculation")]
-    public int[] carNumber;
+    // public int[] carNumber;
     public CarCounter[] CarCount;
+
 
     [Header("Cameras")]
     public GameObject[] cameras;
     public GameObject CameraController;
 
-    private float timeVariable;
-    private int direction = 0;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-       
-        // carCount = GetComponent<CarCounter>();
-        // time = 0; Just leaving it 0 for now 
-        // timeVariable = GreenTimeCalc(carCount.counterTemp);
         for (int i = 0; i < cameras.Length; i++)
         {
             cameras[i].SetActive(false);
         }
-        ChangeLightGreen(direction);
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (oneTimeRun) // instead of writing it on the start method ive done it here . 
+        {
+            // The first direction manually setted to few sec just to show the skipping feature
+            time[direction] = 8f;// GreenTimeCalc(CarCount[direction].carsCounter);
+            ChangeLightGreen(direction);
+            oneTimeRun = false;
+        }
+
         timeVariable += Time.deltaTime;
-        // Turns();
-        if (timeVariable >= time[direction] - yellowLightDuration && timeVariable < time[direction])
+        Debug.Log(" Direction : " + direction +
+                  " Time assigned : " + time[direction] +
+                  " Car count : " + CarCount[direction].carsCounter);
+
+        if (timeVariable >= time[direction] - yellowLightDuration && timeVariable <= time[direction])
         {
             ChangeLightYellow(direction);
         }
         if (timeVariable >= time[direction])
         {
             ChangeLightRed(direction);
-
         }
         if (timeVariable >= time[direction] + delay)
         {
             direction++;
             direction %= 4;
-            timeVariable = CarCount[direction].counterTemp; 
-            timeVariable = 5; //GreenTimeCalc(carCount.counterTemp[direction]);
+            time[direction] = GreenTimeCalc(CarCount[direction].carsCounter);
+            // this loop does the job of skipping the direction i think it needs to be optimized but for now it does the job 
+            for (int i = 0; true; i++) 
+                 
+            {
+                if (time[direction] == 0)
+                {
+                    direction++;
+                    direction %= 4;
+                    time[direction] = GreenTimeCalc(CarCount[direction].carsCounter);
+                    continue;
+
+                }
+                else
+                {
+                    break;
+                }
+
+            }
+            timeVariable = 0f;
+
             ChangeLightGreen(direction);
         }
-        
+
 
     }
 
@@ -116,10 +143,14 @@ public class Basic_algo : MonoBehaviour
     private int GreenTimeCalc(int carNo)
     {
         // Just temp simple formula 
-        int greenTime=(((carNo * 3)*2)/2); // * 2 and / 2 just incase car number is zero , i know i couldve made if statment but idk lol
+        int greenTime = (carNo * 2) + (int)delay; // here is our simple formula so far i need more time to dig and get the proper and suitable one , i substracted the yellow time so it does not count up there
         if (greenTime >= 30)
         {
             return 30;
+        }
+        else if (carNo == 0) // if there is no cars 
+        {
+            return 0;
         }
         else
         {
@@ -128,15 +159,15 @@ public class Basic_algo : MonoBehaviour
 
     }
 
-   /* private void Turns()
-    {
-        if(carCount.counterTemp[direction+/]> carCount.counterTemp[direction + 2])
-        {
+    /* private void Turns() will use it on choosing lanes .
+     {
+         if(carCount.counterTemp[direction+/]> carCount.counterTemp[direction + 2])
+         {
 
-        }else
-        {
-            
-        }
-    }
-   */
+         }else
+         {
+
+         }
+     }
+    */
 }
