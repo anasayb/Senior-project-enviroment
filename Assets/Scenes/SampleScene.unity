@@ -19525,7 +19525,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1046300191}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56182f5b57ad96240be4196c1a688174, type: 3}
   m_Name: 
@@ -19533,6 +19533,7 @@ MonoBehaviour:
   trafficLights: []
   delay: 2
   yellowLightDuration: 3
+  text: {fileID: 0}
   CarCount:
   - {fileID: 936486429}
   cameras: []
@@ -19550,7 +19551,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1047522885
 GameObject:
@@ -21042,6 +21043,7 @@ MonoBehaviour:
   - {fileID: 772489421}
   delay: 2
   yellowLightDuration: 3
+  text: {fileID: 2130120252}
   CarCount:
   - {fileID: 936486429}
   - {fileID: 1460863852}
@@ -41653,7 +41655,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Average Waiting Time:'
+  m_text: 'Time:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

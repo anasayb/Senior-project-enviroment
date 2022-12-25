@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Basic_algo : MonoBehaviour
@@ -13,6 +15,9 @@ public class Basic_algo : MonoBehaviour
     private float timeVariable = 0f;
     private int direction = 0;
     private bool oneTimeRun = true;
+
+    [Header("GUI")]
+    public GameObject text;
 
     [Header("Green Time Calculation")]
     // public int[] carNumber;
@@ -37,7 +42,7 @@ public class Basic_algo : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (oneTimeRun) // instead of writing it on the start method ive done it here . 
         {
@@ -51,10 +56,11 @@ public class Basic_algo : MonoBehaviour
         Debug.Log(" Direction : " + direction +
                   " Time assigned : " + time[direction] +
                   " Car count : " + CarCount[direction].carsCounter);
-
+        text.GetComponent<TMP_Text>().text = "Time:\n" + Math.Max((Math.Ceiling(time[direction] - timeVariable)), 0).ToString();
         if (timeVariable >= time[direction] - yellowLightDuration && timeVariable <= time[direction])
         {
             ChangeLightYellow(direction);
+            text.GetComponent<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
         }
         if (timeVariable >= time[direction])
         {
@@ -66,7 +72,7 @@ public class Basic_algo : MonoBehaviour
             direction %= 4;
             time[direction] = GreenTimeCalc(CarCount[direction].carsCounter);
             // this loop does the job of skipping the direction i think it needs to be optimized but for now it does the job 
-            for (int i = 0; true; i++) 
+            for (int i = 0; i < 4; i++) 
                  
             {
                 if (time[direction] == 0)
@@ -85,18 +91,17 @@ public class Basic_algo : MonoBehaviour
             }
             timeVariable = 0f;
 
-            ChangeLightGreen(direction);
+            if (time[direction] != 0)
+            {
+                ChangeLightGreen(direction);
+                text.GetComponent<TMP_Text>().color = new Color(0.02360218f, 0.3018868f, 0.01281594f);
+            }
+            
         }
 
 
     }
 
-    private void FixedUpdate()
-    {
-
-
-
-    }
 
     /// <summary>
     /// Method <c>ChangeLightRed</c> make the current traffic light red.
@@ -146,7 +151,7 @@ public class Basic_algo : MonoBehaviour
         int greenTime = (carNo * 2) + (int)delay; // here is our simple formula so far i need more time to dig and get the proper and suitable one , i substracted the yellow time so it does not count up there
         if (greenTime >= 30)
         {
-            return 30;
+            return 30+1;
         }
         else if (carNo == 0) // if there is no cars 
         {
@@ -154,7 +159,7 @@ public class Basic_algo : MonoBehaviour
         }
         else
         {
-            return greenTime;
+            return greenTime+1;
         }
 
     }
