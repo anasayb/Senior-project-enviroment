@@ -133,48 +133,38 @@ public class User_Camera_Controll : MonoBehaviour
     /// </summary>
     public void updateCameras(int cam)
     {
-
+        north = west = south = east = false;
         if (cam == 0)
         {
-            east = false;
-            north = true;
-            for (int i = 0; i < EastCamera.Length; i++)
-            {
-
-                EastCamera[i].gameObject.SetActive(false);
-            }
-
+               north = true;
         }
         else if (cam == 1)
         {
-            north = false;
+     
             west = true;
-            for (int i = 0; i < NorthCamera.Length; i++)
-            {
-                NorthCamera[i].gameObject.SetActive(false);
-            }
 
         }
         else if (cam == 2)
         {
-            west = false;
+         
             south = true;
-            for (int i = 0; i < WestCamera.Length; i++)
-            {
-                WestCamera[i].gameObject.SetActive(false);
-            }
 
         }
         else if (cam == 3)
         {
-            south = false;
+           
             east = true;
-            for (int i = 0; i < SouthCamera.Length; i++)
-            {
-                SouthCamera[i].gameObject.SetActive(false);
-            }
 
         }
+
+        for (int i = 0; i < NorthCamera.Length; i++)
+        {
+            NorthCamera[i].gameObject.SetActive(false);
+            WestCamera[i].gameObject.SetActive(false);
+            SouthCamera[i].gameObject.SetActive(false);
+            EastCamera[i].gameObject.SetActive(false);
+        }
+
 
     }
 }
