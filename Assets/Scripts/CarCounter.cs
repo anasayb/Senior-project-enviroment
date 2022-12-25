@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CarCounter : MonoBehaviour
 {
-    public int counterTemp;
+    public int carsCounter;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,16 +19,16 @@ public class CarCounter : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        counterTemp++;
-        Debug.Log(other.gameObject.tag);
-        Debug.Log(counterTemp);
+        carsCounter++;
+        //Debug.Log(other.gameObject.tag);
+        //Debug.Log("Car after Enter Count = " + carsCounter + "At this intersection " + tag);
 
     }
     private void OnTriggerExit(Collider other)
     {
-        counterTemp--;
-        Debug.Log(other.gameObject.tag);
-        Debug.Log("Car Count = " + counterTemp);
+        carsCounter--;
+        //Debug.Log(other.gameObject.tag);
+        //Debug.Log("Car after Exit Count = " + carsCounter + "At this intersection " + tag);
 
 
     }
