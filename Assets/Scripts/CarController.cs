@@ -19,6 +19,7 @@ public class CarController : MonoBehaviour
     public bool right = false;
     public Transform pathGourpLeft, pathGourpRight;
     public float distanceFromPath = 2f;
+    public Vector3 posForwardCenter;
 
     private bool doneTurning = false;
     private float MAX_TURNING_ANGLE = 20f;
@@ -77,7 +78,7 @@ public class CarController : MonoBehaviour
         RaycastHit hit;
 
         // The Ray start postion
-        Vector3 posForwardCenter = transform.position;
+        posForwardCenter = transform.position;
         posForwardCenter.y = 1.5f;
 
         Vector3 posForwardRight = transform.position;
@@ -167,8 +168,11 @@ public class CarController : MonoBehaviour
 
         // Turning Code
         if (Physics.Raycast(posForwardCenter, -(transform.up), out hit, sensorLength))
-        {   
-
+        {
+            if (hit.collider.tag == "NorthTrafficLight")
+            {
+                Basic_algo.carNumberNorth += 1; 
+            }
             // If the car enter the intersection sqaure 
             if (hit.collider.tag == "IntersectionArea")
             {
