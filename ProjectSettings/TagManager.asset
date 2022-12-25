@@ -9,6 +9,10 @@ TagManager:
   - IntersectionArea
   - Turning
   - Truck
+  - SouthTrafficLight
+  - NorthTrafficLight
+  - EastTrafficLight
+  - WestTrafficLight
   layers:
   - Default
   - TransparentFX
