@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEditor;
 using UnityEditor.AssetImporters;
 using UnityEditorInternal;
@@ -41,6 +42,12 @@ public class CarController : MonoBehaviour
     public LayerMask CarLay;
     public float waitngTime = 0;
 
+    [Header("GUI")]
+    public GameObject carInfo;
+    public Material tent;
+
+    private Material orignal;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -64,6 +71,9 @@ public class CarController : MonoBehaviour
 
         // Calculate the wating time of the car
         calculateWatingTime();
+
+        //updating the car info in car info
+        updateCarInfo();
 
     }
 
@@ -570,5 +580,71 @@ public class CarController : MonoBehaviour
         
     }
 
+
+    private void OnMouseDown()
+    {
+
+        carInfo.SetActive(true);
+
+
+        carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text = name;
+        carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString();
+        carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString();
+        carInfo.transform.Find("Intersection Enter").GetComponent<TMP_Text>().text = "Intersection Enter Direction: " + transform.parent.name;
+
+        string[] direction = { "North", "West", "South", "East" };
+        int index = 0;
+        for (int i = 0; i < direction.Length; i++)
+        {
+            if (direction[i] == transform.parent.name)
+            {
+                index = i;
+            }
+        }
+
+        if (!(right || left))
+        {
+            carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 2) % 4];
+        }
+        else if (right)
+        {
+            carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 1) % 4];
+        }
+        else if (left)
+        {
+            carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 3) % 4];
+        }
+
+
+        carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
+
+    }
+
+    private void OnMouseEnter()
+    {
+        orignal = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials[0];
+        Material[] mt = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials;
+        mt[0] = tent;
+        transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials = mt;
+    }
+
+    private void OnMouseExit()
+    {
+        Material[] mt = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials;
+        mt[0] = orignal;
+        transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials = mt;
+    }
+
+
+    private void updateCarInfo()
+    {
+        if (carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text == name)
+        {
+            carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: "+Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString();
+            carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString("0.00") + "s";
+        }
+    }
+
+    
 
 }
