@@ -45,6 +45,7 @@ public class CarController : MonoBehaviour
     [Header("GUI")]
     public GameObject carInfo;
     public Material tent;
+    public GameObject sel;
 
     private Material orignal;
 
@@ -558,35 +559,38 @@ public class CarController : MonoBehaviour
 
 
     /// <summary>
-    /// Method <c>DrawLine</c> This function Draw ray lines in the game mode.
+    /// Method <c>OnMouseDown</c> This function is used to update the infromation of the car in the info box if the car is selcted.
     /// </summary>
-    /// <param name="start">the vector where the length start</param>
-    /// <param name="length">the lien length</param>
-    /// <param name="start">the clor of the line</param>
-    /// <param name="duration">the duration on which the line apears in the screen</param>
-    private void DrawLine(Vector3 start, Vector3 length, Color color, float duration = 0.1f)
+    private void updateCarInfo()
     {
-       
-        GameObject myLine = new GameObject();
-        myLine.transform.position = start;
-        myLine.AddComponent<LineRenderer>();
-        LineRenderer lr = myLine.GetComponent<LineRenderer>();
-        lr.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
-        lr.startColor = color; lr.endColor = color;
-        lr.startWidth = 0.1f; lr.endWidth = 0.1f;
-        lr.SetPosition(0, start);
-        lr.SetPosition(1, start+length);
-        GameObject.Destroy(myLine, duration);
-        
+        if (carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text == name)
+        {
+            carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString();
+            carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString("0.00") + "s";
+            sel.transform.position = new Vector3(transform.position.x, 5f, transform.position.z);
+           
+            // To enbale the animation
+            sel.GetComponentInChildren<Animation>().enabled = true;
+        }
+
     }
 
 
+    /// <summary>
+    /// Method <c>OnMouseDown</c> This function is called when the user clicks on the car object in order to display the car info in a box.
+    /// </summary>
     private void OnMouseDown()
     {
 
+        // Activate the selector and change its postion ot the center of the car
+        sel.SetActive(true);
+        sel.transform.position = new Vector3(transform.position.x, 5f, transform.position.z);
+
+
+        // Activate the carInfo boc
         carInfo.SetActive(true);
 
-
+        // Fill the infroamtion of the carInfo box
         carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text = name;
         carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString();
         carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString();
@@ -615,36 +619,61 @@ public class CarController : MonoBehaviour
             carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 3) % 4];
         }
 
-
         carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
 
     }
 
+
+
+    /// <summary>
+    /// Method <c>OnMouseDown</c> This function is called when the user mouse enter the car object in order to highlight the car.
+    /// </summary>
     private void OnMouseEnter()
-    {
+    {   
+        // Change the matrial used to color the car into a slightly darker one
         orignal = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials[0];
         Material[] mt = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials;
         mt[0] = tent;
         transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials = mt;
     }
 
+
+    /// <summary>
+    /// Method <c>OnMouseDown</c> This function is called when the user mouse exit the car object in order to dehighlight the car.
+    /// </summary>
     private void OnMouseExit()
     {
+        // Change the matrial used to the original one
         Material[] mt = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials;
         mt[0] = orignal;
         transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials = mt;
     }
 
 
-    private void updateCarInfo()
-    {
-        if (carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text == name)
-        {
-            carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: "+Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString();
-            carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString("0.00") + "s";
-        }
-    }
 
-    
+    /*
+    /// <summary>
+    /// Method <c>DrawLine</c> This function Draw ray lines in the game mode.
+    /// </summary>
+    /// <param name="start">the vector where the length start</param>
+    /// <param name="length">the lien length</param>
+    /// <param name="start">the clor of the line</param>
+    /// <param name="duration">the duration on which the line apears in the screen</param>
+    private void DrawLine(Vector3 start, Vector3 length, Color color, float duration = 0.1f)
+    {
+
+        GameObject myLine = new GameObject();
+        myLine.transform.position = start;
+        myLine.AddComponent<LineRenderer>();
+        LineRenderer lr = myLine.GetComponent<LineRenderer>();
+        lr.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
+        lr.startColor = color; lr.endColor = color;
+        lr.startWidth = 0.1f; lr.endWidth = 0.1f;
+        lr.SetPosition(0, start);
+        lr.SetPosition(1, start + length);
+        GameObject.Destroy(myLine, duration);
+
+    }
+    */
 
 }

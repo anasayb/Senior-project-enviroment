@@ -739,6 +739,7 @@ MonoBehaviour:
   waitngTime: 0
   carInfo: {fileID: 0}
   tent: {fileID: 2100000, guid: 53b8bd045bfd497479447566212b96d8, type: 2}
+  selector: {fileID: 0}
 --- !u!1 &1440122984603677080
 GameObject:
   m_ObjectHideFlags: 0
