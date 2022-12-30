@@ -212,9 +212,10 @@ public class CarController : MonoBehaviour
     {
 
         Ray ray = new Ray(transform.position, transform.forward);
-
-        if (Physics.Raycast(ray, 200, ~CarLay))
+        RaycastHit h;
+        if (Physics.Raycast(ray, out h, 200, ~CarLay))
         {
+
             Rigidbody speed = GetComponent<Rigidbody>();
             if (speed.velocity.magnitude < 1)
             {
@@ -227,7 +228,7 @@ public class CarController : MonoBehaviour
         Avg_wating_time.updateAvg(transform.name, waitngTime, left, right, transform.parent.name);
 
         // Debug code
-        // Debug.DrawRay(ray.origin, transform.forward*200, Color.blue);
+        Debug.DrawRay(ray.origin, transform.forward*200, Color.blue);
 
     }
 
