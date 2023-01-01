@@ -20,7 +20,7 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     public GameObject text;
 
     [Header("Cameras")]
-    public GameObject[] cameras;
+    public GameObject Maincamera;
     public GameObject CameraController;
 
     private float timeVariable = 0;
@@ -31,9 +31,24 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     {
         time = Scence_Manger.providedTime;
         direction = Scence_Manger.dir;
-        for (int i = 0; i < cameras.Length; i++)
+        if (direction == 0)
         {
-            cameras[i].SetActive(false); 
+            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "North";
+
+        }else if (direction == 1)
+        {
+            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "West";
+
+        }
+        else if (direction == 2)
+        {
+            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "South";
+
+        }
+        else if (direction == 3)
+        {
+            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "East";
+
         }
         ChangeLightGreen(direction);
        
@@ -103,15 +118,7 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     {
 
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
-
-        for (int i = 0; i < cameras.Length; i++)
-        {
-            cameras[i].SetActive(false);
-        }
-
-
-        CameraController.GetComponent<User_Camera_Controll>().updateCameras(to);
-        cameras[to].SetActive(true);
+        Maincamera.GetComponent<User_Camera_Controll>().updateCameras(to);
         
     }
 }

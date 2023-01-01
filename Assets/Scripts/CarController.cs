@@ -637,6 +637,12 @@ public class CarController : MonoBehaviour
         orignal = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials[0];
         Material[] mt = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials;
         mt[0] = tent;
+        if (transform.tag == "Truck")
+        {
+            Material[] mt2 = transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials;
+            mt2[0] = tent;
+            transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials = mt2;
+        }
         transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials = mt;
     }
 
@@ -649,6 +655,12 @@ public class CarController : MonoBehaviour
         // Change the matrial used to the original one
         Material[] mt = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials;
         mt[0] = orignal;
+        if (transform.tag == "Truck")
+        {
+            Material[] mt2 = transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials;
+            mt2[0] = orignal;
+            transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials = mt2;
+        }
         transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials = mt;
     }
 
