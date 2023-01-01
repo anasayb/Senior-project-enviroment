@@ -52,8 +52,9 @@ public class Avg_wating_time : MonoBehaviour
             if (!stored)
             {
                 DatabaseConnection db = GameObject.Find("Database").GetComponent<DatabaseConnection>();
-                StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes)));
+                StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights")));
                 stored = true;
+                //Application.OpenURL("http://localhost");
             }
         }
             

@@ -241,7 +241,7 @@ public class CarController : MonoBehaviour
         if(colide != -1)
         {
 
-            // If a colide is NOT detected
+            // If a colide is  detected
             deaccelerate(0);
             return;
 
@@ -265,7 +265,7 @@ public class CarController : MonoBehaviour
 
 
 
-        if (colide == -1)
+        if (colide == -1 )
         {
 
             // If a colide is NOT detected
@@ -371,10 +371,10 @@ public class CarController : MonoBehaviour
             if (transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude <= 30)
             {   
                 Rigidbody speed = GetComponent<Rigidbody>();
-                if (speed.velocity.magnitude > 7)
+                if (speed.velocity.magnitude > 5)
                 {
                     colide = transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude;
-                    deaccelerate(7);
+                    deaccelerate(5);
                 }
                 
 
@@ -395,7 +395,6 @@ public class CarController : MonoBehaviour
                 resetAllWheelsAngles();
 
             }
-
 
         }
         else
@@ -436,6 +435,7 @@ public class CarController : MonoBehaviour
                    
                 }
             }
+            
            
         }
 
@@ -480,6 +480,7 @@ public class CarController : MonoBehaviour
 
             }
 
+
         }
         else
         {
@@ -520,6 +521,7 @@ public class CarController : MonoBehaviour
                 }
             }
             
+
         }
 
     }

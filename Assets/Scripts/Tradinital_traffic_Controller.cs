@@ -14,6 +14,7 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     public float[] time;
     public float delay = 2;
     public float yellowLightDuration = 3f;
+    
 
     [Header("GUI")]
     public GameObject text;
@@ -25,11 +26,11 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     private float timeVariable = 0;
     private int direction = 0;
 
-
     // Start is called before the first frame update
     void Start()
     {
         time = Scence_Manger.providedTime;
+        direction = Scence_Manger.dir;
         for (int i = 0; i < cameras.Length; i++)
         {
             cameras[i].SetActive(false); 
