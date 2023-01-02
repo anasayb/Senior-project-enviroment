@@ -12,13 +12,14 @@ public class Scence_Manger : MonoBehaviour
     public static float[] providedTime = { 10, 10, 10, 10 };
 
     public GameObject[] timeInputs;
-
+    public GameObject method; 
 
     /// <summary>
     /// Method <c>startprogram</c> getting the times form the user and setting the global values.
     /// </summary>
     public void startprogram()
     {
+        // if(method.)
         providedTime = new float[timeInputs.Length];
         for (int i = 0; i < timeInputs.Length; i++)
         {
@@ -35,5 +36,7 @@ public class Scence_Manger : MonoBehaviour
         SceneManager.LoadScene("SampleScene");
      
     }
+
+    
 
 }
