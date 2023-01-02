@@ -568,10 +568,24 @@ public class CarController : MonoBehaviour
     {
         if (carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text == name)
         {
-            carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString();
-            carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString("0.00") + "s";
+            carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString() + " m/s";
+            carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString("0.00") + " s";
             sel.transform.position = new Vector3(transform.position.x, 5f, transform.position.z);
-           
+
+            /*
+            if (colide == -1)
+            {
+                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
+            }
+            else
+            {
+                Ray ray = new Ray(transform.position, transform.forward);
+                RaycastHit h;
+                Physics.Raycast(ray, out h, 200, ~CarLay);
+                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: " + h.distance + " m";
+            }
+            */
+
             // To enbale the animation
             sel.GetComponentInChildren<Animation>().enabled = true;
         }
@@ -595,8 +609,8 @@ public class CarController : MonoBehaviour
 
         // Fill the infroamtion of the carInfo box
         carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text = name;
-        carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString();
-        carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString();
+        carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString() + " m/s";
+        carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString() + " s";
         carInfo.transform.Find("Intersection Enter").GetComponent<TMP_Text>().text = "Intersection Enter Direction: " + transform.parent.name;
 
         string[] direction = { "North", "West", "South", "East" };
@@ -623,6 +637,21 @@ public class CarController : MonoBehaviour
         }
 
         carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
+
+        /*
+        if (colide == -1)
+        {
+            carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
+        }
+        else
+        {
+            Ray ray = new Ray(transform.position, transform.forward);
+            RaycastHit h;
+            Physics.Raycast(ray, out h, 200, ~CarLay);
+            carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: " + h.distance + " m";
+        }
+        */
+
 
     }
 
@@ -691,4 +720,4 @@ public class CarController : MonoBehaviour
     }
     */
 
-}
+    }

@@ -15,6 +15,7 @@ public class Scence_Manger : MonoBehaviour
     [HideInInspector]
     public static float[] providedTime = { 10, 10, 10, 10 };
     public static int dir = 0;
+    public static int startingNumberOfCars = 22;
 
     public GameObject[] timeInputs;
 
