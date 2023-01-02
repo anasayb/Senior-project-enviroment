@@ -28,6 +28,7 @@ public class Scence_Manger : MonoBehaviour
 
         // if(method.)
 
+
         // directiont to start the simulation
         for (int i = 0; i < direction.Length; i++)
         {
@@ -39,6 +40,8 @@ public class Scence_Manger : MonoBehaviour
 
 
         // Times of the traffic lights
+
+
 
         providedTime = new float[timeInputs.Length];
         for (int i = 0; i < timeInputs.Length; i++)
@@ -56,7 +59,6 @@ public class Scence_Manger : MonoBehaviour
         SceneManager.LoadScene("SampleScene");
      
     }
-
 
 
     public  void updateNorthToggle(bool value)
