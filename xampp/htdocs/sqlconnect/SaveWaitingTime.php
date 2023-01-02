@@ -9,6 +9,7 @@
         exit();
     }
 
+    $table = $_POST["table"];
     $name = $_POST["name"];
     $time = $_POST["waiting_time"];
     $streat = $_POST["streat"];
@@ -17,7 +18,7 @@
     echo ($name." and ".$time." and ".$streat." and ".$turning);
 
     // add times to the table
-    $insertQuey = "INSERT INTO `waitingtimes`(`name`, `waitingTime`, `Direction`, `Streat`) VALUES ('".$name."','". $time."', '". $turning."','". $streat."');";
+    $insertQuey = "INSERT INTO `$table`(`name`, `waitingTime`, `Direction`, `Streat`) VALUES ('".$name."','". $time."', '". $turning."','". $streat."');";
     mysqli_query($con, $insertQuey) or die("4: Insert Failed");
 
     echo("0");

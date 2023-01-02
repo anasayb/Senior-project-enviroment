@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public struct data
 {
@@ -18,6 +19,9 @@ public class Avg_wating_time : MonoBehaviour
 
     public static float Avg_wating = 0;
     public GameObject Text;
+    public GameObject Summery;
+    public GameObject CarInfo;
+    public GameObject timer;
 
     private static Dictionary<string, data> waitingTimes;
     private static float numberOfCars = 0;
@@ -46,14 +50,15 @@ public class Avg_wating_time : MonoBehaviour
 
         // If all cars are disapeared chagn the color of the text to green
         // numberOfCars == 0 && transform.GetComponent<Car_Generator>().CarsToGenerate == 0
-        if (numberOfCars == 0)
+        if (numberOfCars <= 0)
         {
             Text.GetComponent<TMP_Text>().color = new Color(0.039f, 0.545f, 0.039f);
             if (!stored)
             {
                 DatabaseConnection db = GameObject.Find("Database").GetComponent<DatabaseConnection>();
-                StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes)));
+                StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights")));
                 stored = true;
+                summeryPanel();
             }
         }
             
@@ -134,5 +139,64 @@ public class Avg_wating_time : MonoBehaviour
         }
         
         Avg_wating = sum / waitingTimes.Count;
+    }
+
+
+    private void summeryPanel()
+    {   
+        CarInfo.SetActive(false);
+        timer.SetActive(false);
+        Summery.SetActive(true);
+
+        // Name of the method
+        Summery.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = "Traditional Traffic Light System";
+
+        // Starting Direction
+        string[] names = { "North", "West", "South", "East"};
+        Summery.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = names[Scence_Manger.dir];
+
+        // Avg_waiting
+        Summery.transform.Find("AVG").Find("Time").GetComponent<TMP_Text>().text = Avg_wating.ToString();
+
+        // Max waiting
+        Summery.transform.Find("Max Waiting Time").Find("Time").GetComponent<TMP_Text>().text = maxWaiting().ToString();
+
+        // Cars Number
+        Summery.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = Scence_Manger.startingNumberOfCars.ToString();
+
+        // Cars informations
+        GameObject cont = Summery.transform.Find("CarInfo").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;
+        GameObject row = cont.transform.GetChild(0).gameObject;
+        foreach (var item in waitingTimes)
+        {
+            GameObject newRow = GameObject.Instantiate(row);
+            // Car name
+            newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = item.Key;
+            // Waiting Time
+            newRow.transform.GetChild(1).GetComponent<TMP_Text>().text = item.Value.waiting_time.ToString();
+            // Start Direction
+            newRow.transform.GetChild(2).GetComponent<TMP_Text>().text = item.Value.streat;
+            // Turning
+            newRow.transform.GetChild(3).GetComponent<TMP_Text>().text = item.Value.direction;
+            newRow.transform.SetParent(cont.transform);
+        }
+
+
+        // Destroy the template record
+        row.SetActive(false);
+    }
+
+    private float maxWaiting()
+    {
+        float max = 0;
+        foreach (var item in waitingTimes)
+        {
+            if (item.Value.waiting_time > max)
+            {
+                max = item.Value.waiting_time;
+            }
+        }
+
+        return max;
     }
 }

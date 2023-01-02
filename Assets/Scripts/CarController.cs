@@ -241,7 +241,7 @@ public class CarController : MonoBehaviour
         if(colide != -1)
         {
 
-            // If a colide is NOT detected
+            // If a colide is  detected
             deaccelerate(0);
             return;
 
@@ -265,7 +265,7 @@ public class CarController : MonoBehaviour
 
 
 
-        if (colide == -1)
+        if (colide == -1 )
         {
 
             // If a colide is NOT detected
@@ -371,10 +371,10 @@ public class CarController : MonoBehaviour
             if (transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude <= 30)
             {   
                 Rigidbody speed = GetComponent<Rigidbody>();
-                if (speed.velocity.magnitude > 7)
+                if (speed.velocity.magnitude > 5)
                 {
                     colide = transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude;
-                    deaccelerate(7);
+                    deaccelerate(5);
                 }
                 
 
@@ -395,7 +395,6 @@ public class CarController : MonoBehaviour
                 resetAllWheelsAngles();
 
             }
-
 
         }
         else
@@ -436,6 +435,7 @@ public class CarController : MonoBehaviour
                    
                 }
             }
+            
            
         }
 
@@ -480,6 +480,7 @@ public class CarController : MonoBehaviour
 
             }
 
+
         }
         else
         {
@@ -520,6 +521,7 @@ public class CarController : MonoBehaviour
                 }
             }
             
+
         }
 
     }
@@ -566,10 +568,24 @@ public class CarController : MonoBehaviour
     {
         if (carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text == name)
         {
-            carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString();
-            carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString("0.00") + "s";
+            carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString() + " m/s";
+            carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString("0.00") + " s";
             sel.transform.position = new Vector3(transform.position.x, 5f, transform.position.z);
-           
+
+            /*
+            if (colide == -1)
+            {
+                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
+            }
+            else
+            {
+                Ray ray = new Ray(transform.position, transform.forward);
+                RaycastHit h;
+                Physics.Raycast(ray, out h, 200, ~CarLay);
+                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: " + h.distance + " m";
+            }
+            */
+
             // To enbale the animation
             sel.GetComponentInChildren<Animation>().enabled = true;
         }
@@ -593,8 +609,8 @@ public class CarController : MonoBehaviour
 
         // Fill the infroamtion of the carInfo box
         carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text = name;
-        carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString();
-        carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString();
+        carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString() + " m/s";
+        carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString() + " s";
         carInfo.transform.Find("Intersection Enter").GetComponent<TMP_Text>().text = "Intersection Enter Direction: " + transform.parent.name;
 
         string[] direction = { "North", "West", "South", "East" };
@@ -622,6 +638,21 @@ public class CarController : MonoBehaviour
 
         carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
 
+        /*
+        if (colide == -1)
+        {
+            carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
+        }
+        else
+        {
+            Ray ray = new Ray(transform.position, transform.forward);
+            RaycastHit h;
+            Physics.Raycast(ray, out h, 200, ~CarLay);
+            carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: " + h.distance + " m";
+        }
+        */
+
+
     }
 
 
@@ -635,6 +666,12 @@ public class CarController : MonoBehaviour
         orignal = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials[0];
         Material[] mt = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials;
         mt[0] = tent;
+        if (transform.tag == "Truck")
+        {
+            Material[] mt2 = transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials;
+            mt2[0] = tent;
+            transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials = mt2;
+        }
         transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials = mt;
     }
 
@@ -647,6 +684,12 @@ public class CarController : MonoBehaviour
         // Change the matrial used to the original one
         Material[] mt = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials;
         mt[0] = orignal;
+        if (transform.tag == "Truck")
+        {
+            Material[] mt2 = transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials;
+            mt2[0] = orignal;
+            transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials = mt2;
+        }
         transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials = mt;
     }
 
@@ -677,4 +720,4 @@ public class CarController : MonoBehaviour
     }
     */
 
-}
+    }

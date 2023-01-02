@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class Tradinital_traffic_Controller : MonoBehaviour
 {
@@ -14,25 +14,41 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     public float[] time;
     public float delay = 2;
     public float yellowLightDuration = 3f;
+    
 
     [Header("GUI")]
-    public GameObject text;
+    public GameObject timer;
 
     [Header("Cameras")]
-    public GameObject[] cameras;
+    public GameObject Maincamera;
     public GameObject CameraController;
 
     private float timeVariable = 0;
     private int direction = 0;
 
-
     // Start is called before the first frame update
     void Start()
     {
         time = Scence_Manger.providedTime;
-        for (int i = 0; i < cameras.Length; i++)
+        direction = Scence_Manger.dir;
+        if (direction == 0)
         {
-            cameras[i].SetActive(false); 
+            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "North";
+
+        }else if (direction == 1)
+        {
+            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "West";
+
+        }
+        else if (direction == 2)
+        {
+            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "South";
+
+        }
+        else if (direction == 3)
+        {
+            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "East";
+
         }
         ChangeLightGreen(direction);
        
@@ -43,11 +59,12 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     {
  
         timeVariable += Time.deltaTime;
-        text.GetComponent<TMP_Text>().text = "Time:\n"+Math.Max((Math.Ceiling(time[direction]-timeVariable)), 0).ToString();
+        timer.GetComponentInChildren<TMP_Text>().text = Math.Max((Math.Ceiling(time[direction]-timeVariable)), 0).ToString();
+        timer.transform.GetChild(1).GetComponent<Image>().fillAmount = (1-(timeVariable/time[direction]));
         if (timeVariable >= time[direction] - yellowLightDuration && timeVariable < time[direction])
         {
             ChangeLightYellow(direction);
-            text.GetComponent<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
+            timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
         }
         if (timeVariable >= time[direction])
         {
@@ -60,7 +77,7 @@ public class Tradinital_traffic_Controller : MonoBehaviour
             direction %= 4;
             ChangeLightGreen(direction);    
             timeVariable = 0;
-            text.GetComponent<TMP_Text>().color = new Color(0.02360218f, 0.3018868f, 0.01281594f);
+            timer.GetComponentInChildren<TMP_Text>().color = new Color(0, 0, 0);
         }
 
     }
@@ -102,15 +119,7 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     {
 
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
-
-        for (int i = 0; i < cameras.Length; i++)
-        {
-            cameras[i].SetActive(false);
-        }
-
-
-        CameraController.GetComponent<User_Camera_Controll>().updateCameras(to);
-        cameras[to].SetActive(true);
+        Maincamera.GetComponent<User_Camera_Controll>().updateCameras(to);
         
     }
 }
