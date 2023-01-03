@@ -19,7 +19,29 @@ public class Scence_Manger : MonoBehaviour
 
     public GameObject direction;
     public GameObject[] timeInputs;
-    public GameObject method; 
+    public GameObject timeobject;
+    public GameObject method;
+
+
+    public void FixedUpdate()
+    {
+
+        if (SceneManager.GetActiveScene().name == "Menu")
+        {
+
+
+            if (method.GetComponent<TMP_Dropdown>().value == 0)
+            {
+                timeobject.SetActive(true);
+            }
+            else
+            {
+                timeobject.SetActive(false);
+            }
+        }
+        
+
+    }
 
     /// <summary>
     /// Method <c>startprogram</c> getting the times form the user and setting the global values.
