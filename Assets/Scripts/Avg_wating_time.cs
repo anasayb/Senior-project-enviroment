@@ -31,7 +31,7 @@ public class Avg_wating_time : MonoBehaviour
     void Start()
     {
         waitingTimes= new Dictionary<string, data>();
-        
+        Avg_wating = 0;
     }
 
     // Update is called once per frame
