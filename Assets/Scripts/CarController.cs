@@ -36,7 +36,7 @@ public class CarController : MonoBehaviour
 
     private float tempSensorLength;
     private float colide = -1;
-    private float yellowLight = 1.5f;
+    private float yellowLight = 1f;
 
     [Header("Wating Time")]
     public LayerMask CarLay;
@@ -261,16 +261,22 @@ public class CarController : MonoBehaviour
         {
             turnRight();
         }
-        
 
 
 
-        if (colide == -1 )
+
+        if (colide == -1)
         {
-
             // If a colide is NOT detected
-            accelerate();
-
+            if (turning)
+            {
+                accelerate(150);
+            }
+            else
+            {
+                accelerate(300);
+            }
+           
 
         }
  
@@ -280,7 +286,7 @@ public class CarController : MonoBehaviour
     /// <summary>
     /// Method <c>maccelerateove</c> This function Accelerate the car.
     /// </summary>
-    private void accelerate()
+    private void accelerate(float torque)
     {
         Rigidbody speed = GetComponent<Rigidbody>();
         speed.drag = 0;
@@ -291,7 +297,7 @@ public class CarController : MonoBehaviour
             // Increase the speed
             for (int i = 0; i < wheels.Length; i++)
             {
-                wheels[i].motorTorque = 150;
+                wheels[i].motorTorque = torque;
                 wheels[i].brakeTorque = 0;
             }
         }
@@ -324,7 +330,7 @@ public class CarController : MonoBehaviour
 
         if (force < 0)
         {
-            accelerate();
+            accelerate(300);
             return;
         }
 
@@ -396,6 +402,8 @@ public class CarController : MonoBehaviour
 
             }
 
+            
+
         }
         else
         {
@@ -435,7 +443,7 @@ public class CarController : MonoBehaviour
                    
                 }
             }
-            
+
            
         }
 
@@ -480,7 +488,6 @@ public class CarController : MonoBehaviour
 
             }
 
-
         }
         else
         {
@@ -520,7 +527,6 @@ public class CarController : MonoBehaviour
                    
                 }
             }
-            
 
         }
 

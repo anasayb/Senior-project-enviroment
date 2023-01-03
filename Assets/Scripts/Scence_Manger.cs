@@ -34,7 +34,6 @@ public class Scence_Manger : MonoBehaviour
 
         // Selected method
         int meth = method.GetComponent<TMP_Dropdown>().value;
-        Debug.Log(meth);
         if (meth == 0)
         {
             algorthim = "Tradional Traffic Light System";

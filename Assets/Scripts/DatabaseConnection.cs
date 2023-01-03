@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UIElements;
 using static UnityEditor.Progress;
 
 
@@ -54,31 +55,8 @@ public class DatabaseConnection : MonoBehaviour
 
         foreach (var item in watingTime)
         {
-            WWWForm form = new WWWForm();
-            form.AddField("table", table);
-            form.AddField("name", item.Key);
-            form.AddField("waiting_time", item.Value.waiting_time.ToString());
-            form.AddField("streat", item.Value.streat);
-            form.AddField("turningDirection", item.Value.direction);
 
-
-            UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form);
-            
-            //www.SendWebRequest();
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log("Form upload complete!");
-            }
-
-
-            www.Dispose();
-
+            StartCoroutine(saveObject(table, item));
 
         }
 
@@ -99,5 +77,34 @@ public class DatabaseConnection : MonoBehaviour
 
     }
 
+
+    private IEnumerator saveObject(string table, KeyValuePair<string, data> item)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("table", table);
+        form.AddField("name", item.Key);
+        form.AddField("waiting_time", item.Value.waiting_time.ToString());
+        form.AddField("streat", item.Value.streat);
+        form.AddField("turningDirection", item.Value.direction);
+
+
+        UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form);
+
+        //www.SendWebRequest();
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            Debug.Log("Form upload complete!");
+        }
+
+
+        www.Dispose();
+
+    }
 
 }

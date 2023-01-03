@@ -16,8 +16,9 @@ public struct data
 
 public class Avg_wating_time : MonoBehaviour
 {
-
+    
     public static float Avg_wating = 0;
+
     public GameObject Text;
     public GameObject Summery;
     public GameObject CarInfo;
@@ -32,6 +33,7 @@ public class Avg_wating_time : MonoBehaviour
     {
         waitingTimes= new Dictionary<string, data>();
         Avg_wating = 0;
+
     }
 
     // Update is called once per frame
@@ -39,6 +41,7 @@ public class Avg_wating_time : MonoBehaviour
     {
         //
         calculateTheNumberOfCar();
+
 
         // Calculate the Average waiting time
         Cal();
