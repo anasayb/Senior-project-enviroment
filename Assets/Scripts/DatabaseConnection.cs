@@ -42,6 +42,10 @@ public class DatabaseConnection : MonoBehaviour
         else if (TrafficLightController.GetComponent<Basic_algo>().enabled == true)
         {
             string name = "Basic_algo";
+            if (Scence_Manger.dir == 0) name += "_North";
+            else if (Scence_Manger.dir == 1) name += "_West";
+            else if (Scence_Manger.dir == 2) name += "_South";
+            else if (Scence_Manger.dir == 3) name += "_East";
 
             WWWForm form = new WWWForm();
             form.AddField("table", name);
