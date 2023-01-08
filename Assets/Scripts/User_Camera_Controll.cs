@@ -1,49 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class User_Camera_Controll : MonoBehaviour
 {
-    public GameObject[] NorthCamera;
-    public bool north = false;
+    public GameObject MainCamera;
+    public string currentPostionOfCamera = "North";
+    public GameObject text;
 
-    public GameObject[] WestCamera;
-    public bool west = false;
-
-    public GameObject[] SouthCamera;
-    public bool south = false;
-
-    public GameObject[] EastCamera;
-    public bool east = false;
+    private string updatePostion = "";
 
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < NorthCamera.Length; i++)
+        if (currentPostionOfCamera == "North")
         {
-            NorthCamera[i].gameObject.SetActive(false);
-            if (i == 0)
-            {
-                NorthCamera[i].gameObject.SetActive(true);
-            }
+
+            MainCamera.transform.position = new Vector3(0,30,50);
+            MainCamera.transform.rotation = Quaternion.Euler(30,180,0);
+            text.GetComponent<TMP_Text>().text = "University Street\n("+currentPostionOfCamera+")";
+
         }
-
-        for (int i = 0; i< WestCamera.Length; i++)
-        {  
-                WestCamera[i].gameObject.SetActive(false);
-        }
-
-
-
-        for (int i = 0; i < SouthCamera.Length; i++)
+        else if (currentPostionOfCamera == "West")
         {
-                SouthCamera[i].gameObject.SetActive(false);
+
+            MainCamera.transform.position = new Vector3(-50, 30, 0);
+            MainCamera.transform.rotation = Quaternion.Euler(30, 90, 0);
+            text.GetComponent<TMP_Text>().text = "Stadium Street\n("+currentPostionOfCamera + ")";
+
         }
-
-
-        for (int i = 0; i < EastCamera.Length; i++)
+        else if (currentPostionOfCamera == "South")
         {
-                EastCamera[i].gameObject.SetActive(false);
+
+            MainCamera.transform.position = new Vector3(0, 30, -50);
+            MainCamera.transform.rotation = Quaternion.Euler(30, 0, 0);
+            text.GetComponent<TMP_Text>().text = "University Street\n("+currentPostionOfCamera + ")";
+
+        }
+        else if (currentPostionOfCamera == "East")
+        {
+
+            MainCamera.transform.position = new Vector3(50, 30, 0);
+            MainCamera.transform.rotation = Quaternion.Euler(30, -90, 0);
+            text.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera + ")";
+
         }
     }
 
@@ -51,78 +52,19 @@ public class User_Camera_Controll : MonoBehaviour
     void Update()
     {
 
-        int cam = 0;
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            cam = 1;
-        }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            cam = 2;
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            cam = 3;
-        }
-
-        if (north && cam != 0)
-        {
-            for (int i = 0; i < NorthCamera.Length; i++)
+        if (updatePostion != "" && updatePostion != currentPostionOfCamera) {
+            string animation = currentPostionOfCamera + "_To_" + updatePostion;
+            GetComponent<Animation>().Play(animation);
+            currentPostionOfCamera = updatePostion;
+            if (currentPostionOfCamera == "North" || currentPostionOfCamera == "South")
             {
-                if (i == cam-1)
-                {
-                    NorthCamera[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    NorthCamera[i].gameObject.SetActive(false);
-                }
+                text.GetComponent<TMP_Text>().text = "University Street\n(" + currentPostionOfCamera + ")";
             }
-
-        }else if (west && cam != 0)
-        {
-            for (int i = 0; i < WestCamera.Length; i++)
+            else
             {
-                if (i == cam - 1)
-                {
-                    WestCamera[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    WestCamera[i].gameObject.SetActive(false);
-                }
+                text.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera + ")";
             }
-
-        }
-        else if(south && cam != 0)
-        {
-            for (int i = 0; i < SouthCamera.Length; i++)
-            {
-                if (i == cam - 1)
-                {
-                    SouthCamera[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    SouthCamera[i].gameObject.SetActive(false);
-                }
-            }
-
-        }
-        else if (east && cam != 0)
-        {
-            for (int i = 0; i < EastCamera.Length; i++)
-            {
-                if (i == cam - 1)
-                {
-                    EastCamera[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    EastCamera[i].gameObject.SetActive(false);
-                }
-            }
-
+            updatePostion = "";
         }
 
     }
@@ -133,38 +75,68 @@ public class User_Camera_Controll : MonoBehaviour
     /// </summary>
     public void updateCameras(int cam)
     {
-        north = west = south = east = false;
+ 
         if (cam == 0)
         {
-               north = true;
+               updatePostion = "North";
         }
         else if (cam == 1)
         {
-     
-            west = true;
+
+            updatePostion = "West";
 
         }
         else if (cam == 2)
         {
-         
-            south = true;
+
+            updatePostion = "South";
 
         }
         else if (cam == 3)
         {
-           
-            east = true;
+
+            updatePostion = "East";
 
         }
 
-        for (int i = 0; i < NorthCamera.Length; i++)
+
+
+    }
+
+
+    /// <summary>
+    /// Method <c>turnCameraLeft</c> move the camera to the left.
+    /// </summary>
+    public void turnCameraLeft()
+    {
+        string[] names = { "North", "West", "South", "East" };
+
+        for (int i = 0; i < name.Length; i++)
         {
-            NorthCamera[i].gameObject.SetActive(false);
-            WestCamera[i].gameObject.SetActive(false);
-            SouthCamera[i].gameObject.SetActive(false);
-            EastCamera[i].gameObject.SetActive(false);
+            if (names[i] == currentPostionOfCamera)
+            {
+                updateCameras((i+1)%4);
+                break;
+            }
         }
 
+    }
+
+    /// <summary>
+    /// Method <c>turnCameraRight</c> turn the camera to right.
+    /// </summary>
+    public void turnCameraRight()
+    {
+
+        string[] names = { "North", "West", "South", "East" };
+
+        for (int i = 0; i < name.Length; i++)
+        {
+            if (names[i] == currentPostionOfCamera)
+            {
+                updateCameras((i - 1) % 4);
+            }
+        }
 
     }
 }

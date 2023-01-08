@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEditor;
 using UnityEditor.AssetImporters;
 using UnityEditorInternal;
@@ -35,11 +36,18 @@ public class CarController : MonoBehaviour
 
     private float tempSensorLength;
     private float colide = -1;
-    private float yellowLight = 1.5f;
+    private float yellowLight = 1f;
 
     [Header("Wating Time")]
     public LayerMask CarLay;
     public float waitngTime = 0;
+
+    [Header("GUI")]
+    public GameObject carInfo;
+    public Material tent;
+    public GameObject sel;
+
+    private Material orignal;
 
     // Start is called before the first frame update
     void Start()
@@ -64,6 +72,9 @@ public class CarController : MonoBehaviour
 
         // Calculate the wating time of the car
         calculateWatingTime();
+
+        //updating the car info in car info
+        updateCarInfo();
 
     }
 
@@ -201,9 +212,10 @@ public class CarController : MonoBehaviour
     {
 
         Ray ray = new Ray(transform.position, transform.forward);
-
-        if (Physics.Raycast(ray, 200, ~CarLay))
+        RaycastHit h;
+        if (Physics.Raycast(ray, out h, 200, ~CarLay))
         {
+
             Rigidbody speed = GetComponent<Rigidbody>();
             if (speed.velocity.magnitude < 1)
             {
@@ -229,7 +241,7 @@ public class CarController : MonoBehaviour
         if(colide != -1)
         {
 
-            // If a colide is NOT detected
+            // If a colide is  detected
             deaccelerate(0);
             return;
 
@@ -249,16 +261,22 @@ public class CarController : MonoBehaviour
         {
             turnRight();
         }
-        
+
 
 
 
         if (colide == -1)
         {
-
             // If a colide is NOT detected
-            accelerate();
-
+            if (turning)
+            {
+                accelerate(150);
+            }
+            else
+            {
+                accelerate(300);
+            }
+           
 
         }
  
@@ -268,7 +286,7 @@ public class CarController : MonoBehaviour
     /// <summary>
     /// Method <c>maccelerateove</c> This function Accelerate the car.
     /// </summary>
-    private void accelerate()
+    private void accelerate(float torque)
     {
         Rigidbody speed = GetComponent<Rigidbody>();
         speed.drag = 0;
@@ -279,7 +297,7 @@ public class CarController : MonoBehaviour
             // Increase the speed
             for (int i = 0; i < wheels.Length; i++)
             {
-                wheels[i].motorTorque = 150;
+                wheels[i].motorTorque = torque;
                 wheels[i].brakeTorque = 0;
             }
         }
@@ -312,7 +330,7 @@ public class CarController : MonoBehaviour
 
         if (force < 0)
         {
-            accelerate();
+            accelerate(300);
             return;
         }
 
@@ -359,10 +377,10 @@ public class CarController : MonoBehaviour
             if (transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude <= 30)
             {   
                 Rigidbody speed = GetComponent<Rigidbody>();
-                if (speed.velocity.magnitude > 7)
+                if (speed.velocity.magnitude > 5)
                 {
                     colide = transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude;
-                    deaccelerate(7);
+                    deaccelerate(5);
                 }
                 
 
@@ -384,6 +402,7 @@ public class CarController : MonoBehaviour
 
             }
 
+            
 
         }
         else
@@ -424,6 +443,7 @@ public class CarController : MonoBehaviour
                    
                 }
             }
+
            
         }
 
@@ -507,7 +527,7 @@ public class CarController : MonoBehaviour
                    
                 }
             }
-            
+
         }
 
     }
@@ -548,6 +568,141 @@ public class CarController : MonoBehaviour
 
 
     /// <summary>
+    /// Method <c>OnMouseDown</c> This function is used to update the infromation of the car in the info box if the car is selcted.
+    /// </summary>
+    private void updateCarInfo()
+    {
+        if (carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text == name)
+        {
+            carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString() + " km/s";
+            carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString("0.00") + " s";
+            sel.transform.position = new Vector3(transform.position.x, 5f, transform.position.z);
+
+            /*
+            if (colide == -1)
+            {
+                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
+            }
+            else
+            {
+                Ray ray = new Ray(transform.position, transform.forward);
+                RaycastHit h;
+                Physics.Raycast(ray, out h, 200, ~CarLay);
+                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: " + h.distance + " m";
+            }
+            */
+
+            // To enbale the animation
+            sel.GetComponentInChildren<Animation>().enabled = true;
+        }
+
+    }
+
+
+    /// <summary>
+    /// Method <c>OnMouseDown</c> This function is called when the user clicks on the car object in order to display the car info in a box.
+    /// </summary>
+    private void OnMouseDown()
+    {
+
+        // Activate the selector and change its postion ot the center of the car
+        sel.SetActive(true);
+        sel.transform.position = new Vector3(transform.position.x, 5f, transform.position.z);
+
+
+        // Activate the carInfo boc
+        carInfo.SetActive(true);
+
+        // Fill the infroamtion of the carInfo box
+        carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text = name;
+        carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString() + " km/s";
+        carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString() + " s";
+        carInfo.transform.Find("Intersection Enter").GetComponent<TMP_Text>().text = "Intersection Enter Direction: " + transform.parent.name;
+
+        string[] direction = { "North", "West", "South", "East" };
+        int index = 0;
+        for (int i = 0; i < direction.Length; i++)
+        {
+            if (direction[i] == transform.parent.name)
+            {
+                index = i;
+            }
+        }
+
+        if (!(right || left))
+        {
+            carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 2) % 4];
+        }
+        else if (right)
+        {
+            carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 1) % 4];
+        }
+        else if (left)
+        {
+            carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 3) % 4];
+        }
+
+        carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
+
+        /*
+        if (colide == -1)
+        {
+            carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
+        }
+        else
+        {
+            Ray ray = new Ray(transform.position, transform.forward);
+            RaycastHit h;
+            Physics.Raycast(ray, out h, 200, ~CarLay);
+            carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: " + h.distance + " m";
+        }
+        */
+
+
+    }
+
+
+
+    /// <summary>
+    /// Method <c>OnMouseDown</c> This function is called when the user mouse enter the car object in order to highlight the car.
+    /// </summary>
+    private void OnMouseEnter()
+    {   
+        // Change the matrial used to color the car into a slightly darker one
+        orignal = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials[0];
+        Material[] mt = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials;
+        mt[0] = tent;
+        if (transform.tag == "Truck")
+        {
+            Material[] mt2 = transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials;
+            mt2[0] = tent;
+            transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials = mt2;
+        }
+        transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials = mt;
+    }
+
+
+    /// <summary>
+    /// Method <c>OnMouseDown</c> This function is called when the user mouse exit the car object in order to dehighlight the car.
+    /// </summary>
+    private void OnMouseExit()
+    {
+        // Change the matrial used to the original one
+        Material[] mt = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials;
+        mt[0] = orignal;
+        if (transform.tag == "Truck")
+        {
+            Material[] mt2 = transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials;
+            mt2[0] = orignal;
+            transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials = mt2;
+        }
+        transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials = mt;
+    }
+
+
+
+    /*
+    /// <summary>
     /// Method <c>DrawLine</c> This function Draw ray lines in the game mode.
     /// </summary>
     /// <param name="start">the vector where the length start</param>
@@ -556,7 +711,7 @@ public class CarController : MonoBehaviour
     /// <param name="duration">the duration on which the line apears in the screen</param>
     private void DrawLine(Vector3 start, Vector3 length, Color color, float duration = 0.1f)
     {
-       
+
         GameObject myLine = new GameObject();
         myLine.transform.position = start;
         myLine.AddComponent<LineRenderer>();
@@ -565,10 +720,10 @@ public class CarController : MonoBehaviour
         lr.startColor = color; lr.endColor = color;
         lr.startWidth = 0.1f; lr.endWidth = 0.1f;
         lr.SetPosition(0, start);
-        lr.SetPosition(1, start+length);
+        lr.SetPosition(1, start + length);
         GameObject.Destroy(myLine, duration);
-        
+
     }
+    */
 
-
-}
+    }
