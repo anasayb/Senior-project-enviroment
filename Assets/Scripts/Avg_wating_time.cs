@@ -152,7 +152,7 @@ public class Avg_wating_time : MonoBehaviour
         Summery.SetActive(true);
 
         // Name of the method
-        Summery.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = "Traditional Traffic Light System";
+        Summery.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = Scence_Manger.algorthim;
 
         // Starting Direction
         string[] names = { "North", "West", "South", "East"};

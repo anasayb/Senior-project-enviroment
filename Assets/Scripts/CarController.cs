@@ -574,7 +574,7 @@ public class CarController : MonoBehaviour
     {
         if (carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text == name)
         {
-            carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString() + " m/s";
+            carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString() + " km/s";
             carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString("0.00") + " s";
             sel.transform.position = new Vector3(transform.position.x, 5f, transform.position.z);
 
@@ -615,7 +615,7 @@ public class CarController : MonoBehaviour
 
         // Fill the infroamtion of the carInfo box
         carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text = name;
-        carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString() + " m/s";
+        carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString() + " km/s";
         carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString() + " s";
         carInfo.transform.Find("Intersection Enter").GetComponent<TMP_Text>().text = "Intersection Enter Direction: " + transform.parent.name;
 
