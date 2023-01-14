@@ -45,7 +45,7 @@ public class AI : Agent
             {
                 if (episodeNumber != 0)
                 {
-                    SetReward(-(Avg_wating_time.Avg_wating/300));
+                    SetReward((float)-(Avg_wating_time.Avg_wating/300));
                 }
                 RequestDecision();
 

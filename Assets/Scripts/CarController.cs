@@ -617,8 +617,8 @@ public class CarController : MonoBehaviour
 
         // Fill the infroamtion of the carInfo box
         carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text = name;
-        carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString() + " km/s";
-        carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString() + " s";
+        carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString("F2") + " km/s";
+        carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + (((int)(waitngTime * 100)) / 100f).ToString() + " s";
         carInfo.transform.Find("Intersection Enter").GetComponent<TMP_Text>().text = "Intersection Enter Direction: " + transform.parent.name;
 
         string[] direction = { "North", "West", "South", "East" };

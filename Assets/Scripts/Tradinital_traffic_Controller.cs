@@ -63,7 +63,7 @@ public class Tradinital_traffic_Controller : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
  
         timeVariable += Time.deltaTime;
@@ -90,12 +90,6 @@ public class Tradinital_traffic_Controller : MonoBehaviour
 
     }
 
-    private void FixedUpdate()
-    {
-       
-
-
-    }
 
     /// <summary>
     /// Method <c>ChangeLightRed</c> make the current traffic light red.

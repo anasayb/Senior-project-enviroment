@@ -37,7 +37,7 @@ public class Avg_wating_time : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //
         calculateTheNumberOfCar();
@@ -159,10 +159,10 @@ public class Avg_wating_time : MonoBehaviour
         Summery.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = names[Scence_Manger.dir];
 
         // Avg_waiting
-        Summery.transform.Find("AVG").Find("Time").GetComponent<TMP_Text>().text = Avg_wating.ToString();
+        Summery.transform.Find("AVG").Find("Time").GetComponent<TMP_Text>().text = (((int)(Avg_wating * 100))/100f).ToString("F2") + " s";
 
         // Max waiting
-        Summery.transform.Find("Max Waiting Time").Find("Time").GetComponent<TMP_Text>().text = maxWaiting().ToString();
+        Summery.transform.Find("Max Waiting Time").Find("Time").GetComponent<TMP_Text>().text = (((int)(maxWaiting() * 100)) / 100f).ToString("F2") + " s";
 
         // Cars Number
         Summery.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = Scence_Manger.startingNumberOfCars.ToString();
@@ -176,7 +176,7 @@ public class Avg_wating_time : MonoBehaviour
             // Car name
             newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = item.Key;
             // Waiting Time
-            newRow.transform.GetChild(1).GetComponent<TMP_Text>().text = item.Value.waiting_time.ToString();
+            newRow.transform.GetChild(1).GetComponent<TMP_Text>().text = (((int)(item.Value.waiting_time * 100)) / 100f).ToString("F2");
             // Start Direction
             newRow.transform.GetChild(2).GetComponent<TMP_Text>().text = item.Value.streat;
             // Turning
