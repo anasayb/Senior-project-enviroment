@@ -25,7 +25,7 @@ public class Avg_wating_time : MonoBehaviour
     public GameObject timer;
 
     private static Dictionary<string, data> waitingTimes;
-    private static float numberOfCars = 0;
+    public static float numberOfCars = 0;
     private bool stored = false;
 
     // Start is called before the first frame update
