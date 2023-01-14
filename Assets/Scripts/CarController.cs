@@ -377,10 +377,10 @@ public class CarController : MonoBehaviour
             if (transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude <= 30)
             {   
                 Rigidbody speed = GetComponent<Rigidbody>();
-                if (speed.velocity.magnitude > 5)
+                if (speed.velocity.magnitude > 10)
                 {
                     colide = transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude;
-                    deaccelerate(5);
+                    deaccelerate(10);
                 }
                 
 
@@ -421,6 +421,7 @@ public class CarController : MonoBehaviour
 
             // Unfreez the roation contrain
             GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezeAll;
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationZ;
             wheels[0].steerAngle = stear;
             wheels[1].steerAngle = stear;
 
@@ -464,10 +465,10 @@ public class CarController : MonoBehaviour
             if (transform.InverseTransformPoint(RightPath[0].position.x, transform.position.y, RightPath[0].position.z).magnitude <= 20 && !doneTurning)
             {
                 Rigidbody speed = GetComponent<Rigidbody>();
-                if (speed.velocity.magnitude > 4)
+                if (speed.velocity.magnitude > 7)
                 {
                     colide = transform.InverseTransformPoint(RightPath[0].position.x, transform.position.y, RightPath[0].position.z).magnitude;
-                    deaccelerate(4);
+                    deaccelerate(7);
                 }
 
             }
@@ -505,6 +506,7 @@ public class CarController : MonoBehaviour
 
             // Unfreez the roation contrain
             GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezeAll;
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationZ;
             wheels[0].steerAngle = stear;
             wheels[1].steerAngle = stear;
 
