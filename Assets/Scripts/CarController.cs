@@ -30,6 +30,7 @@ public class CarController : MonoBehaviour
     private float FORCE_STOP = 1600f;
     private bool turning = false;
     private int currentIndexLeft = 0, currentIndexRight = 0;
+    private bool deaccelrate = false;
 
     [Header("Sensors")]
     public float sensorLength = 10f;
@@ -175,14 +176,14 @@ public class CarController : MonoBehaviour
             colide = -1;
         }
 
-        
+
 
         // Turning Code
         if (Physics.Raycast(posForwardCenter, -(transform.up), out hit, sensorLength))
         {
             if (hit.collider.tag == "NorthTrafficLight")
             {
-                Basic_algo.carNumberNorth += 1; 
+                Basic_algo.carNumberNorth += 1;
             }
             // If the car enter the intersection sqaure 
             if (hit.collider.tag == "IntersectionArea")
@@ -193,11 +194,15 @@ public class CarController : MonoBehaviour
             {
                 turning = false;
             }
-           
+
         }
         else
         {
             // End of the map, no road under you
+            if (carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text == name) { 
+                sel.SetActive(false);
+                carInfo.SetActive(false);
+            }
             Destroy(gameObject);
         }
 
@@ -213,7 +218,7 @@ public class CarController : MonoBehaviour
 
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit h;
-        if (Physics.Raycast(ray, out h, 200, ~CarLay))
+        if (Physics.Raycast(ray, out h, 230, ~CarLay) && Car_Generator.CarsToGenerate == 0 && deaccelrate)
         {
 
             Rigidbody speed = GetComponent<Rigidbody>();
@@ -228,7 +233,7 @@ public class CarController : MonoBehaviour
         Avg_wating_time.updateAvg(transform.name, waitngTime, left, right, transform.parent.name);
 
         // Debug code
-        // Debug.DrawRay(ray.origin, transform.forward*200, Color.blue);
+        // Debug.DrawRay(ray.origin, transform.forward*300, Color.blue);
 
     }
 
@@ -286,8 +291,9 @@ public class CarController : MonoBehaviour
     /// <summary>
     /// Method <c>maccelerateove</c> This function Accelerate the car.
     /// </summary>
-    private void accelerate(float torque)
+    private void accelerate(float torque)   
     {
+        deaccelrate = false;
         Rigidbody speed = GetComponent<Rigidbody>();
         speed.drag = 0;
 
@@ -311,6 +317,7 @@ public class CarController : MonoBehaviour
     /// <param name="finalSpeed">the target speed</param>
     private void deaccelerate(float finalSpeed)
     {
+        deaccelrate = true;
         Rigidbody speed = GetComponent<Rigidbody>();
         
         

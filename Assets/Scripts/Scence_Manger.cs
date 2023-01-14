@@ -21,6 +21,7 @@ public class Scence_Manger : MonoBehaviour
     public GameObject[] timeInputs;
     public GameObject timeobject;
     public GameObject method;
+    public GameObject TotalNumberOfCars;
 
 
     public void FixedUpdate()
@@ -76,6 +77,13 @@ public class Scence_Manger : MonoBehaviour
             {
                 providedTime[i] = 10f;
             }
+        }
+
+        // Number of Cars
+        string input2 = TotalNumberOfCars.GetComponent<TMP_InputField>().text;
+        if (!int.TryParse(input2, out startingNumberOfCars))
+        {
+            startingNumberOfCars = 22;
         }
 
         StartCoroutine(LoadYourAsyncScene("SampleScene"));

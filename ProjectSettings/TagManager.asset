@@ -13,6 +13,7 @@ TagManager:
   - NorthTrafficLight
   - EastTrafficLight
   - WestTrafficLight
+  - Bus
   layers:
   - Default
   - TransparentFX
