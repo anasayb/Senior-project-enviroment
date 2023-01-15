@@ -14,10 +14,10 @@ public class Car_Generator : MonoBehaviour
     private Transform[] parents;
     private Transform[] TurningPathsLeft;
     private Transform[] TurningPathsRight;
-    private int NameCarNumber = 0;
-    private int NameTruckNumber = 0;
-    private int NameEmergencyNumber = 0;
-    private int NameBusNumber = 0;
+    private int NameCarNumber = 1;
+    private int NameTruckNumber = 1;
+    private int NameEmergencyNumber = 1;
+    private int NameBusNumber = 1;
     private GameObject selector;
 
     Vector3[] startPos = {  new Vector3(6.44f, 1, -33.256f), new Vector3(13.21318f, 1, -33.256f),
@@ -192,7 +192,7 @@ public class Car_Generator : MonoBehaviour
             // Right
 
             // Random values for the need variables
-            carIndex = Random.Range(0, CarsPrefabs.Length);
+            carIndex = Random.Range(0, CarsPrefabs.Length-1);
             a = Random.Range(0, 2);  // Random number from 0 to 1
             turn = false;
             if (a == 1) // if a is 0 make the bool false

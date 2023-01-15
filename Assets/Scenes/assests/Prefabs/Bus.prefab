@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 3581308462959658242}
   m_Layer: 6
   m_Name: Bus
-  m_TagString: Untagged
+  m_TagString: Bus
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -129,7 +129,7 @@ MonoBehaviour:
   waitngTime: 0
   carInfo: {fileID: 0}
   tent: {fileID: 2100000, guid: 2d390730628f67047932c8804b15b617, type: 2}
-  selector: {fileID: 0}
+  sel: {fileID: 0}
 --- !u!1 &3581308463507075228
 GameObject:
   m_ObjectHideFlags: 0
