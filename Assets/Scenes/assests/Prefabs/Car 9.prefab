@@ -820,7 +820,7 @@ MonoBehaviour:
   - {fileID: 3201737344146538232}
   - {fileID: 3201737343556140850}
   MAX_SPEED: 20
-  left: 1
+  left: 0
   right: 0
   pathGourpLeft: {fileID: 0}
   pathGourpRight: {fileID: 0}
@@ -833,6 +833,7 @@ MonoBehaviour:
   waitngTime: 0
   carInfo: {fileID: 0}
   tent: {fileID: 2100000, guid: 5e54fa8db04e6224281cc927ac997350, type: 2}
+  sel: {fileID: 0}
 --- !u!1 &3201737345466101143
 GameObject:
   m_ObjectHideFlags: 0

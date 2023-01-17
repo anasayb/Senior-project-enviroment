@@ -25,7 +25,7 @@ public class Avg_wating_time : MonoBehaviour
     public GameObject timer;
 
     private static Dictionary<string, data> waitingTimes;
-    private static float numberOfCars = 0;
+    public static float numberOfCars = 0;
     private bool stored = false;
 
     // Start is called before the first frame update
@@ -37,7 +37,7 @@ public class Avg_wating_time : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //
         calculateTheNumberOfCar();
@@ -152,17 +152,17 @@ public class Avg_wating_time : MonoBehaviour
         Summery.SetActive(true);
 
         // Name of the method
-        Summery.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = "Traditional Traffic Light System";
+        Summery.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = Scence_Manger.algorthim;
 
         // Starting Direction
         string[] names = { "North", "West", "South", "East"};
         Summery.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = names[Scence_Manger.dir];
 
         // Avg_waiting
-        Summery.transform.Find("AVG").Find("Time").GetComponent<TMP_Text>().text = Avg_wating.ToString();
+        Summery.transform.Find("AVG").Find("Time").GetComponent<TMP_Text>().text = (((int)(Avg_wating * 100))/100f).ToString("F2") + " s";
 
         // Max waiting
-        Summery.transform.Find("Max Waiting Time").Find("Time").GetComponent<TMP_Text>().text = maxWaiting().ToString();
+        Summery.transform.Find("Max Waiting Time").Find("Time").GetComponent<TMP_Text>().text = (((int)(maxWaiting() * 100)) / 100f).ToString("F2") + " s";
 
         // Cars Number
         Summery.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = Scence_Manger.startingNumberOfCars.ToString();
@@ -176,7 +176,7 @@ public class Avg_wating_time : MonoBehaviour
             // Car name
             newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = item.Key;
             // Waiting Time
-            newRow.transform.GetChild(1).GetComponent<TMP_Text>().text = item.Value.waiting_time.ToString();
+            newRow.transform.GetChild(1).GetComponent<TMP_Text>().text = (((int)(item.Value.waiting_time * 100)) / 100f).ToString("F2");
             // Start Direction
             newRow.transform.GetChild(2).GetComponent<TMP_Text>().text = item.Value.streat;
             // Turning
