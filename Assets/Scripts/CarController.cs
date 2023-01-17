@@ -30,6 +30,7 @@ public class CarController : MonoBehaviour
     private float FORCE_STOP = 1600f;
     private bool turning = false;
     private int currentIndexLeft = 0, currentIndexRight = 0;
+    private bool deaccelrate = false;
 
     [Header("Sensors")]
     public float sensorLength = 10f;
@@ -133,7 +134,7 @@ public class CarController : MonoBehaviour
             {
                 
                 // If the car needs more then 2 seconds to pass the intersection, the car will stop.
-                if (hit.distance/speed.velocity.magnitude >= yellowLight)
+                if (hit.distance/speed.velocity.magnitude > 1)
                 {
                     findHit = true;
                     colide = hit.distance;
@@ -175,14 +176,14 @@ public class CarController : MonoBehaviour
             colide = -1;
         }
 
-        
+
 
         // Turning Code
         if (Physics.Raycast(posForwardCenter, -(transform.up), out hit, sensorLength))
         {
             if (hit.collider.tag == "NorthTrafficLight")
             {
-                Basic_algo.carNumberNorth += 1; 
+                Basic_algo.carNumberNorth += 1;
             }
             // If the car enter the intersection sqaure 
             if (hit.collider.tag == "IntersectionArea")
@@ -193,11 +194,15 @@ public class CarController : MonoBehaviour
             {
                 turning = false;
             }
-           
+
         }
         else
         {
             // End of the map, no road under you
+            if (carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text == name) { 
+                sel.SetActive(false);
+                carInfo.SetActive(false);
+            }
             Destroy(gameObject);
         }
 
@@ -213,7 +218,7 @@ public class CarController : MonoBehaviour
 
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit h;
-        if (Physics.Raycast(ray, out h, 200, ~CarLay))
+        if (Physics.Raycast(ray, out h, 230, ~CarLay) && Car_Generator.CarsToGenerate == 0 && deaccelrate)
         {
 
             Rigidbody speed = GetComponent<Rigidbody>();
@@ -228,7 +233,7 @@ public class CarController : MonoBehaviour
         Avg_wating_time.updateAvg(transform.name, waitngTime, left, right, transform.parent.name);
 
         // Debug code
-        // Debug.DrawRay(ray.origin, transform.forward*200, Color.blue);
+        // Debug.DrawRay(ray.origin, transform.forward*300, Color.blue);
 
     }
 
@@ -286,8 +291,9 @@ public class CarController : MonoBehaviour
     /// <summary>
     /// Method <c>maccelerateove</c> This function Accelerate the car.
     /// </summary>
-    private void accelerate(float torque)
+    private void accelerate(float torque)   
     {
+        deaccelrate = false;
         Rigidbody speed = GetComponent<Rigidbody>();
         speed.drag = 0;
 
@@ -311,6 +317,7 @@ public class CarController : MonoBehaviour
     /// <param name="finalSpeed">the target speed</param>
     private void deaccelerate(float finalSpeed)
     {
+        deaccelrate = true;
         Rigidbody speed = GetComponent<Rigidbody>();
         
         
@@ -377,10 +384,10 @@ public class CarController : MonoBehaviour
             if (transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude <= 30)
             {   
                 Rigidbody speed = GetComponent<Rigidbody>();
-                if (speed.velocity.magnitude > 5)
+                if (speed.velocity.magnitude > 10)
                 {
                     colide = transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude;
-                    deaccelerate(5);
+                    deaccelerate(10);
                 }
                 
 
@@ -421,6 +428,7 @@ public class CarController : MonoBehaviour
 
             // Unfreez the roation contrain
             GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezeAll;
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationZ;
             wheels[0].steerAngle = stear;
             wheels[1].steerAngle = stear;
 
@@ -431,6 +439,12 @@ public class CarController : MonoBehaviour
                 wheels[1].steerAngle -= 5;
                 wheels[2].steerAngle = stear - 5;
                 wheels[3].steerAngle = stear - 5;
+            }
+            else if (transform.tag == "Bus")
+            {
+                wheels[0].steerAngle -= 5;
+                wheels[1].steerAngle -= 5;
+
             }
 
             // if the distance to teh point is less than the specifed distance go to next point
@@ -464,10 +478,10 @@ public class CarController : MonoBehaviour
             if (transform.InverseTransformPoint(RightPath[0].position.x, transform.position.y, RightPath[0].position.z).magnitude <= 20 && !doneTurning)
             {
                 Rigidbody speed = GetComponent<Rigidbody>();
-                if (speed.velocity.magnitude > 4)
+                if (speed.velocity.magnitude > 5)
                 {
                     colide = transform.InverseTransformPoint(RightPath[0].position.x, transform.position.y, RightPath[0].position.z).magnitude;
-                    deaccelerate(4);
+                    deaccelerate(5);
                 }
 
             }
@@ -505,16 +519,17 @@ public class CarController : MonoBehaviour
 
             // Unfreez the roation contrain
             GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezeAll;
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationZ;
             wheels[0].steerAngle = stear;
             wheels[1].steerAngle = stear;
 
             // if the object is a truk increase the stear angle
             if (transform.tag == "Truck")
             {
-                wheels[0].steerAngle += 20;
-                wheels[1].steerAngle += 20;
-                wheels[2].steerAngle = stear + 20;
-                wheels[3].steerAngle = stear + 20;
+                wheels[0].steerAngle += 10;
+                wheels[1].steerAngle += 10;
+                wheels[2].steerAngle = stear + 10;
+                wheels[3].steerAngle = stear + 10;
             }
 
             // if the distance to teh point is less than the specifed distance go to next point
@@ -615,8 +630,8 @@ public class CarController : MonoBehaviour
 
         // Fill the infroamtion of the carInfo box
         carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text = name;
-        carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString() + " km/s";
-        carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString() + " s";
+        carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString("F2") + " km/s";
+        carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + (((int)(waitngTime * 100)) / 100f).ToString() + " s";
         carInfo.transform.Find("Intersection Enter").GetComponent<TMP_Text>().text = "Intersection Enter Direction: " + transform.parent.name;
 
         string[] direction = { "North", "West", "South", "East" };

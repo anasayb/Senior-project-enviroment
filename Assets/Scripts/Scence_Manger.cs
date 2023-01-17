@@ -21,7 +21,11 @@ public class Scence_Manger : MonoBehaviour
     public GameObject[] timeInputs;
     public GameObject timeobject;
     public GameObject method;
-
+    public GameObject TotalNumberOfCars;
+    public GameObject carNumberError;
+    public GameObject timeError;
+    public GameObject startButton;
+    public GameObject Loading;
 
     public void FixedUpdate()
     {
@@ -49,9 +53,11 @@ public class Scence_Manger : MonoBehaviour
     public void startprogram()
     {
 
-        // if(method.)
+        // resset the error messages
+        carNumberError.SetActive(false);
+        timeError.SetActive(false);
 
-        // directiont to start the simulation
+        // directtion to start the simulation
         dir = direction.GetComponent<TMP_Dropdown>().value;
 
         // Selected method
@@ -76,8 +82,31 @@ public class Scence_Manger : MonoBehaviour
             {
                 providedTime[i] = 10f;
             }
+            if (providedTime[i] <= 3)
+            {
+                timeError.SetActive(true);
+            }
         }
 
+        // Number of Cars
+        string input2 = TotalNumberOfCars.GetComponent<TMP_InputField>().text;
+        if (!int.TryParse(input2, out startingNumberOfCars))
+        {
+            startingNumberOfCars = 22;
+        }
+
+        if (startingNumberOfCars <= 0 || startingNumberOfCars > 180)
+        {
+            carNumberError.SetActive(true);
+        }
+
+        if (carNumberError.activeSelf == true || timeError.activeSelf == true)
+        {
+            return;
+        }
+
+        startButton.SetActive(false);
+        Loading.SetActive(true);
         StartCoroutine(LoadYourAsyncScene("SampleScene"));
         //SceneManager.LoadScene("SampleScene");
      

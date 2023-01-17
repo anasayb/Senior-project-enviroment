@@ -14,11 +14,11 @@ public class DatabaseConnection : MonoBehaviour
     public IEnumerator SaveWatingTime(Dictionary<string, data> watingTime, GameObject TrafficLightController)
     {
         string table = "";
-        if (TrafficLightController.GetComponent<Tradinital_traffic_Controller>().enabled == true)
+        if (TrafficLightController.GetComponent<Traditional_traffic_Controller>().enabled == true)
         {
 
-            string name = "traditional";
-            float[] temp = TrafficLightController.GetComponent<Tradinital_traffic_Controller>().time;
+            string name = Scence_Manger.startingNumberOfCars + " traditional";
+            float[] temp = TrafficLightController.GetComponent<Traditional_traffic_Controller>().time;
             name += "_N" + temp[0].ToString();
             name += "_W" + temp[1].ToString();
             name += "_S" + temp[2].ToString();
@@ -41,7 +41,7 @@ public class DatabaseConnection : MonoBehaviour
         }
         else if (TrafficLightController.GetComponent<Basic_algo>().enabled == true)
         {
-            string name = "Basic_algo";
+            string name = Scence_Manger.startingNumberOfCars + " Basic_algo";
             if (Scence_Manger.dir == 0) name += "_North";
             else if (Scence_Manger.dir == 1) name += "_West";
             else if (Scence_Manger.dir == 2) name += "_South";
