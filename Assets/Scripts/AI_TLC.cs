@@ -5,6 +5,7 @@ using UnityEngine;
 using System;
 using System.Diagnostics;
 using UnityEditor;
+using UnityEngine.UI;
 
 public class AI_TLC : MonoBehaviour
 {
@@ -14,11 +15,11 @@ public class AI_TLC : MonoBehaviour
     public float yellowLightDuration = 3f;
 
     [Header("Cameras")]
-    //public GameObject Maincameras;
+    public GameObject Maincamera;
     //public GameObject CameraController;
 
     [Header("GUI")]
-    //public GameObject text;
+    public GameObject timer;
 
     private float timeVariable = 0;
 
@@ -44,21 +45,22 @@ public class AI_TLC : MonoBehaviour
 
     // Update is called once per frame
 
-    private void Update()
+    private void FixedUpdate()
     {
         //updateCarsNumbers();
 
         timeVariable += Time.deltaTime;
-        //text.GetComponent<TMP_Text>().text = "Time:\n" + Math.Max((time - timeVariable), 0).ToString();
+        timer.GetComponentInChildren<TMP_Text>().text = Math.Max((Math.Ceiling(time - timeVariable)), 0).ToString();
+        timer.transform.GetChild(1).GetComponent<Image>().fillAmount = (1 - (timeVariable/time));
         if (timeVariable < time - yellowLightDuration)
         {
-            //text.GetComponent<TMP_Text>().color = new Color(0.02360218f, 0.3018868f, 0.01281594f);
+            timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
             ChangeLightGreen(direct);
         }
         else if (timeVariable >= time - yellowLightDuration && timeVariable < time)
         {
             ChangeLightYellow(direct);
-            //text.GetComponent<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
+            timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
         }
         else if (timeVariable >= time && timeVariable < time + delay)
         {
@@ -107,16 +109,7 @@ public class AI_TLC : MonoBehaviour
     {
 
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
-
-        /*for (int i = 0; i < cameras.Length; i++)
-        {
-            cameras[i].SetActive(false);
-        }
-
-
-        CameraController.GetComponent<User_Camera_Controll>().updateCameras(to);
-        cameras[to].SetActive(true);
-        */
+        Maincamera.GetComponent<User_Camera_Controll>().updateCameras(to);
 
     }
 

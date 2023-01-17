@@ -113,7 +113,7 @@ public class Basic_algo : MonoBehaviour
             if (time[direction] != 0)
             {
                 ChangeLightGreen(direction);
-                timer.GetComponentInChildren<TMP_Text>().color = new Color(0, 0, 0);
+                timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
             }
             
         }

@@ -107,6 +107,7 @@ public class User_Camera_Controll : MonoBehaviour
     /// <summary>
     /// Method <c>turnCameraLeft</c> move the camera to the left.
     /// </summary>
+    /*
     public void turnCameraLeft()
     {
         string[] names = { "North", "West", "South", "East" };
@@ -139,4 +140,5 @@ public class User_Camera_Controll : MonoBehaviour
         }
 
     }
+    */
 }
