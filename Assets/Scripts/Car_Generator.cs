@@ -104,10 +104,10 @@ public class Car_Generator : MonoBehaviour
 
         
 
-        StartCoroutine(GenerateCrsForDirection(nums["northCars"], 0, selector));
-        StartCoroutine(GenerateCrsForDirection(nums["westCars"], 1, selector));
-        StartCoroutine(GenerateCrsForDirection(nums["southCars"], 2, selector));
-        StartCoroutine(GenerateCrsForDirection(nums["eastCars"], 3, selector));
+        GenerateCrsForDirection(nums["northCars"], 0, selector);
+        GenerateCrsForDirection(nums["westCars"], 1, selector);
+        GenerateCrsForDirection(nums["southCars"], 2, selector);
+        GenerateCrsForDirection(nums["eastCars"], 3, selector);
 
 
 
@@ -115,7 +115,7 @@ public class Car_Generator : MonoBehaviour
     }
 
 
-    IEnumerator GenerateCrsForDirection(int numOfCars, int streat, GameObject selector)
+    void GenerateCrsForDirection(int numOfCars, int streat, GameObject selector)
     {
         Vector3 frontCarLeft = startPos[streat*2];
         Vector3 frontCarRight = startPos[streat*2+1];
@@ -161,6 +161,7 @@ public class Car_Generator : MonoBehaviour
             if (newCar.tag == "Truck")
             {
                 newCar.name = "Truck " + NameTruckNumber++;
+
             }
             else if (newCar.tag == "Emergency")
             {
@@ -229,7 +230,6 @@ public class Car_Generator : MonoBehaviour
             newCar = Instantiate(CarsPrefabs[carIndex], frontCarRight, Quaternion.Euler(rot));
             newCar.GetComponent<CarController>().pathGourpLeft = TurningPathsLeft[streat];
             newCar.GetComponent<CarController>().pathGourpRight = TurningPathsRight[streat];
-            newCar.name = "Car " + NameCarNumber++;
             newCar.transform.SetParent(parents[streat], true);
             newCar.GetComponent<CarController>().sel = selector;
             newCar.GetComponent<CarController>().carInfo = GameObject.Find("Canvas").transform.Find("CarInfo").gameObject;
@@ -255,6 +255,6 @@ public class Car_Generator : MonoBehaviour
 
         }
 
-        yield return null;
+        //yield return null;
     }
 }

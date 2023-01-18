@@ -34,8 +34,11 @@ public class Basic_algo : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
+        
         direction = Scence_Manger.dir;
+
+        /*
         if (direction == 0)
         {
             Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "North";
@@ -56,6 +59,7 @@ public class Basic_algo : MonoBehaviour
             Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "East";
 
         }
+        */
 
     }
 
