@@ -5562,6 +5562,7 @@ MonoBehaviour:
   timeError: {fileID: 108142216}
   startButton: {fileID: 1693869588}
   Loading: {fileID: 1722744985}
+  CheckBox: {fileID: 718003688}
 --- !u!1 &1530771866
 GameObject:
   m_ObjectHideFlags: 0

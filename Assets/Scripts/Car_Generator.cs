@@ -124,6 +124,29 @@ public class Car_Generator : MonoBehaviour
 
             // Random values for the need variables
             int carIndex = Random.Range(0, CarsPrefabs.Length);
+            if (Scence_Manger.EmergencyCar == true)
+            {
+                if (CarsPrefabs[carIndex].tag == "Emergency")
+                {
+                    Scence_Manger.EmergencyCar = false;
+                }
+                else if (j+1 == numOfCars)
+                {
+
+                    carIndex = CarsPrefabs.Length-2;
+                    Scence_Manger.EmergencyCar = false;
+
+                }
+
+                
+            }
+            else
+            {
+                while (CarsPrefabs[carIndex].tag == "Emergency")
+                {
+                    carIndex = Random.Range(0, CarsPrefabs.Length);
+                }
+            }
             int a = Random.Range(0, 2);  // Random number from 0 to 1
             bool turn = false;
             if (a == 1) // if a is 0 make the bool false
@@ -194,6 +217,30 @@ public class Car_Generator : MonoBehaviour
 
             // Random values for the need variables
             carIndex = Random.Range(0, CarsPrefabs.Length-1);
+            if (Scence_Manger.EmergencyCar == true)
+            {
+                if (CarsPrefabs[carIndex].tag == "Emergency")
+                {
+                    Scence_Manger.EmergencyCar = false;
+
+                }
+                else if (j + 1 == numOfCars)
+                {
+
+                    carIndex = CarsPrefabs.Length - 2;
+                    Scence_Manger.EmergencyCar = false;
+
+                }
+
+
+            }
+            else
+            {
+                while (CarsPrefabs[carIndex].tag == "Emergency")
+                {
+                    carIndex = Random.Range(0, CarsPrefabs.Length-1);
+                }
+            }
             a = Random.Range(0, 2);  // Random number from 0 to 1
             turn = false;
             if (a == 1) // if a is 0 make the bool false

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -14,8 +15,9 @@ public class Scence_Manger : MonoBehaviour
     [HideInInspector]
     public static float[] providedTime = { 10, 10, 10, 10 };
     public static int dir = 0;
-    public static int startingNumberOfCars = 22;
+    public static int startingNumberOfCars = 80;
     public static string algorthim;
+    public static bool EmergencyCar;
 
     public GameObject direction;
     public GameObject[] timeInputs;
@@ -26,6 +28,7 @@ public class Scence_Manger : MonoBehaviour
     public GameObject timeError;
     public GameObject startButton;
     public GameObject Loading;
+    public GameObject CheckBox;
 
     public void FixedUpdate()
     {
@@ -92,7 +95,7 @@ public class Scence_Manger : MonoBehaviour
         string input2 = TotalNumberOfCars.GetComponent<TMP_InputField>().text;
         if (!int.TryParse(input2, out startingNumberOfCars))
         {
-            startingNumberOfCars = 22;
+            startingNumberOfCars = 80;
         }
 
         if (startingNumberOfCars <= 0 || startingNumberOfCars > 180)
@@ -107,6 +110,12 @@ public class Scence_Manger : MonoBehaviour
 
         startButton.SetActive(false);
         Loading.SetActive(true);
+
+        if (CheckBox.GetComponent<Toggle>().isOn)
+        {
+            EmergencyCar = true;
+        }
+
         StartCoroutine(LoadYourAsyncScene("SampleScene"));
         //SceneManager.LoadScene("SampleScene");
      

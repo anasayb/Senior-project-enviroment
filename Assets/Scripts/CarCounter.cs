@@ -5,6 +5,8 @@ using UnityEngine;
 public class CarCounter : MonoBehaviour
 {
     public int carsCounter;
+    public bool emergencyExist = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +22,10 @@ public class CarCounter : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         carsCounter++;
+        if (other.tag == "Emergency")
+        {
+            emergencyExist = true;
+        }
         //Debug.Log(other.gameObject.tag);
         //Debug.Log("Car after Enter Count = " + carsCounter + "At this intersection " + tag);
 
@@ -27,6 +33,10 @@ public class CarCounter : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         carsCounter--;
+        if (other.tag == "Emergency")
+        {
+            emergencyExist = false;
+        }
         //Debug.Log(other.gameObject.tag);
         //Debug.Log("Car after Exit Count = " + carsCounter + "At this intersection " + tag);
 
