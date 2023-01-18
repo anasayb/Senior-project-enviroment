@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Car
+  - Traffic Light
+  - IntersectionArea
+  - Turning
+  - Truck
+  - SouthTrafficLight
+  - NorthTrafficLight
+  - EastTrafficLight
+  - WestTrafficLight
+  - Bus
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - Turning layer
+  - Water
+  - UI
+  - Cars
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
