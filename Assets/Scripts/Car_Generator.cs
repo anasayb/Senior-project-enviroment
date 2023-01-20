@@ -33,20 +33,6 @@ public class Car_Generator : MonoBehaviour
     public void generate()    
     {
 
-        // selector
-        //selector = GameObject.Find("Selector").gameObject;
-        //selector.SetActive(false);
-
-        if (CarsToGenerate == 22)
-        {
-            template.SetActive(true);
-            transform.name = "Garbage";
-            transform.gameObject.SetActive(false);
-            template.name = "Cars";
-            CarsToGenerate = 0;
-            return;
-        }
-
         parents = new Transform[4];
         parents[0] = transform.Find("North").transform;
         parents[1] = transform.Find("West").transform;
@@ -66,6 +52,29 @@ public class Car_Generator : MonoBehaviour
         TurningPathsRight[2] = transform.parent.Find("Turning Paths").Find("Right").Find("Turnining Right Path South").transform;
         TurningPathsRight[3] = transform.parent.Find("Turning Paths").Find("Right").Find("Turnining Right Path East").transform;
 
+
+        if (CarsToGenerate == 22)
+        {
+            
+            for (int i = 0; i < template.transform.childCount; i++)
+            {
+                GameObject dir = template.transform.GetChild(i).gameObject;
+                for (int j = 0; j < dir.transform.childCount; j++)
+                {
+
+                    GameObject car = Instantiate(dir.transform.GetChild(j).gameObject);
+                    car.transform.parent = parents[i];
+                    car.GetComponent<CarController>().pathGourpLeft = TurningPathsLeft[i];
+                    car.GetComponent<CarController>().pathGourpRight = TurningPathsRight[i];
+                }
+            }
+
+            CarsToGenerate = 0;
+            return;
+        }
+
+        //template.SetActive(false);
+        
         
         GenerateCar();
 

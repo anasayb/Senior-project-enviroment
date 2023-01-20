@@ -29,7 +29,7 @@ public class Avg_wating_time : MonoBehaviour
 
 
     private Dictionary<string, data> waitingTimes;
-    private bool stored = false;
+    //private bool stored = false;
 
 
     // Start is called before the first frame update
@@ -60,19 +60,7 @@ public class Avg_wating_time : MonoBehaviour
         // If all cars are disapeared chagn the color of the text to green
         // numberOfCars == 0 && transform.GetComponent<Car_Generator>().CarsToGenerate == 0
 
-        if (numberOfCars <= 0)
-        {
-            //Text.GetComponent<TMP_Text>().color = new Color(0.039f, 0.545f, 0.039f);
-            if (stored)
-            {
-                //DatabaseConnection db = GameObject.Find("Database").GetComponent<DatabaseConnection>();
-				
-                //StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights")));
-                stored = true;
-                summeryPanel();
-
-            }
-        }
+  
             
     }
 
@@ -213,4 +201,9 @@ public class Avg_wating_time : MonoBehaviour
         return max;
     }
 
+    public void reset()
+    {
+        Avg_wating = 0;
+        waitingTimes.Clear();
+    }
 }

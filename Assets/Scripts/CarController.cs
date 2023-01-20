@@ -37,7 +37,6 @@ public class CarController : MonoBehaviour
 
     private float tempSensorLength;
     private float colide = -1;
-    private float yellowLight = 1f;
 
     [Header("Wating Time")]
     public LayerMask CarLay;

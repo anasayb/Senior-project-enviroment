@@ -20,13 +20,6 @@ public class Light_Conteroler : MonoBehaviour
     }
 
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-
     private void FixedUpdate()
     {   
         // Update the traffic light singals
@@ -40,7 +33,10 @@ public class Light_Conteroler : MonoBehaviour
     /// </summary>
     public void chagneToGreen()
     {
-        flag[0] = false;
+        for (int i = 0; i < flag.Length; i++)
+        {
+            flag[i] = false;
+        }
         flag[2] = true;
         GetComponent<BoxCollider>().enabled = false;
     }
@@ -51,7 +47,11 @@ public class Light_Conteroler : MonoBehaviour
     /// </summary>
     public void chagneToRed()
     {
-        flag[1] = false;
+        for (int i = 0; i < flag.Length; i++)
+        {
+            flag[i] = false;
+        }
+
         flag[0] = true;
         //BoxCollider box = ;
         GetComponent<BoxCollider>().enabled = true;
@@ -65,7 +65,10 @@ public class Light_Conteroler : MonoBehaviour
     /// </summary>
     public void chagneToYellow()
     {
-        flag[2] = false;
+        for (int i = 0; i < flag.Length; i++)
+        {
+            flag[i] = false;
+        }
         flag[1] = true;
 
         //BoxCollider box = GetComponent<BoxCollider>();
