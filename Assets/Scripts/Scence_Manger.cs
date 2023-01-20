@@ -15,7 +15,7 @@ public class Scence_Manger : MonoBehaviour
     [HideInInspector]
     public static float[] providedTime = { 10, 10, 10, 10 };
     public static int dir = 0;
-    public static int startingNumberOfCars = 80;
+    public static int startingNumberOfCars = 22;
     public static string algorthim;
     public static bool EmergencyCar;
 
@@ -95,7 +95,7 @@ public class Scence_Manger : MonoBehaviour
         string input2 = TotalNumberOfCars.GetComponent<TMP_InputField>().text;
         if (!int.TryParse(input2, out startingNumberOfCars))
         {
-            startingNumberOfCars = 80;
+            startingNumberOfCars = 22;
         }
 
         if (startingNumberOfCars <= 0 || startingNumberOfCars > 180)
@@ -115,7 +115,7 @@ public class Scence_Manger : MonoBehaviour
         {
             EmergencyCar = true;
         }
-
+        
         StartCoroutine(LoadYourAsyncScene("SampleScene"));
         //SceneManager.LoadScene("SampleScene");
      
