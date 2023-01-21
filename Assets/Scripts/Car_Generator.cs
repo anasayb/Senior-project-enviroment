@@ -61,7 +61,7 @@ public class Car_Generator : MonoBehaviour
                 for (int j = 0; j < dir.transform.childCount; j++)
                 {
 
-                    GameObject car = Instantiate(dir.transform.GetChild(j).gameObject);
+                    GameObject car = Instantiate(dir.transform.GetChild(j).gameObject, transform.position + dir.transform.GetChild(j).position, Quaternion.Euler(new Vector3(0, 0, 0)));
                     car.transform.parent = parents[i];
                     car.GetComponent<CarController>().pathGourpLeft = TurningPathsLeft[i];
                     car.GetComponent<CarController>().pathGourpRight = TurningPathsRight[i];
@@ -115,15 +115,15 @@ public class Car_Generator : MonoBehaviour
 
 
 
-        StartCoroutine(GenerateCrsForDirection(nums["northCars"], 0));
-        StartCoroutine(GenerateCrsForDirection(nums["westCars"], 1));
-        StartCoroutine(GenerateCrsForDirection(nums["southCars"], 2));
-        StartCoroutine(GenerateCrsForDirection(nums["eastCars"], 3));
+        GenerateCrsForDirection(nums["northCars"], 0);
+        GenerateCrsForDirection(nums["westCars"], 1);
+        GenerateCrsForDirection(nums["southCars"], 2);
+        GenerateCrsForDirection(nums["eastCars"], 3);
 
     }
 
 
-    IEnumerator GenerateCrsForDirection(int numOfCars, int streat)
+    void GenerateCrsForDirection(int numOfCars, int streat)
     {
         Vector3 frontCarLeft = startPos[streat*2];
         Vector3 frontCarRight = startPos[streat*2+1];
@@ -263,7 +263,7 @@ public class Car_Generator : MonoBehaviour
 
         }
 
-        yield return null;
+        //yield return null;
 
     }
 }

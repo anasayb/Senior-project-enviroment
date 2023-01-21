@@ -30,6 +30,7 @@ public class AI : Agent
     private int nextTime = 0;
     private bool once = true;
 
+
     // for making things fast
     // private float initialTimeScale = 10f;
 
@@ -41,6 +42,7 @@ public class AI : Agent
 
         // Set variables
         cars = transform.parent.Find("Train").Find("Cars").gameObject;
+        cars.transform.name = "Cars " + transform.parent.name;
         trafficLights = transform.parent.Find("Train").GetComponent<AI_TLC>().trafficLights;
         CarCount = transform.parent.Find("Train").GetComponent<AI_TLC>().CarCount;
 
@@ -52,8 +54,8 @@ public class AI : Agent
         }
 
         // Set the seed value
-        Random.InitState((int)System.DateTime.Now.Ticks);
-        int num = Random.Range(1, 24);
+        //Random.InitState(System.DateTime.Now.Millisecond);
+        int num = Random.Range(1, 81);
         cars.GetComponent<Car_Generator>().CarsToGenerate = num;
         cars.GetComponent<Avg_wating_time>().numberOfCars = num;
         cars.GetComponent<Avg_wating_time>().reset();
@@ -108,7 +110,9 @@ public class AI : Agent
                 ChangeLightRed(i);
             }
 
-            int num = Random.Range(1, 24);
+            Random.InitState(System.DateTime.Now.Millisecond);
+            int num = Random.Range(1, 81);
+            Debug.Log("Number: " + num);
             cars.GetComponent<Car_Generator>().CarsToGenerate = num;
             cars.GetComponent<Avg_wating_time>().numberOfCars = num;
             cars.GetComponent<Avg_wating_time>().reset();
@@ -180,7 +184,7 @@ public class AI : Agent
             if (once)
             {
                 once = false;
-                SetReward(-(cars.GetComponent<Avg_wating_time>().Avg_wating / 500));
+                SetReward(-(cars.GetComponent<Avg_wating_time>().Avg_wating / 600));
                 RequestDecision();
             }
                       
