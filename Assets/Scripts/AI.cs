@@ -28,13 +28,14 @@ public class AI : Agent
     private int nextDirect = 0;
     private int time = 0;
     private int nextTime = 0;
+    private bool once = true;
 
     // for making things fast
-    private float initialTimeScale = 10f;
+    // private float initialTimeScale = 10f;
 
     public void Start()
     {
-        Time.timeScale = initialTimeScale;
+        //Time.timeScale = initialTimeScale;
         //Time.fixedDeltaTime = 0.02f * Time.timeScale;
 
 
@@ -42,15 +43,24 @@ public class AI : Agent
         cars = transform.parent.Find("Train").Find("Cars").gameObject;
         trafficLights = transform.parent.Find("Train").GetComponent<AI_TLC>().trafficLights;
         CarCount = transform.parent.Find("Train").GetComponent<AI_TLC>().CarCount;
+
+        // Prepare
+        // Reset Lights
+        for (int i = 0; i < 4; i++)
+        {
+            ChangeLightRed(i);
+        }
+
+        int num = Random.Range(1, 24);
+        cars.GetComponent<Car_Generator>().CarsToGenerate = num;
+        cars.GetComponent<Avg_wating_time>().numberOfCars = num;
+        cars.GetComponent<Avg_wating_time>().reset();
+        cars.GetComponent<Car_Generator>().generate();
+
     }
 
     public void FixedUpdate()
     {   
-        // If the enviroment is still not inizilized 
-        //if (newEnv == null)
-        //{
-        //    return;
-        //}
 
         // check if the episode finish
         if (cars.GetComponent<Avg_wating_time>().numberOfCars == 0 || cars.GetComponent<Avg_wating_time>().Avg_wating >= 600)
@@ -87,45 +97,33 @@ public class AI : Agent
         
         Debug.Log("ep: " + episodeNumber);
         episodeNumber++;
-        if (episodeNumber == 1)
+
+        if (episodeNumber != 1)
         {
-            RequestDecision();
-            return;
+            // Reset Lights
+            for (int i = 0; i < 4; i++)
+            {
+                ChangeLightRed(i);
+            }
+
+            int num = Random.Range(1, 24);
+            cars.GetComponent<Car_Generator>().CarsToGenerate = num;
+            cars.GetComponent<Avg_wating_time>().numberOfCars = num;
+            cars.GetComponent<Avg_wating_time>().reset();
+            cars.GetComponent<Car_Generator>().finish = false;
+            cars.GetComponent<Car_Generator>().generate();
+           
         }
 
-        //if (newEnv != null)
-        //{
-        //    Destroy(newEnv);
-        //}
-
-        //newEnv = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.Euler(Vector3.zero));
-        //newEnv.name = "Env";
-        // newEnv.transform.SetParent(transform.parent);
-        // newEnv.transform.localPosition = new Vector3(0,0,0);
-
-        //cars = newEnv.transform.Find("Cars").gameObject;
-
-        // Reset Lights
-        for (int i = 0; i < trafficLights.Length; i++)
-        {
-            ChangeLightRed(i);
-        }
-
-        int num = Random.Range(1,24);
-        cars.GetComponent<Car_Generator>().CarsToGenerate = num;
-        cars.GetComponent<Avg_wating_time>().numberOfCars = num;
-        cars.GetComponent<Avg_wating_time>().reset();
-        cars.GetComponent<Car_Generator>().generate();
-
-        
-
-        // Request descion to begin the episode
-        RequestDecision();
+        // Resest variabels
+        time = 0;
+        direct = 0;
 
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        Debug.Log(CarCount[0].carsCounter + " " + CarCount[1].carsCounter + " " + CarCount[2].carsCounter + " " + CarCount[3].carsCounter);
         sensor.AddObservation(CarCount[0].carsCounter);
         sensor.AddObservation(CarCount[1].carsCounter);
         sensor.AddObservation(CarCount[2].carsCounter);
@@ -177,8 +175,13 @@ public class AI : Agent
             ChangeLightGreen(direct);
         }else if (timeVariable >= time - yellowLightDuration - 1 && timeVariable < time - yellowLightDuration)
         {
-            SetReward(-(cars.GetComponent<Avg_wating_time>().Avg_wating / 500));
-            RequestDecision();
+            if (once)
+            {
+                once = false;
+                SetReward(-(cars.GetComponent<Avg_wating_time>().Avg_wating / 500));
+                RequestDecision();
+            }
+                      
         }
         else if (timeVariable >= time - yellowLightDuration && timeVariable < time)
         {
@@ -190,6 +193,7 @@ public class AI : Agent
                 nextTime = -1;
                 nextDirect = -1;
                 timeVariable = 0;
+                once = true;
             }
             else
             {
@@ -211,6 +215,7 @@ public class AI : Agent
             nextTime = -1;
             nextDirect = -1;
             timeVariable = 0;
+            once = true;
         }
     }
 
@@ -242,7 +247,10 @@ public class AI : Agent
     /// <param name="to">the next traffic light to be green</param>
     private void ChangeLightGreen(int to)
     {
-
+        for (int i = 0; i < 4; i++)
+        {
+            ChangeLightRed(i);
+        }
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
 
     }

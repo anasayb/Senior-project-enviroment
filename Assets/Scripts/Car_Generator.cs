@@ -29,7 +29,6 @@ public class Car_Generator : MonoBehaviour
                             new Vector3(-6.68f, 1, 35.39f), new Vector3(-13.39f, 1, 35.39f),
                             new Vector3(-33.0f, 1, -6.8f), new Vector3(-33.0f, 1, -13.16f)};
 
-    // Start is called before the first frame update
     public void generate()    
     {
 
@@ -74,10 +73,9 @@ public class Car_Generator : MonoBehaviour
         }
 
         //template.SetActive(false);
-        
-        
-        GenerateCar();
 
+
+        GenerateCar();
     }
 
     // Update is called once per frame
@@ -115,15 +113,12 @@ public class Car_Generator : MonoBehaviour
 
         }
 
-        
+
 
         StartCoroutine(GenerateCrsForDirection(nums["northCars"], 0));
         StartCoroutine(GenerateCrsForDirection(nums["westCars"], 1));
         StartCoroutine(GenerateCrsForDirection(nums["southCars"], 2));
         StartCoroutine(GenerateCrsForDirection(nums["eastCars"], 3));
-
-
-
 
     }
 
