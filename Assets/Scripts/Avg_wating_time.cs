@@ -28,7 +28,7 @@ public class Avg_wating_time : MonoBehaviour
 
     private static Dictionary<string, data> waitingTimes;
     public static float numberOfCars = 0;
-    private bool stored = false;
+    private bool stored = true;
 
     // Start is called before the first frame update
     void Start()
