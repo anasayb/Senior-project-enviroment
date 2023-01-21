@@ -51,6 +51,8 @@ public class AI : Agent
             ChangeLightRed(i);
         }
 
+        // Set the seed value
+        Random.InitState((int)System.DateTime.Now.Ticks);
         int num = Random.Range(1, 24);
         cars.GetComponent<Car_Generator>().CarsToGenerate = num;
         cars.GetComponent<Avg_wating_time>().numberOfCars = num;
