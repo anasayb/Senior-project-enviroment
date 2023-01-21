@@ -225,7 +225,7 @@ public class AI : Agent
     /// <param name="to">the current traffic light to be red</param>
     public void ChangeLightRed(int to)
     {
-        Debug.Log(to);
+
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToRed();
 
     }
