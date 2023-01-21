@@ -110,7 +110,6 @@ public class AI : Agent
             cars.GetComponent<Car_Generator>().CarsToGenerate = num;
             cars.GetComponent<Avg_wating_time>().numberOfCars = num;
             cars.GetComponent<Avg_wating_time>().reset();
-            cars.GetComponent<Car_Generator>().finish = false;
             cars.GetComponent<Car_Generator>().generate();
            
         }
@@ -123,7 +122,7 @@ public class AI : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        Debug.Log(CarCount[0].carsCounter + " " + CarCount[1].carsCounter + " " + CarCount[2].carsCounter + " " + CarCount[3].carsCounter);
+        
         sensor.AddObservation(CarCount[0].carsCounter);
         sensor.AddObservation(CarCount[1].carsCounter);
         sensor.AddObservation(CarCount[2].carsCounter);
@@ -151,7 +150,7 @@ public class AI : Agent
 
     private void TrafficLightControlling()
     {
-        if (time == 0)
+        if (time == 0 || time == -1)
         {
             if (nextTime != 0 && nextTime != -1)
             {
@@ -173,6 +172,7 @@ public class AI : Agent
         {
 
             ChangeLightGreen(direct);
+
         }else if (timeVariable >= time - yellowLightDuration - 1 && timeVariable < time - yellowLightDuration)
         {
             if (once)
@@ -225,7 +225,7 @@ public class AI : Agent
     /// <param name="to">the current traffic light to be red</param>
     public void ChangeLightRed(int to)
     {
-
+        Debug.Log(to);
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToRed();
 
     }
