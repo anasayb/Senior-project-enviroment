@@ -5,6 +5,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+
+
 public class Basic_algo : MonoBehaviour
 {
     public Component[] trafficLights;
@@ -16,6 +19,17 @@ public class Basic_algo : MonoBehaviour
     private float timeVariable = 0f;
     private int direction = 0;
     private bool oneTimeRun = true;
+    private bool secondoneTimeRun = false;
+    private int oldDirection = 1;
+    private int newDirection;
+    private int[] turnWaiting = { 0, 0, 0, 0 };
+    //NodeClass North;
+    //NodeClass South;
+    //NodeClass West;
+    //NodeClass East;
+
+
+    private PriorityQueue<NodeClass> queue = new PriorityQueue<NodeClass>();
 
     [Header("GUI")]
     public GameObject timer;
@@ -34,96 +48,165 @@ public class Basic_algo : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {   
-        
+    {
+
         direction = Scence_Manger.dir;
+        NodeClass North = new NodeClass(0, CarCount[0].carsCounter);
+        queue.Enqueue(North);
+        time[queue.Peek().direction] = GreenTimeCalc(CarCount[queue.Peek().direction].carsCounter);
 
-        /*
-        if (direction == 0)
-        {
-            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "North";
 
-        }
-        else if (direction == 1)
-        {
-            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "West";
-
-        }
-        else if (direction == 2)
-        {
-            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "South";
-
-        }
-        else if (direction == 3)
-        {
-            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "East";
-
-        }
-        */
 
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (oneTimeRun) // instead of writing it on the start method ive done it here . 
-        {
-            // The first direction manually setted to few sec just to show the skipping feature
-            time[direction] = 8f;// GreenTimeCalc(CarCount[direction].carsCounter);
-            ChangeLightGreen(direction);
-            oneTimeRun = false;
-        }
 
+
+        //  Debug.Log(queue.Peek());
         timeVariable += Time.deltaTime;
-        Debug.Log(" Direction : " + direction +
+        /*Debug.Log(" Direction : " + direction +
                   " Time assigned : " + time[direction] +
-                  " Car count : " + CarCount[direction].carsCounter);
+                  " Car count : " + CarCount[direction].carsCounter);*/
         timer.GetComponentInChildren<TMP_Text>().text = Math.Max((Math.Ceiling(time[direction] - timeVariable)), 0).ToString();
         timer.transform.GetChild(1).GetComponent<Image>().fillAmount = (1 - (timeVariable / time[direction]));
+
         if (timeVariable >= time[direction] - yellowLightDuration && timeVariable <= time[direction])
         {
             ChangeLightYellow(direction);
             timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
         }
+
         if (timeVariable >= time[direction])
         {
             ChangeLightRed(direction);
         }
+
         if (timeVariable >= time[direction] + delay)
         {
-            direction++;
-            direction %= 4;
-            time[direction] = GreenTimeCalc(CarCount[direction].carsCounter);
-            // this loop does the job of skipping the direction i think it needs to be optimized but for now it does the job 
-            for (int i = 0; i < 4; i++) 
-                 
-            {
-                if (time[direction] == 0)
-                {
-                    direction++;
-                    direction %= 4;
-                    time[direction] = GreenTimeCalc(CarCount[direction].carsCounter);
-                    continue;
 
-                }
-                else
+            if (oneTimeRun)
+            {
+                oneTimeRun = false;
+                queue.Clear();
+                NodeClass North = new NodeClass(0, CarCount[0].carsCounter);
+                NodeClass South = new NodeClass(2, CarCount[2].carsCounter);
+                NodeClass West = new NodeClass(1, CarCount[1].carsCounter);
+                NodeClass East = new NodeClass(3, CarCount[3].carsCounter);
+                queue.Enqueue(North);
+                queue.Enqueue(South);
+                queue.Enqueue(West);
+                queue.Enqueue(East);
+                direction = queue.Peek().direction;
+                time[queue.Peek().direction] = GreenTimeCalc(queue.Peek().CarCount);
+                if (time[direction] != 0)
                 {
-                    break;
+                    timeVariable = 0f;
+                    ChangeLightGreen(direction);
+                    timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
                 }
 
             }
-            timeVariable = 0f;
-
-            if (time[direction] != 0)
+            else
             {
-                ChangeLightGreen(direction);
-                timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                for (int i = 0; i < 4; i++)
+                {
+                    if (i == direction)
+                    {
+                        turnWaiting[i] = 0;
+                        continue;
+                    }
+                    else
+                    {
+                        turnWaiting[i]++;
+                    }
+                }
+                for (int i = 0; i < 4; i++)
+                {
+                    if (turnWaiting[i] >= 3)
+                    {
+                        queue.Clear();
+                        secondoneTimeRun = false;
+                        switch (i)
+                        {
+                            case 0:
+                                queue.Enqueue(new NodeClass(0, CarCount[0].carsCounter + 15));
+                                queue.Enqueue(new NodeClass(2, CarCount[2].carsCounter));
+                                queue.Enqueue(new NodeClass(1, CarCount[1].carsCounter));
+                                queue.Enqueue(new NodeClass(3, CarCount[3].carsCounter));
+                                turnWaiting[i] = 0;
+                                break;
+                            case 1:
+                                queue.Enqueue(new NodeClass(1, CarCount[1].carsCounter + 15));
+                                queue.Enqueue(new NodeClass(0, CarCount[0].carsCounter));
+                                queue.Enqueue(new NodeClass(2, CarCount[2].carsCounter));
+                                queue.Enqueue(new NodeClass(3, CarCount[3].carsCounter));
+                                turnWaiting[i] = 0;
+                                break;
+                            case 2:
+                                queue.Enqueue(new NodeClass(2, CarCount[2].carsCounter + 15));
+                                queue.Enqueue(new NodeClass(0, CarCount[0].carsCounter));
+                                queue.Enqueue(new NodeClass(1, CarCount[1].carsCounter));
+                                queue.Enqueue(new NodeClass(3, CarCount[3].carsCounter));
+                                turnWaiting[i] = 0;
+                                break;
+                            case 3:
+                                queue.Enqueue(new NodeClass(3, CarCount[3].carsCounter + 15));
+                                queue.Enqueue(new NodeClass(0, CarCount[0].carsCounter));
+                                queue.Enqueue(new NodeClass(2, CarCount[2].carsCounter));
+                                queue.Enqueue(new NodeClass(1, CarCount[1].carsCounter));
+                                turnWaiting[i] = 0;
+                                break;
+                            default:
+                                Debug.Log("Weird error happened Here ");
+                                queue.Enqueue(new NodeClass(oldDirection, CarCount[oldDirection].carsCounter));
+                                break;
+                        }
+
+                        direction = queue.Peek().direction;
+                        time[direction] = GreenTimeCalc(CarCount[direction].carsCounter);
+                        if (time[direction] != 0)
+                        {
+                            timeVariable = 0f;
+                            ChangeLightGreen(direction);
+                            timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                        }
+                        turnWaiting[i] = 0;
+                        break;
+                    }
+                    secondoneTimeRun = true;
+                }
+                if (secondoneTimeRun)
+                {
+                    oldDirection = queue.Peek().direction;
+                queue.Dequeue();
+                direction = queue.Peek().direction;
+
+
+                time[direction] = GreenTimeCalc(queue.Peek().CarCount);
+                if (time[direction] != 0)
+                {
+                    timeVariable = 0f;
+                    ChangeLightGreen(direction);
+                    timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                }
+                Debug.Log(oldDirection + " " + CarCount[oldDirection].carsCounter);
+                queue.Enqueue(new NodeClass(oldDirection, CarCount[oldDirection].carsCounter));
+                
+                
+
+               
+               //  queue.Enqueue(new NodeClass(oldDirection, CarCount[oldDirection].carsCounter));
+                }
+
+                
+
             }
-            
         }
-
-
     }
+
+
 
 
     /// <summary>
@@ -166,7 +249,7 @@ public class Basic_algo : MonoBehaviour
         int greenTime = (carNo * 2) + (int)delay; // here is our simple formula so far i need more time to dig and get the proper and suitable one , i substracted the yellow time so it does not count up there
         if (greenTime >= 30)
         {
-            return 30+1;
+            return 30 + 1;
         }
         else if (carNo == 0) // if there is no cars 
         {
@@ -174,20 +257,9 @@ public class Basic_algo : MonoBehaviour
         }
         else
         {
-            return greenTime+1;
+            return greenTime + 1;
         }
 
     }
 
-    /* private void Turns() will use it on choosing lanes .
-     {
-         if(carCount.counterTemp[direction+/]> carCount.counterTemp[direction + 2])
-         {
-
-         }else
-         {
-
-         }
-     }
-    */
 }
