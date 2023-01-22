@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1525,7 +1525,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9386792, b: 0.9386792, a: 1}
+  m_Color: {r: 0.6886792, g: 0.6659398, b: 0.6659398, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2641,7 +2641,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -145, y: -338.5}
+  m_AnchoredPosition: {x: -682, y: -327}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &718003690
@@ -4120,7 +4120,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2093184395}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4318,7 +4318,7 @@ MonoBehaviour:
     m_Options:
     - m_Text: Tradional Traffic Light System
       m_Image: {fileID: 0}
-    - m_Text: Queued Traffic Light System
+    - m_Text: carload based Traffic Light System
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4462,7 +4462,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1172426699}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
@@ -5562,6 +5562,7 @@ MonoBehaviour:
   timeError: {fileID: 108142216}
   startButton: {fileID: 1693869588}
   Loading: {fileID: 1722744985}
+  CheckBox: {fileID: 718003688}
 --- !u!1 &1530771866
 GameObject:
   m_ObjectHideFlags: 0
@@ -5855,11 +5856,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2093184395}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -603, y: -347.5}
+  m_AnchoredPosition: {x: -528, y: -343}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1550482529
@@ -5882,7 +5883,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Emergency Car System
+  m_text: 'Emergency Car
 
 '
   m_isRightToLeft: 0
@@ -6341,7 +6342,7 @@ RectTransform:
   m_Children:
   - {fileID: 1739882666}
   m_Father: {fileID: 2093184395}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.84660417, y: 0.067}
   m_AnchorMax: {x: 0.95800006, y: 0.13144444}
@@ -8004,9 +8005,9 @@ RectTransform:
   - {fileID: 121859460}
   - {fileID: 1407748712}
   - {fileID: 440041653}
-  - {fileID: 1550482528}
   - {fileID: 1693869589}
   - {fileID: 1066242106}
+  - {fileID: 1550482528}
   - {fileID: 718003689}
   - {fileID: 1722744988}
   m_Father: {fileID: 0}

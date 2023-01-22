@@ -785,7 +785,7 @@ GameObject:
   - component: {fileID: 7996629673361467694}
   m_Layer: 6
   m_Name: Police Car
-  m_TagString: Untagged
+  m_TagString: Emergency
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -855,7 +855,7 @@ MonoBehaviour:
   - {fileID: 7996629672308618911}
   - {fileID: 7996629673012339722}
   MAX_SPEED: 20
-  left: 1
+  left: 0
   right: 0
   pathGourpLeft: {fileID: 0}
   pathGourpRight: {fileID: 0}
@@ -868,3 +868,4 @@ MonoBehaviour:
   waitngTime: 0
   carInfo: {fileID: 0}
   tent: {fileID: 2100000, guid: 2d390730628f67047932c8804b15b617, type: 2}
+  sel: {fileID: 0}

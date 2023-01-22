@@ -29,13 +29,7 @@ public class Traditional_traffic_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (Scence_Manger.algorthim == "Queued Traffic Light System")
-        {
-
-            GetComponent<Basic_algo>().enabled = true;
-            GetComponent<Traditional_traffic_Controller>().enabled = false;
-            return;
-        }
+        
 
         time = Scence_Manger.providedTime;
         direction = Scence_Manger.dir;
@@ -58,6 +52,15 @@ public class Traditional_traffic_Controller : MonoBehaviour
             Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "East";
 
         }
+
+        if (Scence_Manger.algorthim == "Queued Traffic Light System")
+        {
+
+            GetComponent<Basic_algo>().enabled = true;
+            GetComponent<Traditional_traffic_Controller>().enabled = false;
+            return;
+        }
+
         ChangeLightGreen(direction);
        
     }
