@@ -15,7 +15,7 @@ public class Response
 
 public class DatabaseConnection : MonoBehaviour
 {
-    // public bool finish;
+       public bool connection;
     // public string[] res;
 
     public IEnumerator SaveWatingTime(Dictionary<string, data> watingTime, GameObject TrafficLightController)
@@ -122,7 +122,6 @@ public class DatabaseConnection : MonoBehaviour
     {
         
 
-
         UnityWebRequest www = UnityWebRequest.Get("http://localhost/sqlconnect/GetData.php");
 
         //www.SendWebRequest();
@@ -174,6 +173,32 @@ public class DatabaseConnection : MonoBehaviour
             //}
 
             //Debug.Log(res);
+        }
+
+
+        www.Dispose();
+
+    }
+
+    public IEnumerator CheckConnection(Response res)
+    {
+
+        UnityWebRequest www = UnityWebRequest.Get("http://localhost/sqlconnect/GetData.php");
+
+        //www.SendWebRequest();
+        yield return www.SendWebRequest();
+
+        while (!www.isDone)
+            yield return true;
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            // Debug.Log(www.error);
+            res.result = "Yes";
+        }
+        else
+        {
+            res.result = "No";
         }
 
 

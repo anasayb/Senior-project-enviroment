@@ -71,7 +71,7 @@ public class Scence_Manger : MonoBehaviour
         }
         else
         {
-            algorthim = "Queued Traffic Light System";
+            algorthim = "CarLoad Based Traffic Light System";
         }
 
         // Times of the traffic lights

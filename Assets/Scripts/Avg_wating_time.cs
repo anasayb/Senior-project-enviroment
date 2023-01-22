@@ -25,10 +25,10 @@ public class Avg_wating_time : MonoBehaviour
     public GameObject Text;
     public GameObject CarInfo;
     public GameObject timer;
-
-    private static Dictionary<string, data> waitingTimes;
     public static float numberOfCars = 0;
-    private bool stored = true;
+
+    public static Dictionary<string, data> waitingTimes;
+    private bool stored = false;
 
     // Start is called before the first frame update
     void Start()
@@ -61,14 +61,31 @@ public class Avg_wating_time : MonoBehaviour
             if (!stored)
             {
                 DatabaseConnection db = GameObject.Find("Database").GetComponent<DatabaseConnection>();
-                StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights")));
                 
+
+                //check connection
+                Response res = new Response();
+                IEnumerator e = db.getTables(res);
+                while (e.MoveNext()) ;
                 CarInfo.SetActive(false);
                 timer.SetActive(false);
                 summary.SetActive(true);
-                Summary.summeryPanel(null);
-
                 stored = true;
+                if (res.result == "Yes"){
+
+                    // There is a databse Connection
+                    StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights")));
+                    Summary.summeryPanel(null);
+
+                }
+                else{
+
+                    // If there is no database connection
+                    Summary.CurrentRunSummery();
+
+                }
+
+                
             }
         }
             

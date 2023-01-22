@@ -8,8 +8,7 @@ using UnityEngine.UI;
 
 public class Summary : MonoBehaviour
 {   
-    public static GameObject summary;
-    
+    //public static GameObject summary;
     
     private static Response res;
     private static Response data;
@@ -19,7 +18,6 @@ public class Summary : MonoBehaviour
     void Start()
     {
         database = GameObject.Find("Database").GetComponent<DatabaseConnection>();
-        summary = GameObject.Find("Canvas").transform.Find("Summary").gameObject;
     }
 
     // Update is called once per frame
@@ -49,6 +47,8 @@ public class Summary : MonoBehaviour
         e = database.getData(res, tableName);
         while (e.MoveNext()) ;
         string[] Data = res.result.Split(" ");
+
+        GameObject summary = GameObject.Find("Canvas").transform.Find("Summary").gameObject;
 
         // Name of the method
         summary.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = info[1].Replace("#"," ") + " Traffic Light System";
@@ -143,6 +143,8 @@ public class Summary : MonoBehaviour
     private static void reset()
     {
 
+        GameObject summary = GameObject.Find("Canvas").transform.Find("Summary").gameObject;
+
         // Cars informations
         GameObject cont = summary.transform.Find("CarInfo").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;
 
@@ -159,6 +161,58 @@ public class Summary : MonoBehaviour
         {
             Destroy(rec.transform.GetChild(i).gameObject);
         }
+
+
+    }
+
+
+    public static void CurrentRunSummery()
+    {
+
+        // Name of the method
+        GameObject summary = GameObject.Find("Canvas").transform.Find("Summary").gameObject;
+        summary.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = Scence_Manger.algorthim;
+
+        // Starting Direction
+        string[] names = { "North", "West", "South", "East" };
+        summary.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = names[Scence_Manger.dir];
+
+        // Avg_waiting
+        summary.transform.Find("AVG").Find("Time").GetComponent<TMP_Text>().text = (((int)(Avg_wating_time.Avg_wating * 100)) / 100f).ToString("F2") + " s";
+
+        // Cars Number
+        summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = Scence_Manger.startingNumberOfCars.ToString();
+
+        // Cars informations
+        GameObject cont = summary.transform.Find("CarInfo").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;
+        GameObject row = cont.transform.GetChild(0).gameObject;
+        row.SetActive(true);
+        float mx = 0;
+        Dictionary<string, data> Data = Avg_wating_time.waitingTimes;
+        foreach (var item in Data)
+        {
+
+            if (item.Value.waiting_time > mx)
+            {
+                mx = item.Value.waiting_time;
+            }
+
+            GameObject newRow = GameObject.Instantiate(row);
+            // Car name
+            newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = item.Key;
+            // Waiting Time
+            newRow.transform.GetChild(1).GetComponent<TMP_Text>().text = (((int)(item.Value.waiting_time * 100)) / 100f).ToString("F2");
+            // Start Direction
+            newRow.transform.GetChild(2).GetComponent<TMP_Text>().text = item.Value.streat;
+            // Turning
+            newRow.transform.GetChild(3).GetComponent<TMP_Text>().text = item.Value.direction;
+            newRow.transform.SetParent(cont.transform);
+        }
+        row.SetActive(false);
+        
+
+        // Max waiting
+        summary.transform.Find("Max Waiting Time").Find("Time").GetComponent<TMP_Text>().text = (((int)(mx * 100)) / 100f).ToString("F2") + " s";
 
 
     }
