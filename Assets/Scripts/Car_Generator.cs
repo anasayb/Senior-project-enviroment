@@ -60,11 +60,25 @@ public class Car_Generator : MonoBehaviour
                 GameObject dir = template.transform.GetChild(i).gameObject;
                 for (int j = 0; j < dir.transform.childCount; j++)
                 {
+                    Vector3 rot = new Vector3(0, 0, 0);
+                    Vector3 st = Streats[i].transform.right;
+                    if (st.x == 1f)
+                    {
+                        rot.y = 90;
+                    }
+                    else if (st.x == -1)
+                    {
+                        rot.y = -90;
+                    }
+                    else if (st.z < 0)
+                    {
+                        rot.y = 180;
+                    }
 
-                    GameObject car = Instantiate(dir.transform.GetChild(j).gameObject, transform.position + dir.transform.GetChild(j).position, Quaternion.Euler(new Vector3(0, 0, 0)));
-                    car.transform.parent = parents[i];
-                    car.GetComponent<CarController>().pathGourpLeft = TurningPathsLeft[i];
-                    car.GetComponent<CarController>().pathGourpRight = TurningPathsRight[i];
+                    GameObject obj = Instantiate(dir.transform.GetChild(j).gameObject, transform.position + dir.transform.GetChild(j).position, Quaternion.Euler(rot));
+                    obj.transform.parent = parents[i];
+                    obj.GetComponent<CarController>().pathGourpLeft = TurningPathsLeft[i];
+                    obj.GetComponent<CarController>().pathGourpRight = TurningPathsRight[i];
                 }
             }
 
