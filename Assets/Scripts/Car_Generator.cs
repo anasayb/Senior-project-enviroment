@@ -64,6 +64,7 @@ public class Car_Generator : MonoBehaviour
             CarsToGenerate = 0;
 
             // Create the last car according weather emerergncy car is cehck or not
+            /*
             int index = 0;
             string name = "";
             if (Scence_Manger.EmergencyCar == true)
@@ -86,6 +87,7 @@ public class Car_Generator : MonoBehaviour
             lastCar.GetComponent<CarController>().pathGourpRight = TurningPathsRight[2];
             lastCar.GetComponent<CarController>().sel = selector;
             lastCar.GetComponent<CarController>().carInfo = GameObject.Find("Canvas").transform.Find("CarInfo").gameObject;
+            */
             return;
         }
 
