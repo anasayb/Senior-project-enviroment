@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+
 public class Car_Generator : MonoBehaviour
 {
     public GameObject[] CarsPrefabs;
@@ -108,10 +109,10 @@ public class Car_Generator : MonoBehaviour
 
         // Decide the number of cars for each direction
         Dictionary<string, int> nums = new Dictionary<string, int>();
-        nums["northCars"] = System.Math.Min(Random.Range(0, CarsToGenerate), 45);
-        nums["westCars"]  = System.Math.Min(Random.Range(0, CarsToGenerate - nums["northCars"]), 45);
-        nums["southCars"]  = System.Math.Min(Random.Range(0, CarsToGenerate - nums["northCars"] - nums["westCars"]),45);
-        nums["eastCars"]  = System.Math.Min(CarsToGenerate - nums["northCars"] - nums["westCars"] - nums["southCars"], 45);
+        nums["northCars"] =  System.Math.Min(Random.Range(0, CarsToGenerate), 45);
+        nums["westCars"] = System.Math.Min(Random.Range(0, CarsToGenerate - nums["northCars"]), 45);
+        nums["southCars"] = System.Math.Min(Random.Range(0, CarsToGenerate - nums["northCars"] - nums["westCars"]),45);
+        nums["eastCars"] =  System.Math.Min(CarsToGenerate - nums["northCars"] - nums["westCars"] - nums["southCars"], 45);
 
         CarsToGenerate -= (nums["northCars"] + nums["westCars"] + nums["southCars"] + nums["eastCars"]);
 
@@ -135,6 +136,9 @@ public class Car_Generator : MonoBehaviour
         GenerateCrsForDirection(nums["eastCars"], 3, selector);
 
 
+
+
+ 
 
 
     }
