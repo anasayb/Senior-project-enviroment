@@ -12,12 +12,11 @@ public class Summary : MonoBehaviour
     
     private static Response res;
     private static Response data;
-    private static DatabaseConnection database ;
+    //private static DatabaseConnection database ;
 
     // Start is called before the first frame update
-    void Start()
+    static void Start()
     {
-        database = GameObject.Find("Database").GetComponent<DatabaseConnection>();
     }
 
     // Update is called once per frame
@@ -28,6 +27,8 @@ public class Summary : MonoBehaviour
 
     public static void summeryPanel(string tableName)
     {
+        DatabaseConnection database = GameObject.Find("Database").GetComponent<DatabaseConnection>();
+  
         //reset
         reset();
    
@@ -113,7 +114,7 @@ public class Summary : MonoBehaviour
             }
 
             GameObject newRow = GameObject.Instantiate(row);
-            string name = item.Split('_')[1][0].ToString().ToUpper() + item.Split('_')[1].Substring(1) + " System-" + item.Split('_')[0] + "Cars";
+            string name = item.Split('_')[1][0].ToString().ToUpper()+ item.Split('_')[1].Substring(1).Replace("#", " ") + " System-" + item.Split('_')[0] + "Cars";
             newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = " " + name;
             newRow.transform.SetParent(rec.transform);
             newRow.name = item;

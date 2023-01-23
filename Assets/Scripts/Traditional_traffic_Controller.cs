@@ -53,10 +53,19 @@ public class Traditional_traffic_Controller : MonoBehaviour
 
         }
 
-        if (Scence_Manger.algorthim == "Queued Traffic Light System")
+        if (Scence_Manger.algorthim == "CarLoad Based Traffic Light System")
         {
 
             GetComponent<Basic_algo>().enabled = true;
+            GetComponent<Traditional_traffic_Controller>().enabled = false;
+            return;
+
+        }
+        else if (Scence_Manger.algorthim == "AI Traffic Light System")
+        {
+
+            GetComponent<AI>().enabled = true;
+            GetComponent<AI_TLC>().enabled = true;
             GetComponent<Traditional_traffic_Controller>().enabled = false;
             return;
         }

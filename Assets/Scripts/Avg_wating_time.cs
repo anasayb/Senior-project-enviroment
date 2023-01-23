@@ -21,7 +21,7 @@ public class Avg_wating_time : MonoBehaviour
     
     public static float Avg_wating = 0;
 
-    public GameObject summary;
+    public GameObject sum;
     public GameObject Text;
     public GameObject CarInfo;
     public GameObject timer;
@@ -65,16 +65,16 @@ public class Avg_wating_time : MonoBehaviour
 
                 //check connection
                 Response res = new Response();
-                IEnumerator e = db.getTables(res);
+                IEnumerator e = db.CheckConnection(res);
                 while (e.MoveNext()) ;
                 CarInfo.SetActive(false);
                 timer.SetActive(false);
-                summary.SetActive(true);
+                sum.SetActive(true);
                 stored = true;
                 if (res.result == "Yes"){
 
                     // There is a databse Connection
-                    StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights")));
+                    db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Turning Paths").transform.GetChild(2).Find("Traffic Lights").gameObject);
                     Summary.summeryPanel(null);
 
                 }

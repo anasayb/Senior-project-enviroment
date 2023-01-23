@@ -62,6 +62,17 @@ public class DatabaseConnection : MonoBehaviour
             www.Dispose();
             table = name;
 
+        }else if (TrafficLightController.GetComponent<AI_TLC>().enabled == true)
+        {
+            string name = Scence_Manger.startingNumberOfCars + "_AI";
+
+            WWWForm form = new WWWForm();
+            form.AddField("table", name);
+            UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/DeleteExistingData.php", form);
+            yield return www.SendWebRequest();
+
+            www.Dispose();
+            table = name;
         }
 
         foreach (var item in watingTime)
@@ -191,7 +202,7 @@ public class DatabaseConnection : MonoBehaviour
         while (!www.isDone)
             yield return true;
 
-        if (www.result != UnityWebRequest.Result.Success)
+        if (www.result == UnityWebRequest.Result.Success)
         {
             // Debug.Log(www.error);
             res.result = "Yes";
