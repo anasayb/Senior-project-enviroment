@@ -17,6 +17,8 @@ public class AI : Agent
     //public GameObject newEnv;
     //public int episodeNumber = 0;
 
+    [Header("Cameras")]
+    public GameObject Maincamera;
 
     // Traffic light controlling variable
     public GameObject[] trafficLights;
@@ -244,6 +246,7 @@ public class AI : Agent
             ChangeLightRed(i);
         }
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
+        Maincamera.GetComponent<User_Camera_Controll>().updateCameras(to);
 
     }
 

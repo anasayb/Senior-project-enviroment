@@ -7,22 +7,22 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Summary : MonoBehaviour
-{   
+{
     //public static GameObject summary;
-    
+
     private static Response res;
-    private static DatabaseConnection database ;
+    private static DatabaseConnection database;
 
     // Start is called before the first frame update
     void Start()
     {
-       
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
 
@@ -42,7 +42,7 @@ public class Summary : MonoBehaviour
         string[] CarsData = database.data[tablename].Split(" ");
 
         // Name of the method
-        summary.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = tableInfo[1].Replace("#"," ") + " Traffic Light System";
+        summary.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = tableInfo[1].Replace("#", " ") + " Traffic Light System";
 
         // Starting Direction
         string[] names = { "North", "West", "South", "East" };
@@ -137,7 +137,7 @@ public class Summary : MonoBehaviour
     private static void reset()
     {
 
-        database = GameObject.Find("Database").GetComponent<DatabaseConnection>();
+        //database = GameObject.Find("Database").GetComponent<DatabaseConnection>();
         GameObject summary = GameObject.Find("Canvas").transform.Find("Summary").gameObject;
 
         // Cars informations
@@ -208,7 +208,7 @@ public class Summary : MonoBehaviour
             newRow.transform.SetParent(cont.transform);
         }
         row.SetActive(false);
-        
+
 
         // Max waiting
         summary.transform.Find("Max Waiting Time").Find("Time").GetComponent<TMP_Text>().text = (((int)(mx * 100)) / 100f).ToString("F2") + " s";
@@ -232,8 +232,7 @@ public class Summary : MonoBehaviour
             newRow.name = item;
             UnityEngine.Events.UnityAction action1 = () => { summaryPanel(newRow.name); };
             newRow.transform.GetComponent<Button>().onClick.AddListener(action1);
-            /*
-            if (item == tableName)
+            if (database.tabelsNames.IndexOf(item) == database.tabelsNames.Count-1)
             {
                 newRow.transform.GetChild(0).GetComponent<TMP_Text>().color = new Color(0, 0, 0);
                 var color = newRow.transform.GetComponent<Button>().colors;
@@ -246,7 +245,7 @@ public class Summary : MonoBehaviour
                 color.normalColor = new Color(0, 0, 0, 0);
                 newRow.transform.GetComponent<Button>().colors = color;
             }
-            */
+            
         }
 
 

@@ -65,7 +65,7 @@ public class Traditional_traffic_Controller : MonoBehaviour
         {
 
             GetComponent<AI>().enabled = true;
-            GetComponent<AI_TLC>().enabled = true;
+            //GetComponent<AI_TLC>().enabled = true;
             GetComponent<Traditional_traffic_Controller>().enabled = false;
             return;
         }
