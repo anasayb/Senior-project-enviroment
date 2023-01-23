@@ -33,14 +33,7 @@ public class AI_TLC : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //updateCarsNumbers();
-        /*
-            for (int i = 0; i < cameras.Length; i++)
-            {
-                cameras[i].SetActive(false);
-            }
-        */
-
+        //direct = Scence_Manger.dir;
     }
 
     // Update is called once per frame

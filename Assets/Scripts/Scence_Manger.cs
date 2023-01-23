@@ -32,7 +32,7 @@ public class Scence_Manger : MonoBehaviour
 
     public void FixedUpdate()
     {
-
+    
         if (SceneManager.GetActiveScene().name == "Menu")
         {
 
@@ -40,10 +40,13 @@ public class Scence_Manger : MonoBehaviour
             if (method.GetComponent<TMP_Dropdown>().value == 0)
             {
                 timeobject.SetActive(true);
+                direction.SetActive(true);
             }
             else
             {
+                
                 timeobject.SetActive(false);
+                direction.SetActive(false);
             }
         }
         
@@ -61,7 +64,7 @@ public class Scence_Manger : MonoBehaviour
         timeError.SetActive(false);
 
         // directtion to start the simulation
-        dir = direction.GetComponent<TMP_Dropdown>().value;
+        dir = direction.transform.GetChild(1).GetComponent<TMP_Dropdown>().value;
 
         // Selected method
         int meth = method.GetComponent<TMP_Dropdown>().value;
@@ -69,9 +72,13 @@ public class Scence_Manger : MonoBehaviour
         {
             algorthim = "Tradional Traffic Light System";
         }
-        else
+        else if(meth == 1)
         {
             algorthim = "CarLoad Based Traffic Light System";
+        }
+        else
+        {
+            algorthim = "AI Traffic Light System";
         }
 
         // Times of the traffic lights

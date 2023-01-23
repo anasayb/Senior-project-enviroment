@@ -59,6 +59,15 @@ public class Traditional_traffic_Controller : MonoBehaviour
             GetComponent<Basic_algo>().enabled = true;
             GetComponent<Traditional_traffic_Controller>().enabled = false;
             return;
+
+        }
+        else if (Scence_Manger.algorthim == "AI Traffic Light System")
+        {
+
+            GetComponent<AI>().enabled = true;
+            GetComponent<AI_TLC>().enabled = true;
+            GetComponent<Traditional_traffic_Controller>().enabled = false;
+            return;
         }
 
         ChangeLightGreen(direction);

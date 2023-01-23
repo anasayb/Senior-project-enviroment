@@ -69,6 +69,7 @@ public class Basic_algo : MonoBehaviour
             if (EmegencyTimeVariable <= yellowLightDuration)
             {
                 ChangeLightYellow(direction);
+                timer.GetComponentInChildren<TMP_Text>().text = "EM";
                 timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
             }
 

@@ -10,20 +10,45 @@ using UnityEditor;
 
 public class AI : Agent
 {
-    //private AI_TLC controller;
+
+    // Enviroment Varaibles
     //public GameObject prefab;
-    public int episodeNumber = 0;
-    //public GameObject cars;
+    public GameObject cars;
+    //public GameObject newEnv;
+    //public int episodeNumber = 0;
+
+
+    // Traffic light controlling variable
+    public GameObject[] trafficLights;
+    public CarCounter[] CarCount;
+
+    private float delay = 2f;
+    private float yellowLightDuration = 3f;
+    private float timeVariable = 0;
+
+
+    //private bool finish = true;
+    private int direct = 0;
+    private int nextDirect = 0;
+    private int time = 0;
+    private int nextTime = 0;
+    private bool once = true;
+
 
 
     public void Start()
     {
-        
+        cars = GameObject.Find("Cars");
+        for (int i = 0; i < 4; i++)
+        {
+            GetComponent<AI_TLC>().ChangeLightRed(i);
+        }
+
     }
 
     public void FixedUpdate()
     {   
-        if (Avg_wating_time.numberOfCars == 0 || Avg_wating_time.Avg_wating >= 300)
+        if (Avg_wating_time.numberOfCars == 0 || Avg_wating_time.Avg_wating >= 100)
         {
             if (Avg_wating_time.numberOfCars == 0)
             {
@@ -41,23 +66,13 @@ public class AI : Agent
         }
         else
         {
-            if (GetComponent<AI_TLC>().finish)
-            {
-                if (episodeNumber != 0)
-                {
-                    SetReward((float)-(Avg_wating_time.Avg_wating/300));
-                }
-                RequestDecision();
+            TrafficLightControlling();
 
-                GetComponent<AI_TLC>().finish= false;
-            }
-
-                
         }
     }
 
     public override void OnEpisodeBegin()
-    {   
+    {
         /*
 
         if (episodeNumber == 0)
@@ -90,7 +105,11 @@ public class AI : Agent
         //cars.GetComponent<Avg_wating_time>().Avg_wating = 0;
 
         */
- 
+
+        // Resest variabels
+        time = 0;
+        direct = 0;
+
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -105,19 +124,129 @@ public class AI : Agent
     public override void OnActionReceived(ActionBuffers actions)
     {
 
-        GetComponent<AI_TLC>().direct = actions.DiscreteActions[0];
+        nextDirect = actions.DiscreteActions[0];
 
         int temp = actions.DiscreteActions[1];
         if (temp < 4)
         {
-            GetComponent<AI_TLC>().time = 0;
+            nextTime = 0;
         }
         else
         {
-            GetComponent<AI_TLC>().time = temp;
+            nextTime = temp;
         }
 
+
     }
+
+    private void TrafficLightControlling()
+    {
+        if (time == 0 || time == -1)
+        {
+            if (nextTime != 0 && nextTime != -1)
+            {
+                time = nextTime;
+                direct = nextDirect;
+                nextTime = -1;
+                nextDirect = -1;
+            }
+            else
+            {
+                RequestDecision();
+            }
+            return;
+
+        }
+
+        timeVariable += Time.deltaTime;
+        if (timeVariable < time - yellowLightDuration - 1)
+        {
+
+            ChangeLightGreen(direct);
+
+        }
+        else if (timeVariable >= time - yellowLightDuration - 1 && timeVariable < time - yellowLightDuration)
+        {
+            if (once)
+            {
+                once = false;
+                SetReward(-(Avg_wating_time.Avg_wating / 100));
+                RequestDecision();
+            }
+
+        }
+        else if (timeVariable >= time - yellowLightDuration && timeVariable < time)
+        {
+
+            if (direct == nextDirect)
+            {
+                time = nextTime;
+                direct = nextDirect;
+                nextTime = -1;
+                nextDirect = -1;
+                timeVariable = 0;
+                once = true;
+            }
+            else
+            {
+                ChangeLightYellow(direct);
+            }
+
+        }
+        else if (timeVariable >= time && timeVariable < time + delay)
+        {
+
+            ChangeLightRed(direct);
+
+        }
+        else
+        {
+            //ChangeLightRed(direct);
+            time = nextTime;
+            direct = nextDirect;
+            nextTime = -1;
+            nextDirect = -1;
+            timeVariable = 0;
+            once = true;
+        }
+    }
+
+    /// <summary>
+    /// Method <c>ChangeLightRed</c> make the current traffic light red.
+    /// </summary>
+    /// <param name="to">the current traffic light to be red</param>
+    public void ChangeLightRed(int to)
+    {
+
+        trafficLights[to].GetComponent<Light_Conteroler>().chagneToRed();
+
+    }
+
+    /// <summary>
+    /// Method <c>ChangeLightYellow</c> make the current traffic light yellow.
+    /// </summary>
+    /// <param name="to">the current traffic light to be yellow</param>
+    private void ChangeLightYellow(int to)
+    {
+
+        trafficLights[to].GetComponent<Light_Conteroler>().chagneToYellow();
+
+    }
+
+    /// <summary>
+    /// Method <c>ChangeLightGreen</c> make the next traffic light green.
+    /// </summary>
+    /// <param name="to">the next traffic light to be green</param>
+    private void ChangeLightGreen(int to)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            ChangeLightRed(i);
+        }
+        trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
+
+    }
+
 
 
 }
