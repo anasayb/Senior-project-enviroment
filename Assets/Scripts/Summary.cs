@@ -11,7 +11,6 @@ public class Summary : MonoBehaviour
     //public static GameObject summary;
     
     private static Response res;
-    private static Response data;
     private static DatabaseConnection database ;
 
     // Start is called before the first frame update
@@ -26,54 +25,44 @@ public class Summary : MonoBehaviour
         
     }
 
-    public static void summeryPanel(string tableName)
+
+    /// <summary>
+    /// Method <c>summeryPanel</c> Display the summary of the provided table name.
+    /// </summary>
+    /// <param name="tablename">Table name</param>
+    public static void summaryPanel(string tablename)
     {
         database = GameObject.Find("Database").GetComponent<DatabaseConnection>();
+        GameObject summary = GameObject.Find("Canvas").transform.Find("Summary").gameObject;
 
         //reset
         reset();
-   
-        // Get table
-        res = new Response();
-        IEnumerator e = database.getTables(res);
-        while (e.MoveNext()) ;
-        string[] tables = res.result.Split(' ');
-        if (tableName == null)
-        {
-            tableName = res.result.Split(' ')[0];
-        }
-        string[] info = tableName.Split('_');
 
-        // Get the data of the table
-        res = new Response();
-        e = database.getData(res, tableName);
-        while (e.MoveNext()) ;
-        string[] Data = res.result.Split(" ");
-
-        GameObject summary = GameObject.Find("Canvas").transform.Find("Summary").gameObject;
+        string[] tableInfo = tablename.Split("_");
+        string[] CarsData = database.data[tablename].Split(" ");
 
         // Name of the method
-        summary.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = info[1].Replace("#"," ") + " Traffic Light System";
+        summary.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = tableInfo[1].Replace("#"," ") + " Traffic Light System";
 
         // Starting Direction
         string[] names = { "North", "West", "South", "East" };
-        summary.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = info[info.Length - 1];
+        summary.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = tableInfo[tableInfo.Length - 1];
 
         // Avg_waiting
         float Avg_wating = 0;
-        foreach (string s in Data) if (s != "" && s.Split("_")[0] == "AVG#Waiting#time") Avg_wating = float.Parse(s.Split("_")[1]);
+        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "AVG#Waiting#time") Avg_wating = float.Parse(s.Split("_")[1]);
         summary.transform.Find("AVG").Find("Time").GetComponent<TMP_Text>().text = (((int)(Avg_wating * 100)) / 100f).ToString("F2") + " s";
 
 
         // Cars Number
-        summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = info[0];
+        summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = tableInfo[0];
 
         // Cars informations
         GameObject cont = summary.transform.Find("CarInfo").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;
         GameObject row = cont.transform.GetChild(0).gameObject;
         row.SetActive(true);
         float mx = 0;
-        foreach (var item in Data)
+        foreach (var item in CarsData)
         {
             string[] record = item.Split('_');
             if (record[0] == "AVG#Waiting#time" || record[0] == "")
@@ -107,7 +96,7 @@ public class Summary : MonoBehaviour
         GameObject rec = summary.transform.Find("Records").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;
         row = rec.transform.GetChild(0).gameObject;
         row.SetActive(true);
-        foreach (var item in tables)
+        foreach (var item in database.tabelsNames)
         {
             if (item == "")
             {
@@ -119,9 +108,9 @@ public class Summary : MonoBehaviour
             newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = " " + name;
             newRow.transform.SetParent(rec.transform);
             newRow.name = item;
-            UnityEngine.Events.UnityAction action1 = () => { summeryPanel(newRow.name); };
+            UnityEngine.Events.UnityAction action1 = () => { summaryPanel(newRow.name); };
             newRow.transform.GetComponent<Button>().onClick.AddListener(action1);
-            if (item == tableName)
+            if (item == tablename)
             {
                 newRow.transform.GetChild(0).GetComponent<TMP_Text>().color = new Color(0, 0, 0);
                 var color = newRow.transform.GetComponent<Button>().colors;
@@ -142,6 +131,9 @@ public class Summary : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Method <c>reset</c> Remove old information from the summary.
+    /// </summary>
     private static void reset()
     {
 
@@ -169,7 +161,10 @@ public class Summary : MonoBehaviour
     }
 
 
-    public static void CurrentRunSummery()
+    /// <summary>
+    /// Method <c>CurrentRunSummery</c> Display the current run summary.
+    /// </summary>
+    public static void CurrentRunSummary()
     {
         database = GameObject.Find("Database").GetComponent<DatabaseConnection>();
 
@@ -217,6 +212,46 @@ public class Summary : MonoBehaviour
 
         // Max waiting
         summary.transform.Find("Max Waiting Time").Find("Time").GetComponent<TMP_Text>().text = (((int)(mx * 100)) / 100f).ToString("F2") + " s";
+
+
+        // show histroy runs
+        GameObject rec = summary.transform.Find("Records").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;
+        row = rec.transform.GetChild(0).gameObject;
+        row.SetActive(true);
+        foreach (var item in database.tabelsNames)
+        {
+            if (item == "")
+            {
+                continue;
+            }
+
+            GameObject newRow = GameObject.Instantiate(row);
+            string name = item.Split('_')[1][0].ToString().ToUpper() + item.Split('_')[1].Substring(1) + " System-" + item.Split('_')[0] + "Cars";
+            newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = " " + name;
+            newRow.transform.SetParent(rec.transform);
+            newRow.name = item;
+            UnityEngine.Events.UnityAction action1 = () => { summaryPanel(newRow.name); };
+            newRow.transform.GetComponent<Button>().onClick.AddListener(action1);
+            /*
+            if (item == tableName)
+            {
+                newRow.transform.GetChild(0).GetComponent<TMP_Text>().color = new Color(0, 0, 0);
+                var color = newRow.transform.GetComponent<Button>().colors;
+                color.normalColor = new Color(1, 1, 1, 1);
+                newRow.transform.GetComponent<Button>().colors = color;
+            }
+            else
+            {
+                var color = newRow.transform.GetComponent<Button>().colors;
+                color.normalColor = new Color(0, 0, 0, 0);
+                newRow.transform.GetComponent<Button>().colors = color;
+            }
+            */
+        }
+
+
+        // Destroy the template record
+        row.SetActive(false);
 
 
     }

@@ -20,71 +20,57 @@ public class Avg_wating_time : MonoBehaviour
 {
     
     public static float Avg_wating = 0;
+    public static float numberOfCars = 0;
+    public static Dictionary<string, data> waitingTimes;
 
+    [Header("GUI")]
     public GameObject summary;
-    public GameObject Text;
+    //public GameObject Text;
     public GameObject CarInfo;
     public GameObject timer;
-    public static float numberOfCars = 0;
-
-    public static Dictionary<string, data> waitingTimes;
+    
     private bool stored = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        waitingTimes= new Dictionary<string, data>();
+        waitingTimes = new Dictionary<string, data>();
         Avg_wating = 0;
-
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        //
+        // calculate teh number of cars in the simulation at the moment
         calculateTheNumberOfCar();
 
 
         // Calculate the Average waiting time
         Cal();
 
-        // Prepare the string to print
-        string t = "Average Waiting Time:\n" + Avg_wating.ToString() + " Seconds";
-        Text.GetComponent<TMP_Text>().color = new Color(0f, 0f, 0f);
-        Text.GetComponent<TMP_Text>().text = t;
+        // Prepare the string to print (Timer)
+        // string t = "Average Waiting Time:\n" + Avg_wating.ToString() + " Seconds";
+        // Text.GetComponent<TMP_Text>().color = new Color(0f, 0f, 0f);
+        // Text.GetComponent<TMP_Text>().text = t;
 
-        // If all cars are disapeared chagn the color of the text to green
-        // numberOfCars == 0 
+        // If all cars are disapeared, then finish the simulation
         if (numberOfCars == 0)
         {
-            Text.GetComponent<TMP_Text>().color = new Color(0.039f, 0.545f, 0.039f);
+            //Text.GetComponent<TMP_Text>().color = new Color(0.039f, 0.545f, 0.039f);
             if (!stored)
             {
+                // Database
                 DatabaseConnection db = GameObject.Find("Database").GetComponent<DatabaseConnection>();
                 
-
-                //check connection
-                Response res = new Response();
-                IEnumerator e = db.CheckConnection(res);
-                while (e.MoveNext()) ;
+                // Change the GUI
                 CarInfo.SetActive(false);
                 timer.SetActive(false);
                 summary.SetActive(true);
-                stored = true;
-                if (res.result == "Yes"){
 
-                    // There is a databse Connection
-                    StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights")));
-                    Summary.summeryPanel(null);
-
-                }
-                else{
-
-                    // If there is no database connection
-                    Summary.CurrentRunSummery();
-
-                }
-
+                // store the run inforamtion and show the summary
+                StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights")));
+                Summary.CurrentRunSummery();
+                stored = true;           
                 
             }
         }
@@ -93,7 +79,7 @@ public class Avg_wating_time : MonoBehaviour
 
 
     /// <summary>
-    /// Method <c>updateAvg</c> update the value of the wating time of the car in the Dictionary.
+    /// Method <c>updateAvg</c> update the value of the wating time of a car in the Dictionary.
     /// </summary>
     /// <param name="name">the name of the car to update its watining time</param>
     /// <param name="waitingTime">the new waiting time</param>
