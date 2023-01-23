@@ -54,8 +54,9 @@ public class AI : Agent
         }
 
         // Set the seed value
-        Random.InitState(System.DateTime.Now.Millisecond);
-        int num = Random.Range(1, 81);
+        //Random.InitState(System.DateTime.Now.Millisecond);
+        //int num = Random.Range(1, 24);
+        int num = 23;
         cars.GetComponent<Car_Generator>().CarsToGenerate = num;
         cars.GetComponent<Avg_wating_time>().numberOfCars = num;
         cars.GetComponent<Avg_wating_time>().reset();
@@ -109,9 +110,10 @@ public class AI : Agent
                 ChangeLightRed(i);
             }
 
-            Random.InitState(System.DateTime.Now.Millisecond);
-            int num = Random.Range(1, 81);
-            Debug.Log("Number: " + num);
+            //Random.InitState(System.DateTime.Now.Millisecond);
+            //int num = Random.Range(1, 24);
+            //Debug.Log("Number: " + num);
+            int num = 23;
             cars.GetComponent<Car_Generator>().CarsToGenerate = num;
             cars.GetComponent<Avg_wating_time>().numberOfCars = num;
             cars.GetComponent<Avg_wating_time>().reset();
