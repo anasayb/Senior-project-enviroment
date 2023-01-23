@@ -191,7 +191,7 @@ public class DatabaseConnection : MonoBehaviour
         while (!www.isDone)
             yield return true;
 
-        if (www.result != UnityWebRequest.Result.Success)
+        if (www.result == UnityWebRequest.Result.Success)
         {
             // Debug.Log(www.error);
             res.result = "Yes";

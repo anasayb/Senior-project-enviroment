@@ -65,7 +65,7 @@ public class Avg_wating_time : MonoBehaviour
 
                 //check connection
                 Response res = new Response();
-                IEnumerator e = db.getTables(res);
+                IEnumerator e = db.CheckConnection(res);
                 while (e.MoveNext()) ;
                 CarInfo.SetActive(false);
                 timer.SetActive(false);

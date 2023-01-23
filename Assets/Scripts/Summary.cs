@@ -17,7 +17,7 @@ public class Summary : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        database = GameObject.Find("Database").GetComponent<DatabaseConnection>();
+       
     }
 
     // Update is called once per frame
@@ -28,6 +28,8 @@ public class Summary : MonoBehaviour
 
     public static void summeryPanel(string tableName)
     {
+        database = GameObject.Find("Database").GetComponent<DatabaseConnection>();
+
         //reset
         reset();
    
@@ -143,6 +145,7 @@ public class Summary : MonoBehaviour
     private static void reset()
     {
 
+        database = GameObject.Find("Database").GetComponent<DatabaseConnection>();
         GameObject summary = GameObject.Find("Canvas").transform.Find("Summary").gameObject;
 
         // Cars informations
@@ -168,6 +171,7 @@ public class Summary : MonoBehaviour
 
     public static void CurrentRunSummery()
     {
+        database = GameObject.Find("Database").GetComponent<DatabaseConnection>();
 
         // Name of the method
         GameObject summary = GameObject.Find("Canvas").transform.Find("Summary").gameObject;
