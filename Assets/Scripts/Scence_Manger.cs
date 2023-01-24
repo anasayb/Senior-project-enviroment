@@ -122,7 +122,7 @@ public class Scence_Manger : MonoBehaviour
         {
             EmergencyCar = true;
         }
-        
+
         StartCoroutine(LoadYourAsyncScene("SampleScene"));
         //SceneManager.LoadScene("SampleScene");
      

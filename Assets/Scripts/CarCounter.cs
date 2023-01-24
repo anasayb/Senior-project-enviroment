@@ -5,6 +5,7 @@ using UnityEngine;
 public class CarCounter : MonoBehaviour
 {
     public int carsCounter;
+    public int leaveCarsCounter;
     public bool emergencyExist = false;
 
     // Start is called before the first frame update
@@ -33,6 +34,7 @@ public class CarCounter : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         carsCounter--;
+        leaveCarsCounter++;
         if (other.tag == "Emergency")
         {
             emergencyExist = false;

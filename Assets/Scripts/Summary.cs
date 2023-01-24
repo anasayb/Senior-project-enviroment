@@ -179,8 +179,13 @@ public class Summary : MonoBehaviour
         // Avg_waiting
         summary.transform.Find("AVG").Find("Time").GetComponent<TMP_Text>().text = (((int)(Avg_wating_time.Avg_wating * 100)) / 100f).ToString("F2") + " s";
 
+        // Flow Rate
+        summary.transform.Find("TrafficFlow").Find("Rate").GetComponent<TMP_Text>().text = Avg_wating_time.FlowRate +" Car/Minute";
+
         // Cars Number
         summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = Scence_Manger.startingNumberOfCars.ToString();
+
+
 
         // Cars informations
         GameObject cont = summary.transform.Find("CarInfo").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;

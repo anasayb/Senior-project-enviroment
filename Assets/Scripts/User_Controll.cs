@@ -49,6 +49,9 @@ public class User_Controll : MonoBehaviour
 
         }
 
+        // Reset the simultaion speed
+        Time.timeScale = 1;
+
     }
 
     // Update is called once per frame

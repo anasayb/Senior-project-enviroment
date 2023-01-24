@@ -21,6 +21,11 @@ public class Avg_wating_time : MonoBehaviour
     public static float numberOfCars = 0;
     public static Dictionary<string, data> waitingTimes;
     public static float RunningTime;
+    public static float FlowRate;
+    public static bool FlowCalcualted;
+    public static float[] congestion;
+
+    public CarCounter[] streets;
 
     [Header("GUI")]
     public GameObject summary;
@@ -30,6 +35,7 @@ public class Avg_wating_time : MonoBehaviour
     public GameObject timer;
 
     private bool stored = false;
+    private float timeVariable = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +43,9 @@ public class Avg_wating_time : MonoBehaviour
         Avg_wating_time.waitingTimes = new Dictionary<string, data>();
         Avg_wating_time.Avg_wating = 0;
         Avg_wating_time.RunningTime = 0;
+        Avg_wating_time.FlowRate = 0;
+        Avg_wating_time.FlowCalcualted = false;
+        Avg_wating_time.congestion = new float[4];
     }
 
     // Update is called once per frame
@@ -54,6 +63,13 @@ public class Avg_wating_time : MonoBehaviour
         // If all cars are disapeared, then finish the simulation
         if (numberOfCars == 0)
         {
+            // Calculate the traffic flow if the running time is less than 1 min
+            if (!FlowCalcualted)
+            {
+                FlowRate = Scence_Manger.startingNumberOfCars;
+                FlowCalcualted = true;
+            }
+
             //Text.GetComponent<TMP_Text>().color = new Color(0.039f, 0.545f, 0.039f);
             if (!stored)
             {
@@ -65,6 +81,12 @@ public class Avg_wating_time : MonoBehaviour
                 timer.SetActive(false);
                 summary.SetActive(true);
                 runningTimeText.SetActive(false);
+
+                // congestion
+                for(int i = 0; i < congestion.Length; i++)
+                {
+                    congestion[i] = congestion[i] / (((int)(RunningTime * 100)) / 100f);
+                }
 
                 // store the run inforamtion and show the summary
                 StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights")));
@@ -79,6 +101,26 @@ public class Avg_wating_time : MonoBehaviour
             // Increase the running time of the simulation
             Avg_wating_time.RunningTime += Time.deltaTime;
             runningTimeText.GetComponent<TMP_Text>().text = "Running Time: " + Avg_wating_time.RunningTime.ToString("F2") + " s";
+
+            // Calculate the traffic flow
+            if (Avg_wating_time.RunningTime >= 60 && !FlowCalcualted)
+            {
+                FlowRate = (streets[0].leaveCarsCounter+streets[1].leaveCarsCounter + streets[2].leaveCarsCounter + streets[3].leaveCarsCounter);
+                FlowCalcualted = true;
+            }
+
+
+            timeVariable += Time.deltaTime;
+            if (timeVariable >= 1)
+            {
+                // Calculate the congetsion
+                for (int i = 0; i < streets.Length; i++)
+                {
+                    congestion[i] += streets[i].carsCounter;
+                }
+                timeVariable = 0;
+            }
+            
 
         }
 
