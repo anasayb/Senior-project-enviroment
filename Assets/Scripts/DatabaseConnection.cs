@@ -16,64 +16,71 @@ public class DatabaseConnection : MonoBehaviour
 {
 
 
-    public List<string> tabelsNames;
-    public Dictionary<string, string> data;
+    public static List<string> tabelsNames;
+    public static Dictionary<string, string> data;
+    public static bool connection = false;
 
     public void Start()
-    { 
+    {
 
-            // inizilize the variable
-            data = new Dictionary<string, string>();
+        // inizilize the variable
+        if (DatabaseConnection.tabelsNames == null)
+        {
+            DatabaseConnection.data = new Dictionary<string, string>();
+            DatabaseConnection.tabelsNames = new List<string>();
+        }
 
 
-            // check database connection
-            Response res = new Response();
-            IEnumerator e = CheckConnection(res);
-            while (e.MoveNext()) ;
 
-            if (res.result == "Yes")
+        // check database connection
+        Response res = new Response();
+        IEnumerator e = CheckConnection(res);
+        while (e.MoveNext()) ;
+
+        if (res.result == "Yes")
+        {
+
+            // Database is up
+
+            // Get tables name
+            Response res2 = new Response();
+            IEnumerator e2 = getTables(res2);
+            while (e2.MoveNext()) ;
+
+            // Save table names
+            DatabaseConnection.tabelsNames = res2.result.Split(" ").ToList();
+
+            //Debug
+            // string file1 = Application.streamingAssetsPath + "/TableNames.txt";
+            // File.WriteAllText(file1, res2.result);
+
+            // Get the data in each table
+            foreach (string table in tabelsNames)
             {
-
-                // Database is up
-
-                // Get tables name
-                Response res2 = new Response();
-                IEnumerator e2 = getTables(res2);
-                while (e2.MoveNext()) ;
-
-                // Save table names
-                tabelsNames = res2.result.Split(" ").ToList();
-
-                //Debug
-                // string file1 = Application.streamingAssetsPath + "/TableNames.txt";
-                // File.WriteAllText(file1, res2.result);
-
-                // Get the data in each table
-                foreach (string table in tabelsNames)
+                if (table == "" || table == " ")
                 {
-                    if (table == "" || table == " ")
-                    {
-                        continue;
-                    }
-
-                    Response res3 = new Response();
-                    IEnumerator e3 = getData(res3, table);
-                    while (e3.MoveNext()) ;
-
-                    // save data
-
-                    data.Add(table, res3.result);
+                    continue;
                 }
 
+                Response res3 = new Response();
+                IEnumerator e3 = getData(res3, table);
+                while (e3.MoveNext()) ;
 
-                // Debug  Code
-                // string dataToWrite = "";
-                // dataToWrite += res3.result + "\n";
-                // string file2 = Application.streamingAssetsPath + "/Data.txt";
-                //  File.WriteAllText(file2, dataToWrite);
-                //List<string> list = File.ReadAllLines(file1).ToList();
+                // save data
 
+                DatabaseConnection.data.Add(table, res3.result);
             }
+
+            DatabaseConnection.connection = true;
+
+            // Debug  Code
+            // string dataToWrite = "";
+            // dataToWrite += res3.result + "\n";
+            // string file2 = Application.streamingAssetsPath + "/Data.txt";
+            //  File.WriteAllText(file2, dataToWrite);
+            //List<string> list = File.ReadAllLines(file1).ToList();
+
+        }
 
     }
 
@@ -118,28 +125,31 @@ public class DatabaseConnection : MonoBehaviour
     /// <param name="res">A container for the result</param>
     public IEnumerator getTables(Response res)
     {
-
-
-        UnityWebRequest www = UnityWebRequest.Get("http://localhost/sqlconnect/GetData.php");
-
-        //www.SendWebRequest();
-        yield return www.SendWebRequest();
-
-        while (!www.isDone)
-            yield return true;
-
-        if (www.result != UnityWebRequest.Result.Success)
+        res.result = "";
+        if (DatabaseConnection.connection)
         {
-            Debug.Log(www.error);
+
+            UnityWebRequest www = UnityWebRequest.Get("http://localhost/sqlconnect/GetData.php");
+
+            //www.SendWebRequest();
+            yield return www.SendWebRequest();
+
+            while (!www.isDone)
+                yield return true;
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                res.result = www.downloadHandler.text;
+
+            }
+
+
+            www.Dispose();
         }
-        else
-        {
-            res.result = www.downloadHandler.text;
-
-        }
-
-
-        www.Dispose();
 
     }
 
@@ -151,31 +161,33 @@ public class DatabaseConnection : MonoBehaviour
     /// /// <param name="tableName">The name of the table</param>
     public IEnumerator getData(Response res, string tableName)
     {
-
-        WWWForm form = new WWWForm();
-        form.AddField("name", tableName);
-
-        UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/GetData.php", form);
-
-
-        //www.SendWebRequest();
-        yield return www.SendWebRequest();
-
-        while (!www.isDone)
-            yield return true;
-
-        if (www.result != UnityWebRequest.Result.Success)
+        res.result = "";
+        if (DatabaseConnection.connection)
         {
-            Debug.Log(www.error);
+            WWWForm form = new WWWForm();
+            form.AddField("name", tableName);
+
+            UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/GetData.php", form);
+
+
+            //www.SendWebRequest();
+            yield return www.SendWebRequest();
+
+            while (!www.isDone)
+                yield return true;
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                res.result = www.downloadHandler.text;
+            }
+
+
+            www.Dispose();
         }
-        else
-        {
-            res.result = www.downloadHandler.text;
-        }
-
-
-        www.Dispose();
-
     }
 
 
@@ -202,7 +214,7 @@ public class DatabaseConnection : MonoBehaviour
             else if (Scence_Manger.dir == 3) name += "_east";
 
 
-            
+
             table = name;
 
 
@@ -221,21 +233,24 @@ public class DatabaseConnection : MonoBehaviour
 
 
         // check if a table with the same name is already exist
-        if (tabelsNames.Contains(table))
-        {   
-            tabelsNames.RemoveAt(tabelsNames.IndexOf(table));
-            
+        if (DatabaseConnection.tabelsNames.Contains(table))
+        {
+            DatabaseConnection.tabelsNames.RemoveAt(DatabaseConnection.tabelsNames.IndexOf(table));
+
         }
-        tabelsNames.Add(table);
+        DatabaseConnection.tabelsNames.Add(table);
 
-        WWWForm form = new WWWForm();
-        form.AddField("table", table);
-        UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/DeleteExistingData.php", form);
-        yield return www.SendWebRequest();
 
-        www.Dispose();
+        if (DatabaseConnection.connection)
+        {
+            WWWForm form = new WWWForm();
+            form.AddField("table", table);
+            UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/DeleteExistingData.php", form);
+            yield return www.SendWebRequest();
 
-        
+            www.Dispose();
+        }
+
 
         string carsData = "";
         foreach (var item in watingTime)
@@ -245,8 +260,8 @@ public class DatabaseConnection : MonoBehaviour
 
         }
 
-        
-        
+
+
 
         WWWForm form2 = new WWWForm();
         form2.AddField("table", table);
@@ -257,23 +272,26 @@ public class DatabaseConnection : MonoBehaviour
         form2.AddField("turningDirection", "");
 
 
-        if (data.ContainsKey(table))
+        if (DatabaseConnection.data.ContainsKey(table))
         {
-            data[table] = carsData;
+            DatabaseConnection.data[table] = carsData;
 
         }
         else
         {
-            data.Add(table, carsData);
+            DatabaseConnection.data.Add(table, carsData);
         }
 
+        
+        if (DatabaseConnection.connection)
+        {
+            UnityWebRequest www2 = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form2);
 
-        UnityWebRequest www2 = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form2);
+            //www.SendWebRequest();
+            yield return www2.SendWebRequest();
 
-        //www.SendWebRequest();
-        yield return www2.SendWebRequest();
-
-        www2.Dispose();
+            www2.Dispose();
+        }
 
     }
 
@@ -285,30 +303,34 @@ public class DatabaseConnection : MonoBehaviour
     /// /// <param name="item">A pair of the car name with the crossponding car's data</param>
     private IEnumerator saveToDatabase(string table, KeyValuePair<string, data> item)
     {
-        WWWForm form = new WWWForm();
-        form.AddField("table", table);
-        form.AddField("name", item.Key.Replace(" ", "#"));
-        form.AddField("waiting_time", item.Value.waiting_time.ToString());
-        form.AddField("streat", item.Value.streat);
-        form.AddField("turningDirection", item.Value.direction);
 
-
-        UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form);
-
-        //www.SendWebRequest();
-        yield return www.SendWebRequest();
-
-        if (www.result != UnityWebRequest.Result.Success)
+        if (DatabaseConnection.connection)
         {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            Debug.Log("Form upload complete!");
-        }
+            WWWForm form = new WWWForm();
+            form.AddField("table", table);
+            form.AddField("name", item.Key.Replace(" ", "#"));
+            form.AddField("waiting_time", item.Value.waiting_time.ToString());
+            form.AddField("streat", item.Value.streat);
+            form.AddField("turningDirection", item.Value.direction);
 
 
-        www.Dispose();
+            UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form);
+
+            //www.SendWebRequest();
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Form upload complete!");
+            }
+
+
+            www.Dispose();
+        }
 
     }
 

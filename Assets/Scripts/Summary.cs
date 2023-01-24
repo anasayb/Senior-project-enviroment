@@ -32,14 +32,15 @@ public class Summary : MonoBehaviour
     /// <param name="tablename">Table name</param>
     public static void summaryPanel(string tablename)
     {
-        database = GameObject.Find("Database").GetComponent<DatabaseConnection>();
+       
+        // Define the summary variable
         GameObject summary = GameObject.Find("Canvas").transform.Find("Summary").gameObject;
 
         //reset
         reset();
 
         string[] tableInfo = tablename.Split("_");
-        string[] CarsData = database.data[tablename].Split(" ");
+        string[] CarsData = DatabaseConnection.data[tablename].Split(" ");
 
         // Name of the method
         summary.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = tableInfo[1].Replace("#", " ") + " Traffic Light System";
@@ -96,7 +97,7 @@ public class Summary : MonoBehaviour
         GameObject rec = summary.transform.Find("Records").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;
         row = rec.transform.GetChild(0).gameObject;
         row.SetActive(true);
-        foreach (var item in database.tabelsNames)
+        foreach (var item in DatabaseConnection.tabelsNames)
         {
             if (item == "")
             {
@@ -104,7 +105,7 @@ public class Summary : MonoBehaviour
             }
 
             GameObject newRow = GameObject.Instantiate(row);
-            string name = item.Split('_')[1][0].ToString().ToUpper() + item.Split('_')[1].Substring(1) + " System-" + item.Split('_')[0] + "Cars";
+            string name = item.Split('_')[1][0].ToString().ToUpper() + item.Split('_')[1].Substring(1).Replace("#", " ") + " System-" + item.Split('_')[0] + "Cars";
             newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = " " + name;
             newRow.transform.SetParent(rec.transform);
             newRow.name = item;
@@ -137,7 +138,7 @@ public class Summary : MonoBehaviour
     private static void reset()
     {
 
-        //database = GameObject.Find("Database").GetComponent<DatabaseConnection>();
+        // Define the summary variable
         GameObject summary = GameObject.Find("Canvas").transform.Find("Summary").gameObject;
 
         // Cars informations
@@ -166,7 +167,6 @@ public class Summary : MonoBehaviour
     /// </summary>
     public static void CurrentRunSummary()
     {
-        database = GameObject.Find("Database").GetComponent<DatabaseConnection>();
 
         // Name of the method
         GameObject summary = GameObject.Find("Canvas").transform.Find("Summary").gameObject;
@@ -218,7 +218,7 @@ public class Summary : MonoBehaviour
         GameObject rec = summary.transform.Find("Records").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;
         row = rec.transform.GetChild(0).gameObject;
         row.SetActive(true);
-        foreach (var item in database.tabelsNames)
+        foreach (var item in DatabaseConnection.tabelsNames)
         {
             if (item == "")
             {
@@ -226,13 +226,13 @@ public class Summary : MonoBehaviour
             }
 
             GameObject newRow = GameObject.Instantiate(row);
-            string name = item.Split('_')[1][0].ToString().ToUpper() + item.Split('_')[1].Substring(1) + " System-" + item.Split('_')[0] + "Cars";
+            string name = item.Split('_')[1][0].ToString().ToUpper() + item.Split('_')[1].Substring(1).Replace("#"," ") + " System-" + item.Split('_')[0] + "Cars";
             newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = " " + name;
             newRow.transform.SetParent(rec.transform);
             newRow.name = item;
             UnityEngine.Events.UnityAction action1 = () => { summaryPanel(newRow.name); };
             newRow.transform.GetComponent<Button>().onClick.AddListener(action1);
-            if (database.tabelsNames.IndexOf(item) == database.tabelsNames.Count-1)
+            if (DatabaseConnection.tabelsNames.IndexOf(item) == DatabaseConnection.tabelsNames.Count-1)
             {
                 newRow.transform.GetChild(0).GetComponent<TMP_Text>().color = new Color(0, 0, 0);
                 var color = newRow.transform.GetComponent<Button>().colors;
