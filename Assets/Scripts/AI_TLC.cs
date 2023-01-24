@@ -102,7 +102,7 @@ public class AI_TLC : MonoBehaviour
     {
 
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
-        Maincamera.GetComponent<User_Camera_Controll>().updateCameras(to);
+        Maincamera.GetComponent<User_Controll>().updateCameras(to);
 
     }
 

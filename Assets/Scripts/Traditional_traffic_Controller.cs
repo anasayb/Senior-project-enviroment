@@ -35,21 +35,21 @@ public class Traditional_traffic_Controller : MonoBehaviour
         direction = Scence_Manger.dir;
         if (direction == 0)
         {
-            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "North";
+            Maincamera.GetComponent<User_Controll>().currentPostionOfCamera = "North";
 
         }else if (direction == 1)
         {
-            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "West";
+            Maincamera.GetComponent<User_Controll>().currentPostionOfCamera = "West";
 
         }
         else if (direction == 2)
         {
-            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "South";
+            Maincamera.GetComponent<User_Controll>().currentPostionOfCamera = "South";
 
         }
         else if (direction == 3)
         {
-            Maincamera.GetComponent<User_Camera_Controll>().currentPostionOfCamera = "East";
+            Maincamera.GetComponent<User_Controll>().currentPostionOfCamera = "East";
 
         }
 
@@ -133,7 +133,7 @@ public class Traditional_traffic_Controller : MonoBehaviour
     {
 
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
-        Maincamera.GetComponent<User_Camera_Controll>().updateCameras(to);
+        Maincamera.GetComponent<User_Controll>().updateCameras(to);
         
     }
 }

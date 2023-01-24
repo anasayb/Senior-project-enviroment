@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 
@@ -19,10 +20,12 @@ public class Avg_wating_time : MonoBehaviour
     public static float Avg_wating = 0;
     public static float numberOfCars = 0;
     public static Dictionary<string, data> waitingTimes;
+    public static float RunningTime;
 
     [Header("GUI")]
     public GameObject summary;
-    //public GameObject Text;
+    //public GameObject AvgWaitingTimeText;
+    public GameObject runningTimeText;
     public GameObject CarInfo;
     public GameObject timer;
 
@@ -31,8 +34,9 @@ public class Avg_wating_time : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        waitingTimes = new Dictionary<string, data>();
-        Avg_wating = 0;
+        Avg_wating_time.waitingTimes = new Dictionary<string, data>();
+        Avg_wating_time.Avg_wating = 0;
+        Avg_wating_time.RunningTime = 0;
     }
 
     // Update is called once per frame
@@ -45,10 +49,7 @@ public class Avg_wating_time : MonoBehaviour
         // Calculate the Average waiting time
         Cal();
 
-        // Prepare the string to print (Timer)
-        // string t = "Average Waiting Time:\n" + Avg_wating.ToString() + " Seconds";
-        // Text.GetComponent<TMP_Text>().color = new Color(0f, 0f, 0f);
-        // Text.GetComponent<TMP_Text>().text = t;
+       
 
         // If all cars are disapeared, then finish the simulation
         if (numberOfCars == 0)
@@ -63,6 +64,7 @@ public class Avg_wating_time : MonoBehaviour
                 CarInfo.SetActive(false);
                 timer.SetActive(false);
                 summary.SetActive(true);
+                runningTimeText.SetActive(false);
 
                 // store the run inforamtion and show the summary
                 StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights")));
@@ -70,6 +72,14 @@ public class Avg_wating_time : MonoBehaviour
                 stored = true;
 
             }
+        }
+        else
+        {
+
+            // Increase the running time of the simulation
+            Avg_wating_time.RunningTime += Time.deltaTime;
+            runningTimeText.GetComponent<TMP_Text>().text = "Running Time: " + Avg_wating_time.RunningTime.ToString("F2") + " s";
+
         }
 
     }

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class User_Camera_Controll : MonoBehaviour
+public class User_Controll : MonoBehaviour
 {
     public GameObject MainCamera;
     public string currentPostionOfCamera = "North";
-    public GameObject text;
+    public GameObject streetText;
+    public GameObject simulationSpeed;
+    
 
     private string updatePostion = "";
 
@@ -19,7 +21,7 @@ public class User_Camera_Controll : MonoBehaviour
 
             MainCamera.transform.position = new Vector3(0,30,50);
             MainCamera.transform.rotation = Quaternion.Euler(30,180,0);
-            text.GetComponent<TMP_Text>().text = "University Street\n("+currentPostionOfCamera+")";
+            streetText.GetComponent<TMP_Text>().text = "University Street\n("+currentPostionOfCamera+")";
 
         }
         else if (currentPostionOfCamera == "West")
@@ -27,7 +29,7 @@ public class User_Camera_Controll : MonoBehaviour
 
             MainCamera.transform.position = new Vector3(-50, 30, 0);
             MainCamera.transform.rotation = Quaternion.Euler(30, 90, 0);
-            text.GetComponent<TMP_Text>().text = "Stadium Street\n("+currentPostionOfCamera + ")";
+            streetText.GetComponent<TMP_Text>().text = "Stadium Street\n("+currentPostionOfCamera + ")";
 
         }
         else if (currentPostionOfCamera == "South")
@@ -35,7 +37,7 @@ public class User_Camera_Controll : MonoBehaviour
 
             MainCamera.transform.position = new Vector3(0, 30, -50);
             MainCamera.transform.rotation = Quaternion.Euler(30, 0, 0);
-            text.GetComponent<TMP_Text>().text = "University Street\n("+currentPostionOfCamera + ")";
+            streetText.GetComponent<TMP_Text>().text = "University Street\n("+currentPostionOfCamera + ")";
 
         }
         else if (currentPostionOfCamera == "East")
@@ -43,29 +45,54 @@ public class User_Camera_Controll : MonoBehaviour
 
             MainCamera.transform.position = new Vector3(50, 30, 0);
             MainCamera.transform.rotation = Quaternion.Euler(30, -90, 0);
-            text.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera + ")";
+            streetText.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera + ")";
 
         }
+
     }
 
     // Update is called once per frame
     void Update()
     {
 
+        // Camera Updating 
         if (updatePostion != "" && updatePostion != currentPostionOfCamera) {
             string animation = currentPostionOfCamera + "_To_" + updatePostion;
             GetComponent<Animation>().Play(animation);
             currentPostionOfCamera = updatePostion;
             if (currentPostionOfCamera == "North" || currentPostionOfCamera == "South")
             {
-                text.GetComponent<TMP_Text>().text = "University Street\n(" + currentPostionOfCamera + ")";
+                streetText.GetComponent<TMP_Text>().text = "University Street\n(" + currentPostionOfCamera + ")";
             }
             else
             {
-                text.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera + ")";
+                streetText.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera + ")";
             }
             updatePostion = "";
         }
+
+
+        // Speed of the simulation, if there are still some cars in the simulation
+        if (Avg_wating_time.numberOfCars != 0)
+        {
+            // Simultaion speed
+            simulationSpeed.GetComponent<TMP_Text>().text = "x" + Time.timeScale.ToString();
+            if (Input.GetKeyDown(KeyCode.Equals))
+            {
+                speedUpSimultaion();
+            }
+            else if (Input.GetKeyDown(KeyCode.Minus))
+            {
+                speedDownSimulation();
+            }
+
+        }
+        else
+        {
+            simulationSpeed.SetActive(false);
+        }
+        
+
 
     }
 
@@ -104,41 +131,16 @@ public class User_Camera_Controll : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// Method <c>turnCameraLeft</c> move the camera to the left.
-    /// </summary>
-    /*
-    public void turnCameraLeft()
+    public void speedUpSimultaion()
     {
-        string[] names = { "North", "West", "South", "East" };
-
-        for (int i = 0; i < name.Length; i++)
-        {
-            if (names[i] == currentPostionOfCamera)
-            {
-                updateCameras((i+1)%4);
-                break;
-            }
-        }
-
+        Time.timeScale = Mathf.Min(8, Time.timeScale * 2);
     }
 
-    /// <summary>
-    /// Method <c>turnCameraRight</c> turn the camera to right.
-    /// </summary>
-    public void turnCameraRight()
+    public void speedDownSimulation()
     {
-
-        string[] names = { "North", "West", "South", "East" };
-
-        for (int i = 0; i < name.Length; i++)
-        {
-            if (names[i] == currentPostionOfCamera)
-            {
-                updateCameras((i - 1) % 4);
-            }
-        }
-
+        Time.timeScale = Mathf.Max( 1, Time.timeScale / 2);
     }
-    */
+
+
+
 }
