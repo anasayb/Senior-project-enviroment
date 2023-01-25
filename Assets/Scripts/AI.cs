@@ -54,13 +54,14 @@ public class AI : Agent
         }
 
         // Set the seed value
-        //Random.InitState(System.DateTime.Now.Millisecond);
-        //int num = Random.Range(1, 24);
-        int num = 23;
+        Random.InitState(System.DateTime.Now.Millisecond);
+        int num = Random.Range(1, 51);
         cars.GetComponent<Car_Generator>().CarsToGenerate = num;
         cars.GetComponent<Avg_wating_time>().numberOfCars = num;
         cars.GetComponent<Avg_wating_time>().reset();
         cars.GetComponent<Car_Generator>().generate();
+
+        RequestDecision();
 
     }
 
@@ -68,7 +69,7 @@ public class AI : Agent
     {   
 
         // check if the episode finish
-        if (cars.GetComponent<Avg_wating_time>().numberOfCars == 0 || cars.GetComponent<Avg_wating_time>().Avg_wating >= 100)
+        if (cars.GetComponent<Avg_wating_time>().numberOfCars == 0 && cars.GetComponent<Car_Generator>().CarsToGenerate == 0|| cars.GetComponent<Avg_wating_time>().Avg_wating >= 200)
         {   
 
             // Episode finish, Set reward according to result
@@ -103,17 +104,26 @@ public class AI : Agent
         episodeNumber++;
 
         if (episodeNumber != 1)
-        {
+        {   
+            // Destroy old cars
+            foreach (Transform dir in cars.transform)
+            {
+                foreach (Transform car in dir)
+                {
+                    Destroy(car.gameObject);
+                }
+            }
+
+
             // Reset Lights
             for (int i = 0; i < 4; i++)
             {
                 ChangeLightRed(i);
             }
 
-            //Random.InitState(System.DateTime.Now.Millisecond);
-            //int num = Random.Range(1, 24);
-            //Debug.Log("Number: " + num);
-            int num = 23;
+            Random.InitState(System.DateTime.Now.Millisecond);
+            int num = Random.Range(1, 51);
+            Debug.Log("Number: " + num);
             cars.GetComponent<Car_Generator>().CarsToGenerate = num;
             cars.GetComponent<Avg_wating_time>().numberOfCars = num;
             cars.GetComponent<Avg_wating_time>().reset();
@@ -185,7 +195,7 @@ public class AI : Agent
             if (once)
             {
                 once = false;
-                SetReward(-(cars.GetComponent<Avg_wating_time>().Avg_wating / 100));
+                SetReward(-(cars.GetComponent<Avg_wating_time>().Avg_wating / 200));
                 RequestDecision();
             }
                       

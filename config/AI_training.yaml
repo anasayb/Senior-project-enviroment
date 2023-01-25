@@ -33,6 +33,6 @@ behaviors:
     summary_freq: 1000
     keep_checkpoints: 5
     checkpoint_interval: 10000
-    threaded: true
+    threaded: false
     init_path: null
     

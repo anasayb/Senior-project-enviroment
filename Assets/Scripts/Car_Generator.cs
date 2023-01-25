@@ -129,15 +129,15 @@ public class Car_Generator : MonoBehaviour
 
 
 
-        GenerateCrsForDirection(nums["northCars"], 0);
-        GenerateCrsForDirection(nums["westCars"], 1);
-        GenerateCrsForDirection(nums["southCars"], 2);
-        GenerateCrsForDirection(nums["eastCars"], 3);
+        StartCoroutine(GenerateCrsForDirection(nums["northCars"], 0));
+        StartCoroutine(GenerateCrsForDirection(nums["westCars"], 1));
+        StartCoroutine(GenerateCrsForDirection(nums["southCars"], 2));
+        StartCoroutine(GenerateCrsForDirection(nums["eastCars"], 3));
 
     }
 
 
-    void GenerateCrsForDirection(int numOfCars, int streat)
+    IEnumerator GenerateCrsForDirection(int numOfCars, int streat)
     {
         Vector3 frontCarLeft = startPos[streat*2];
         Vector3 frontCarRight = startPos[streat*2+1];
@@ -277,7 +277,7 @@ public class Car_Generator : MonoBehaviour
 
         }
 
-        //yield return null;
+        yield return null;
 
     }
 }
