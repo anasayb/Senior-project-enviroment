@@ -43,20 +43,38 @@ public class Summary : MonoBehaviour
         string[] CarsData = DatabaseConnection.data[tablename].Split(" ");
 
         // Name of the method
-        summary.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = tableInfo[1].Replace("#", " ") + " Traffic Light System";
+        string nameOfAlgo = tableInfo[1].Replace("#", " ");
+        summary.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = nameOfAlgo[0].ToString().ToUpper() + nameOfAlgo.Substring(1) + " Traffic Light System";
 
         // Starting Direction
-        string[] names = { "North", "West", "South", "East" };
-        summary.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = tableInfo[tableInfo.Length - 1];
+        summary.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = tableInfo[tableInfo.Length - 1][0].ToString().ToUpper() + tableInfo[tableInfo.Length - 1].Substring(1);
 
         // Avg_waiting
         float Avg_wating = 0;
         foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "AVG#Waiting#time") Avg_wating = float.Parse(s.Split("_")[1]);
         summary.transform.Find("AVG").Find("Time").GetComponent<TMP_Text>().text = (((int)(Avg_wating * 100)) / 100f).ToString("F2") + " s";
 
+        // Flow Rate
+        float trafficFlow = 0;
+        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Flow#rate") trafficFlow = float.Parse(s.Split("_")[1]);
+        summary.transform.Find("TrafficFlow").Find("Rate").GetComponent<TMP_Text>().text = trafficFlow.ToString() + " Car/Minute";
+
+        // Avrage Congestion
+        float CongestionNorth = 0, CongestionWest = 0,CongestionSouth = 0, CongestionEast = 0;
+        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#north") CongestionNorth = float.Parse(s.Split("_")[1]);
+        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#west") CongestionWest = float.Parse(s.Split("_")[1]);
+        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#south") CongestionSouth = float.Parse(s.Split("_")[1]);
+        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#east") CongestionEast = float.Parse(s.Split("_")[1]);
+        float[] congestionData = {CongestionNorth, CongestionWest, CongestionSouth, CongestionEast};
+        Transform congestion = summary.transform.Find("Congestion");
+        for (int i = 1; i < congestion.childCount; i++)
+        {
+            congestion.GetChild(i).GetChild(1).GetComponent<TMP_Text>().text = congestionData[i-1].ToString("F2");
+        }
+
 
         // Cars Number
-        summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = tableInfo[0];
+        summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = tableInfo[0] + " Cars";
 
         // Cars informations
         GameObject cont = summary.transform.Find("CarInfo").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;
@@ -66,7 +84,7 @@ public class Summary : MonoBehaviour
         foreach (var item in CarsData)
         {
             string[] record = item.Split('_');
-            if (record[0] == "AVG#Waiting#time" || record[0] == "")
+            if (record[0] == "AVG#Waiting#time" || record[0] == "Flow#rate" || record[0].Split("#")[0] == "Congestion" || record[0] == "")
             {
                 continue;
             }
@@ -105,7 +123,7 @@ public class Summary : MonoBehaviour
             }
 
             GameObject newRow = GameObject.Instantiate(row);
-            string name = item.Split('_')[1][0].ToString().ToUpper() + item.Split('_')[1].Substring(1).Replace("#", " ") + " System-" + item.Split('_')[0] + "Cars";
+            string name = item.Split('_')[1][0].ToString().ToUpper() + item.Split('_')[1].Substring(1).Replace("#", " ") + " system-" + item.Split('_')[0] + "Cars";
             newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = " " + name;
             newRow.transform.SetParent(rec.transform);
             newRow.name = item;
@@ -173,8 +191,16 @@ public class Summary : MonoBehaviour
         summary.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = Scence_Manger.algorthim;
 
         // Starting Direction
-        string[] names = { "North", "West", "South", "East" };
-        summary.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = names[Scence_Manger.dir];
+        if (Scence_Manger.algorthim == "Traditional Traffic Light System")
+        {
+            string[] names = { "North", "West", "South", "East" };
+            summary.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = names[Scence_Manger.dir];
+        }
+        else
+        {
+            summary.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = "Dynamic";
+        }
+        
 
         // Avg_waiting
         summary.transform.Find("AVG").Find("Time").GetComponent<TMP_Text>().text = (((int)(Avg_wating_time.Avg_wating * 100)) / 100f).ToString("F2") + " s";
@@ -182,9 +208,16 @@ public class Summary : MonoBehaviour
         // Flow Rate
         summary.transform.Find("TrafficFlow").Find("Rate").GetComponent<TMP_Text>().text = Avg_wating_time.FlowRate +" Car/Minute";
 
-        // Cars Number
-        summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = Scence_Manger.startingNumberOfCars.ToString();
+        // Avrage Congestion
+        Transform congestion = summary.transform.Find("Congestion");
+        for (int i = 1; i < congestion.childCount; i++)
+        {
+                congestion.GetChild(i).GetChild(1).GetComponent<TMP_Text>().text = Avg_wating_time.congestion[i-1].ToString("F2");
+        }
 
+
+        // Cars Number
+        summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = Scence_Manger.startingNumberOfCars.ToString() + " Cars";
 
 
         // Cars informations
@@ -231,7 +264,7 @@ public class Summary : MonoBehaviour
             }
 
             GameObject newRow = GameObject.Instantiate(row);
-            string name = item.Split('_')[1][0].ToString().ToUpper() + item.Split('_')[1].Substring(1).Replace("#"," ") + " System-" + item.Split('_')[0] + "Cars";
+            string name = item.Split('_')[1][0].ToString().ToUpper() + item.Split('_')[1].Substring(1).Replace("#"," ") + " system-" + item.Split('_')[0] + "Cars";
             newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = " " + name;
             newRow.transform.SetParent(rec.transform);
             newRow.name = item;

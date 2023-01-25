@@ -40,8 +40,9 @@ public class Avg_wating_time : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Avg_wating_time.waitingTimes = new Dictionary<string, data>();
         Avg_wating_time.Avg_wating = 0;
+        Avg_wating_time.numberOfCars = 0;
+        Avg_wating_time.waitingTimes = new Dictionary<string, data>();
         Avg_wating_time.RunningTime = 0;
         Avg_wating_time.FlowRate = 0;
         Avg_wating_time.FlowCalcualted = false;
@@ -82,10 +83,10 @@ public class Avg_wating_time : MonoBehaviour
                 summary.SetActive(true);
                 runningTimeText.SetActive(false);
 
-                // congestion
+                // Avreging the congestion
                 for(int i = 0; i < congestion.Length; i++)
                 {
-                    congestion[i] = congestion[i] / (((int)(RunningTime * 100)) / 100f);
+                   Avg_wating_time.congestion[i] = Avg_wating_time.congestion[i] / (((int)(RunningTime * 100)) / 100f);
                 }
 
                 // store the run inforamtion and show the summary
@@ -109,7 +110,7 @@ public class Avg_wating_time : MonoBehaviour
                 FlowCalcualted = true;
             }
 
-
+            // each second record the number of cars
             timeVariable += Time.deltaTime;
             if (timeVariable >= 1)
             {

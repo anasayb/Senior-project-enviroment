@@ -70,7 +70,7 @@ public class Scence_Manger : MonoBehaviour
         int meth = method.GetComponent<TMP_Dropdown>().value;
         if (meth == 0)
         {
-            algorthim = "Tradional Traffic Light System";
+            algorthim = "Traditional Traffic Light System";
         }
         else if(meth == 1)
         {

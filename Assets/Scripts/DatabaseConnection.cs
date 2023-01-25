@@ -28,59 +28,61 @@ public class DatabaseConnection : MonoBehaviour
         {
             DatabaseConnection.data = new Dictionary<string, string>();
             DatabaseConnection.tabelsNames = new List<string>();
-        }
 
 
+            // check database connection
+            Response res = new Response();
+            IEnumerator e = CheckConnection(res);
+            while (e.MoveNext()) ;
 
-        // check database connection
-        Response res = new Response();
-        IEnumerator e = CheckConnection(res);
-        while (e.MoveNext()) ;
-
-        if (res.result == "Yes")
-        {
-
-            // Database is up
-
-            // Get tables name
-            Response res2 = new Response();
-            IEnumerator e2 = getTables(res2);
-            while (e2.MoveNext()) ;
-
-            // Save table names
-            DatabaseConnection.tabelsNames = res2.result.Split(" ").ToList();
-
-            //Debug
-            // string file1 = Application.streamingAssetsPath + "/TableNames.txt";
-            // File.WriteAllText(file1, res2.result);
-
-            // Get the data in each table
-            foreach (string table in tabelsNames)
+            if (res.result == "Yes")
             {
-                if (table == "" || table == " ")
+
+                // Database is up
+                DatabaseConnection.connection = true;
+
+                // Get tables name
+                Response res2 = new Response();
+                IEnumerator e2 = getTables(res2);
+                while (e2.MoveNext()) ;
+
+                // Save table names
+                DatabaseConnection.tabelsNames = res2.result.Split(" ").ToList();
+
+                //Debug
+                // string file1 = Application.streamingAssetsPath + "/TableNames.txt";
+                // File.WriteAllText(file1, res2.result);
+
+                // Get the data in each table
+                foreach (string table in tabelsNames)
                 {
-                    continue;
+                    if (table == "" || table == " ")
+                    {
+                        continue;
+                    }
+
+                    Response res3 = new Response();
+                    IEnumerator e3 = getData(res3, table);
+                    while (e3.MoveNext()) ;
+
+                    // save data
+
+                    DatabaseConnection.data.Add(table, res3.result);
                 }
 
-                Response res3 = new Response();
-                IEnumerator e3 = getData(res3, table);
-                while (e3.MoveNext()) ;
+                
+                // Debug  Code
+                // string dataToWrite = "";
+                // dataToWrite += res3.result + "\n";
+                // string file2 = Application.streamingAssetsPath + "/Data.txt";
+                //  File.WriteAllText(file2, dataToWrite);
+                //List<string> list = File.ReadAllLines(file1).ToList();
 
-                // save data
-
-                DatabaseConnection.data.Add(table, res3.result);
             }
-
-            DatabaseConnection.connection = true;
-
-            // Debug  Code
-            // string dataToWrite = "";
-            // dataToWrite += res3.result + "\n";
-            // string file2 = Application.streamingAssetsPath + "/Data.txt";
-            //  File.WriteAllText(file2, dataToWrite);
-            //List<string> list = File.ReadAllLines(file1).ToList();
-
         }
+
+
+
 
     }
 
@@ -221,12 +223,13 @@ public class DatabaseConnection : MonoBehaviour
         }
         else if (TrafficLightController.GetComponent<Basic_algo>().enabled == true)
         {
-            string name = Scence_Manger.startingNumberOfCars + "_carload#based";
-            if (Scence_Manger.dir == 0) name += "_north";
-            else if (Scence_Manger.dir == 1) name += "_west";
-            else if (Scence_Manger.dir == 2) name += "_south";
-            else if (Scence_Manger.dir == 3) name += "_east";
+            string name = Scence_Manger.startingNumberOfCars + "_carload#based_dynamic";
+            table = name;
 
+        }
+        else if (TrafficLightController.GetComponent<AI>().enabled == true)
+        {
+            string name = Scence_Manger.startingNumberOfCars + "_ai#based_dynamic";
             table = name;
 
         }
@@ -261,8 +264,7 @@ public class DatabaseConnection : MonoBehaviour
         }
 
 
-
-
+        // Average waiting time
         WWWForm form2 = new WWWForm();
         form2.AddField("table", table);
         form2.AddField("name", "AVG#Waiting#time");
@@ -270,7 +272,62 @@ public class DatabaseConnection : MonoBehaviour
         carsData += "AVG#Waiting#time_" + Avg_wating_time.Avg_wating.ToString() + " ";
         form2.AddField("streat", "");
         form2.AddField("turningDirection", "");
+        
+        if (DatabaseConnection.connection)
+        {
+            UnityWebRequest www2 = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form2);
 
+            //www.SendWebRequest();
+            yield return www2.SendWebRequest();
+
+            www2.Dispose();
+        }
+
+        // Traffic Flow rate
+        WWWForm form3 = new WWWForm();
+        form3.AddField("table", table);
+        form3.AddField("name", "Flow#rate");
+        form3.AddField("waiting_time", Avg_wating_time.FlowRate.ToString());
+        carsData += "Flow#rate_" + Avg_wating_time.FlowRate.ToString() + " ";
+        form3.AddField("streat", "");
+        form3.AddField("turningDirection", "");
+
+        if (DatabaseConnection.connection)
+        {
+            UnityWebRequest www3 = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form3);
+
+            //www.SendWebRequest();
+            yield return www3.SendWebRequest();
+
+            www3.Dispose();
+        }
+
+        string[] streets = { "north", "west", "south", "east"};
+
+        // Avrage congestion for each street Congestion
+        for (int i = 0; i < streets.Length; i++)
+        {
+            WWWForm form4 = new WWWForm();
+            form4.AddField("table", table);
+            form4.AddField("name", "Congestion#" + streets[i]);
+            form4.AddField("waiting_time", Avg_wating_time.congestion[i].ToString());
+            carsData += "Congestion#"+streets[i]+"_" + Avg_wating_time.congestion[i].ToString() + " ";
+            form4.AddField("streat", "");
+            form4.AddField("turningDirection", "");
+
+            // Send data to database
+            if (DatabaseConnection.connection)
+            {
+                UnityWebRequest www4 = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form4);
+
+                //www.SendWebRequest();
+                yield return www4.SendWebRequest();
+
+                www4.Dispose();
+            }
+
+        }
+       
 
         if (DatabaseConnection.data.ContainsKey(table))
         {
@@ -282,16 +339,6 @@ public class DatabaseConnection : MonoBehaviour
             DatabaseConnection.data.Add(table, carsData);
         }
 
-        
-        if (DatabaseConnection.connection)
-        {
-            UnityWebRequest www2 = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form2);
-
-            //www.SendWebRequest();
-            yield return www2.SendWebRequest();
-
-            www2.Dispose();
-        }
 
     }
 
