@@ -62,10 +62,12 @@ public class Basic_algo : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        // This peace of code job is to check if there is emergency car if true it wil give it priority without specific time 
+        // This piece of code job is to check if there is emergency car if true it wil give it priority without specific time 
         if (currentEmergencyDirection != -1)
         {
             EmegencyTimeVariable += Time.deltaTime;
+            timer.GetComponentInChildren<TMP_Text>().text = "EM";
+            timer.transform.GetChild(1).GetComponent<Image>().fillAmount = 1;
             if (EmegencyTimeVariable <= yellowLightDuration)
             {
                 ChangeLightYellow(direction);

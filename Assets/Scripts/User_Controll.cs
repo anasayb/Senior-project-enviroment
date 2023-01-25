@@ -51,6 +51,7 @@ public class User_Controll : MonoBehaviour
 
         // Reset the simultaion speed
         Time.timeScale = 1;
+        simulationSpeed.GetComponent<TMP_Text>().text = "x" + Time.timeScale.ToString();
 
     }
 

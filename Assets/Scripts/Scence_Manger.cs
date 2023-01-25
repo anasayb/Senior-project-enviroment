@@ -24,6 +24,9 @@ public class Scence_Manger : MonoBehaviour
     public GameObject timeobject;
     public GameObject method;
     public GameObject TotalNumberOfCars;
+    public GameObject TradionalSystem;
+    public GameObject CarloadSystem;
+    public GameObject AISystem;
     public GameObject carNumberError;
     public GameObject timeError;
     public GameObject startButton;
@@ -39,14 +42,26 @@ public class Scence_Manger : MonoBehaviour
 
             if (method.GetComponent<TMP_Dropdown>().value == 0)
             {
-                timeobject.SetActive(true);
-                direction.SetActive(true);
+                TradionalSystem.SetActive(true);
+                CarloadSystem.SetActive(false);
+                AISystem.SetActive(false);
+                //timeobject.SetActive(true);
+                //direction.SetActive(true);
             }
-            else
+            else if (method.GetComponent<TMP_Dropdown>().value == 1)
             {
-                
-                timeobject.SetActive(false);
-                direction.SetActive(false);
+                TradionalSystem.SetActive(false);
+                CarloadSystem.SetActive(true);
+                AISystem.SetActive(false);
+                //timeobject.SetActive(false);
+                //direction.SetActive(false);
+            }
+            else if (method.GetComponent<TMP_Dropdown>().value == 2)
+            {
+                TradionalSystem.SetActive(false);
+                CarloadSystem.SetActive(false);
+                AISystem.SetActive(true);
+
             }
         }
         

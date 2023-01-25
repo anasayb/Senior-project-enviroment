@@ -7,6 +7,7 @@ using UnityEngine;
 using System;
 using static UnityEditor.PlayerSettings;
 using UnityEditor;
+using TMPro;
 
 public class AI : Agent
 {
@@ -19,6 +20,9 @@ public class AI : Agent
 
     [Header("Cameras")]
     public GameObject Maincamera;
+
+    [Header("GUI")]
+    public GameObject timer;
 
     // Traffic light controlling variable
     public GameObject[] trafficLights;
@@ -37,6 +41,9 @@ public class AI : Agent
     private bool once = true;
 
 
+    // Emregency car
+    int currentEmergencyDirection = -1;
+    float EmegencyTimeVariable = 0;
 
     public void Start()
     {
@@ -49,7 +56,59 @@ public class AI : Agent
     }
 
     public void FixedUpdate()
-    {   
+    {
+        // This piece of code job is to check if there is emergency car if true it wil give it priority without specific time 
+        if (currentEmergencyDirection != -1)
+        {
+            EmegencyTimeVariable += Time.deltaTime;
+            timer.GetComponentInChildren<TMP_Text>().text = "EM";
+            if (EmegencyTimeVariable <= yellowLightDuration)
+            {
+                ChangeLightYellow(direct);
+                timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
+            }
+
+            if (EmegencyTimeVariable >= yellowLightDuration && EmegencyTimeVariable < yellowLightDuration + delay)
+            {
+                ChangeLightRed(direct);
+            }
+
+            if (EmegencyTimeVariable >= yellowLightDuration + delay)
+            {
+                if (CarCount[currentEmergencyDirection].emergencyExist)
+                {
+                    ChangeLightGreen(currentEmergencyDirection);
+                    timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                }
+                else
+                {
+                    timeVariable = 0f;
+                    EmegencyTimeVariable = 0;
+                    time = 0;
+                    direct = currentEmergencyDirection;
+                    time = (int)yellowLightDuration+1;
+                    currentEmergencyDirection = -1;
+
+                }
+            }
+            return;
+        }
+        else
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                if (CarCount[i].emergencyExist)
+                {
+                    currentEmergencyDirection = i;
+                    if (currentEmergencyDirection == direct)
+                    {
+                        EmegencyTimeVariable = yellowLightDuration + delay;
+                    }
+                    return;
+                }
+            }
+        }
+
         if (Avg_wating_time.numberOfCars == 0 || Avg_wating_time.Avg_wating >= 100)
         {
             if (Avg_wating_time.numberOfCars == 0)
@@ -68,6 +127,8 @@ public class AI : Agent
         }
         else
         {
+            timer.GetComponentInChildren<TMP_Text>().text = "AI";
+            timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
             TrafficLightControlling();
 
         }
@@ -165,6 +226,8 @@ public class AI : Agent
         {
 
             ChangeLightGreen(direct);
+            timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+            timer.GetComponentInChildren<TMP_Text>().text = "AI";
 
         }
         else if (timeVariable >= time - yellowLightDuration - 1 && timeVariable < time - yellowLightDuration)
@@ -180,6 +243,7 @@ public class AI : Agent
         else if (timeVariable >= time - yellowLightDuration && timeVariable < time)
         {
 
+            timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
             if (direct == nextDirect)
             {
                 time = nextTime;
@@ -203,7 +267,6 @@ public class AI : Agent
         }
         else
         {
-            //ChangeLightRed(direct);
             time = nextTime;
             direct = nextDirect;
             nextTime = -1;
