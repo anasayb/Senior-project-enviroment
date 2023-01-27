@@ -28,7 +28,7 @@ public class AI : Agent
     private int nextDirect = 0;
     private int time = 0;
     private int nextTime = 0;
-    private bool once = true;
+    //private bool once = true;
 
 
     // for making things fast
@@ -61,7 +61,7 @@ public class AI : Agent
         cars.GetComponent<Avg_wating_time>().reset();
         cars.GetComponent<Car_Generator>().generate();
 
-        RequestDecision();
+        //RequestDecision();
 
     }
 
@@ -70,17 +70,9 @@ public class AI : Agent
 
         // check if the episode finish
         if (cars.GetComponent<Avg_wating_time>().numberOfCars == 0 && cars.GetComponent<Car_Generator>().CarsToGenerate == 0|| cars.GetComponent<Avg_wating_time>().Avg_wating >= 200)
-        {   
+        {
 
-            // Episode finish, Set reward according to result
-            if (cars.GetComponent<Avg_wating_time>().numberOfCars == 0)
-            {
-                SetReward(1f);
-            }
-            else
-            {
-                SetReward(-1f);
-            }
+            SetReward(1 - (cars.GetComponent<Avg_wating_time>().Avg_wating / 200));
 
             // End Episode
             EndEpisode();
@@ -134,7 +126,8 @@ public class AI : Agent
         // Resest variabels
         time = 0;
         direct = 0;
-
+        SetReward(1);
+        RequestDecision();
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -185,37 +178,16 @@ public class AI : Agent
         }
 
         timeVariable += Time.deltaTime;
-        if (timeVariable < time - yellowLightDuration -1)
+        if (timeVariable < time - yellowLightDuration)
         {
 
             ChangeLightGreen(direct);
 
-        }else if (timeVariable >= time - yellowLightDuration - 1 && timeVariable < time - yellowLightDuration)
-        {
-            if (once)
-            {
-                once = false;
-                SetReward(-(cars.GetComponent<Avg_wating_time>().Avg_wating / 200));
-                RequestDecision();
-            }
-                      
         }
         else if (timeVariable >= time - yellowLightDuration && timeVariable < time)
         {
            
-            if (direct == nextDirect)
-            {
-                time = nextTime;
-                direct = nextDirect;
-                nextTime = -1;
-                nextDirect = -1;
-                timeVariable = 0;
-                once = true;
-            }
-            else
-            {
                 ChangeLightYellow(direct);
-            }
             
         }
         else if (timeVariable >= time && timeVariable < time + delay)
@@ -227,12 +199,13 @@ public class AI : Agent
         else
         {
             //ChangeLightRed(direct);
+            SetReward(1 - (cars.GetComponent<Avg_wating_time>().Avg_wating / 200));
             time = nextTime;
             direct = nextDirect;
             nextTime = -1;
             nextDirect = -1;
             timeVariable = 0;
-            once = true;
+            RequestDecision();
         }
     }
 
