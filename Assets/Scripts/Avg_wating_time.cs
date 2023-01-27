@@ -67,7 +67,7 @@ public class Avg_wating_time : MonoBehaviour
             // Calculate the traffic flow if the running time is less than 1 min
             if (!FlowCalcualted)
             {
-                FlowRate = Scence_Manger.startingNumberOfCars;
+                FlowRate = (streets[0].leaveCarsCounter + streets[1].leaveCarsCounter + streets[2].leaveCarsCounter + streets[3].leaveCarsCounter);
                 FlowCalcualted = true;
             }
 
