@@ -69,10 +69,11 @@ public class AI : Agent
     {   
 
         // check if the episode finish
-        if (cars.GetComponent<Avg_wating_time>().numberOfCars == 0 && cars.GetComponent<Car_Generator>().CarsToGenerate == 0|| cars.GetComponent<Avg_wating_time>().Avg_wating >= 200)
+        if (cars.GetComponent<Avg_wating_time>().numberOfCars == 0 && cars.GetComponent<Car_Generator>().CarsToGenerate == 0|| cars.GetComponent<Avg_wating_time>().Avg_wating >= 160)
         {
 
-            SetReward(1 - (cars.GetComponent<Avg_wating_time>().Avg_wating / 200));
+
+            SetReward(1 - (cars.GetComponent<Avg_wating_time>().Avg_wating / 160));
 
             // End Episode
             EndEpisode();
@@ -126,7 +127,6 @@ public class AI : Agent
         // Resest variabels
         time = 0;
         direct = 0;
-        SetReward(1);
         RequestDecision();
     }
 
@@ -199,7 +199,6 @@ public class AI : Agent
         else
         {
             //ChangeLightRed(direct);
-            SetReward(1 - (cars.GetComponent<Avg_wating_time>().Avg_wating / 200));
             time = nextTime;
             direct = nextDirect;
             nextTime = -1;
