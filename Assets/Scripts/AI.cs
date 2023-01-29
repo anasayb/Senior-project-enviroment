@@ -127,6 +127,7 @@ public class AI : Agent
         // Resest variabels
         time = 0;
         direct = 0;
+        timeVariable = 0;
         RequestDecision();
     }
 
