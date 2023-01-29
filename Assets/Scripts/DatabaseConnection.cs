@@ -42,14 +42,14 @@ public class DatabaseConnection : MonoBehaviour
                 DatabaseConnection.connection = true;
 
                 // Get tables name
-                Response res2 = new Response();
-                IEnumerator e2 = getTables(res2);
-                while (e2.MoveNext()) ;
+                res = new Response();
+                e = getTables(res);
+                while (e.MoveNext()) ;
 
-                if (res2.result != "0")
+                if (res.result != "0")
                 {
                     // Save table names
-                    DatabaseConnection.tabelsNames = res2.result.Split(" ").ToList();
+                    DatabaseConnection.tabelsNames = res.result.Split(" ").ToList();
 
 
                     //Debug
@@ -64,13 +64,13 @@ public class DatabaseConnection : MonoBehaviour
                             continue;
                         }
 
-                        Response res3 = new Response();
-                        IEnumerator e3 = getData(res3, table);
-                        while (e3.MoveNext()) ;
+                        res = new Response();
+                        e = getData(res, table);
+                        while (e.MoveNext()) ;
 
                         // save data
 
-                        DatabaseConnection.data.Add(table, res3.result);
+                        DatabaseConnection.data.Add(table, res.result);
                     }
 
 
@@ -239,9 +239,10 @@ public class DatabaseConnection : MonoBehaviour
 
 
         // check if a table with the same name is already exist
-        if (DatabaseConnection.tabelsNames.Contains(table))
+        int index = DatabaseConnection.tabelsNames.IndexOf(table);
+        if (index != -1)
         {
-            DatabaseConnection.tabelsNames.RemoveAt(DatabaseConnection.tabelsNames.IndexOf(table));
+            DatabaseConnection.tabelsNames.RemoveAt(index);
 
         }
         DatabaseConnection.tabelsNames.Add(table);
@@ -267,42 +268,44 @@ public class DatabaseConnection : MonoBehaviour
         }
 
 
-        // Average waiting time
-        WWWForm form2 = new WWWForm();
-        form2.AddField("table", table);
-        form2.AddField("name", "AVG#Waiting#time");
-        form2.AddField("waiting_time", Avg_wating_time.Avg_wating.ToString());
+        // Average waiting time      
         carsData += "AVG#Waiting#time_" + Avg_wating_time.Avg_wating.ToString() + " ";
-        form2.AddField("streat", "");
-        form2.AddField("turningDirection", "");
-        
+           
         if (DatabaseConnection.connection)
         {
-            UnityWebRequest www2 = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form2);
+            WWWForm form = new WWWForm();
+            form.AddField("table", table);
+            form.AddField("name", "AVG#Waiting#time");
+            form.AddField("waiting_time", Avg_wating_time.Avg_wating.ToString());
+            form.AddField("streat", "");
+            form.AddField("turningDirection", "");
+
+            UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form);
 
             //www.SendWebRequest();
-            yield return www2.SendWebRequest();
+            yield return www.SendWebRequest();
 
-            www2.Dispose();
+            www.Dispose();
         }
 
         // Traffic Flow rate
-        WWWForm form3 = new WWWForm();
-        form3.AddField("table", table);
-        form3.AddField("name", "Flow#rate");
-        form3.AddField("waiting_time", Avg_wating_time.FlowRate.ToString());
         carsData += "Flow#rate_" + Avg_wating_time.FlowRate.ToString() + " ";
-        form3.AddField("streat", "");
-        form3.AddField("turningDirection", "");
-
+        
         if (DatabaseConnection.connection)
         {
-            UnityWebRequest www3 = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form3);
+            WWWForm form = new WWWForm();
+            form.AddField("table", table);
+            form.AddField("name", "Flow#rate");
+            form.AddField("waiting_time", Avg_wating_time.FlowRate.ToString());
+            form.AddField("streat", "");
+            form.AddField("turningDirection", "");
+
+            UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form);
 
             //www.SendWebRequest();
-            yield return www3.SendWebRequest();
+            yield return www.SendWebRequest();
 
-            www3.Dispose();
+            www.Dispose();
         }
 
         string[] streets = { "north", "west", "south", "east"};
@@ -310,23 +313,25 @@ public class DatabaseConnection : MonoBehaviour
         // Avrage congestion for each street Congestion
         for (int i = 0; i < streets.Length; i++)
         {
-            WWWForm form4 = new WWWForm();
-            form4.AddField("table", table);
-            form4.AddField("name", "Congestion#" + streets[i]);
-            form4.AddField("waiting_time", Avg_wating_time.congestion[i].ToString());
+            
             carsData += "Congestion#"+streets[i]+"_" + Avg_wating_time.congestion[i].ToString() + " ";
-            form4.AddField("streat", "");
-            form4.AddField("turningDirection", "");
-
+            
             // Send data to database
             if (DatabaseConnection.connection)
             {
-                UnityWebRequest www4 = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form4);
+                WWWForm form = new WWWForm();
+                form.AddField("table", table);
+                form.AddField("name", "Congestion#" + streets[i]);
+                form.AddField("waiting_time", Avg_wating_time.congestion[i].ToString());
+                form.AddField("streat", "");
+                form.AddField("turningDirection", "");
+
+                UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form);
 
                 //www.SendWebRequest();
-                yield return www4.SendWebRequest();
+                yield return www.SendWebRequest();
 
-                www4.Dispose();
+                www.Dispose();
             }
 
         }
