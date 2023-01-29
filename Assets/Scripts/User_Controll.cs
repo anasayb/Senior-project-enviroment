@@ -51,12 +51,12 @@ public class User_Controll : MonoBehaviour
 
         // Reset the simultaion speed
         Time.timeScale = 1;
-        simulationSpeed.GetComponent<TMP_Text>().text = "x" + Time.timeScale.ToString();
+        //simulationSpeed.SetActive(true);
 
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
 
         // Camera Updating 
@@ -80,6 +80,7 @@ public class User_Controll : MonoBehaviour
         if (Avg_wating_time.numberOfCars != 0)
         {
             // Simultaion speed
+            simulationSpeed.SetActive(true);
             simulationSpeed.GetComponent<TMP_Text>().text = "x" + Time.timeScale.ToString();
             if (Input.GetKeyDown(KeyCode.Equals))
             {
@@ -95,7 +96,6 @@ public class User_Controll : MonoBehaviour
         {
             simulationSpeed.SetActive(false);
         }
-        
 
 
     }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 
@@ -90,7 +91,9 @@ public class Avg_wating_time : MonoBehaviour
                 }
 
                 // store the run inforamtion and show the summary
-                StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights")));
+                StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights"))); ;
+                //while (e.MoveNext()) ;
+                
                 Summary.CurrentRunSummary();
                 stored = true;
 

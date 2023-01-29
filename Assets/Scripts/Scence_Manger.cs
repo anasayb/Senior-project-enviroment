@@ -107,7 +107,7 @@ public class Scence_Manger : MonoBehaviour
             {
                 providedTime[i] = 10f;
             }
-            if (providedTime[i] <= 3)
+            if (providedTime[i] <= 4)
             {
                 timeError.SetActive(true);
             }
@@ -120,7 +120,7 @@ public class Scence_Manger : MonoBehaviour
             startingNumberOfCars = 22;
         }
 
-        if (startingNumberOfCars <= 0 || startingNumberOfCars > 180)
+        if (startingNumberOfCars <= 0 || startingNumberOfCars > 50)
         {
             carNumberError.SetActive(true);
         }

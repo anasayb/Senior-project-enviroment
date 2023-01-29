@@ -19,10 +19,10 @@ public class Basic_algo : MonoBehaviour
     private float timeVariable = 0f;
     private int direction = 0;
     private bool oneTimeRun = true;
-    private bool secondoneTimeRun = false;
+    private bool noStarvation = false;
     private int oldDirection = 1;
     private float EmegencyTimeVariable;
-    int temp;
+    int temp=-1;
     private int currentEmergencyDirection = -1;
     private bool justFinishedEmergency = false;
     private int[] turnWaiting = { 0, 0, 0, 0 };
@@ -162,7 +162,7 @@ public class Basic_algo : MonoBehaviour
                     }
 
                 }
-                else if (secondoneTimeRun)
+                else if (noStarvation)
                 {
                     getNextTurn();
                 }
@@ -248,7 +248,7 @@ public class Basic_algo : MonoBehaviour
             if (turnWaiting[i] >= 3)
             {
                 queue.Clear();
-                secondoneTimeRun = false;
+                noStarvation = false;
                 justFinishedEmergency = false;
                 switch (i)
                 {
@@ -297,7 +297,7 @@ public class Basic_algo : MonoBehaviour
                 turnWaiting[i] = 0;
                 break;
             }
-            secondoneTimeRun = true;
+            noStarvation = true;
         }
     }
 
