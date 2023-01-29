@@ -46,38 +46,41 @@ public class DatabaseConnection : MonoBehaviour
                 IEnumerator e2 = getTables(res2);
                 while (e2.MoveNext()) ;
 
-                // Save table names
-                DatabaseConnection.tabelsNames = res2.result.Split(" ").ToList();
-
-                //Debug
-                // string file1 = Application.streamingAssetsPath + "/TableNames.txt";
-                // File.WriteAllText(file1, res2.result);
-
-                // Get the data in each table
-                foreach (string table in tabelsNames)
+                if (res2.result != "0")
                 {
-                    if (table == "" || table == " ")
+                    // Save table names
+                    DatabaseConnection.tabelsNames = res2.result.Split(" ").ToList();
+
+
+                    //Debug
+                    // string file1 = Application.streamingAssetsPath + "/TableNames.txt";
+                    // File.WriteAllText(file1, res2.result);
+
+                    // Get the data in each table
+                    foreach (string table in tabelsNames)
                     {
-                        continue;
+                        if (table == "" || table == " ")
+                        {
+                            continue;
+                        }
+
+                        Response res3 = new Response();
+                        IEnumerator e3 = getData(res3, table);
+                        while (e3.MoveNext()) ;
+
+                        // save data
+
+                        DatabaseConnection.data.Add(table, res3.result);
                     }
 
-                    Response res3 = new Response();
-                    IEnumerator e3 = getData(res3, table);
-                    while (e3.MoveNext()) ;
 
-                    // save data
-
-                    DatabaseConnection.data.Add(table, res3.result);
+                    // Debug  Code
+                    // string dataToWrite = "";
+                    // dataToWrite += res3.result + "\n";
+                    // string file2 = Application.streamingAssetsPath + "/Data.txt";
+                    //  File.WriteAllText(file2, dataToWrite);
+                    //List<string> list = File.ReadAllLines(file1).ToList();
                 }
-
-                
-                // Debug  Code
-                // string dataToWrite = "";
-                // dataToWrite += res3.result + "\n";
-                // string file2 = Application.streamingAssetsPath + "/Data.txt";
-                //  File.WriteAllText(file2, dataToWrite);
-                //List<string> list = File.ReadAllLines(file1).ToList();
-
             }
         }
 
