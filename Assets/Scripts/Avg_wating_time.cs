@@ -91,8 +91,8 @@ public class Avg_wating_time : MonoBehaviour
                 }
 
                 // store the run inforamtion and show the summary
-                IEnumerator e = db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights")); ;
-                while (e.MoveNext()) ;
+                StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights"))); ;
+                //while (e.MoveNext()) ;
                 
                 Summary.CurrentRunSummary();
                 stored = true;
