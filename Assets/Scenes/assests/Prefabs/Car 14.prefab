@@ -99,8 +99,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.57, y: 1.54, z: 4.93}
-  m_Center: {x: 0, y: 0.12, z: 0}
+  m_Size: {x: 2.57, y: 1.45, z: 4.93}
+  m_Center: {x: 0, y: 0.13, z: 0}
 --- !u!114 &2183674921621003740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,6 +132,7 @@ MonoBehaviour:
   waitngTime: 0
   carInfo: {fileID: 0}
   tent: {fileID: 2100000, guid: 1feea6bc308a2ae4d82ceac8a07c2bee, type: 2}
+  sel: {fileID: 0}
 --- !u!1 &2183674921747211508
 GameObject:
   m_ObjectHideFlags: 0

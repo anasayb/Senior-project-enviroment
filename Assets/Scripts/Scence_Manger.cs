@@ -137,9 +137,12 @@ public class Scence_Manger : MonoBehaviour
         {
             EmergencyCar = true;
         }
+        else
+        {
+            EmergencyCar = false;
+        }
 
-        StartCoroutine(LoadYourAsyncScene("SampleScene"));
-        //SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("SampleScene");
      
     }
 
@@ -147,16 +150,16 @@ public class Scence_Manger : MonoBehaviour
     public void ReturnToMenu()
     {
         //SceneManager.LoadScene("Menu");
-        StartCoroutine(LoadYourAsyncScene("Menu"));
+        SceneManager.LoadScene("Menu");
     }
 
     public void Rerun()
     {
         //SceneManager.LoadScene("SampleScene");
-        StartCoroutine(LoadYourAsyncScene("SampleScene"));
+        SceneManager.LoadScene("SampleScene");
     }
 
-
+    /*
     IEnumerator LoadYourAsyncScene(string name)
     {
         // The Application loads the Scene in the background as the current Scene runs.
@@ -172,5 +175,6 @@ public class Scence_Manger : MonoBehaviour
             yield return null;
         }
     }
+    */
 
 }

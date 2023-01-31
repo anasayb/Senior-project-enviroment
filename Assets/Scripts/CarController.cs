@@ -215,26 +215,26 @@ public class CarController : MonoBehaviour
     /// </summary>
     private void calculateWatingTime()
     {
-
-        Ray ray = new Ray(transform.position, transform.forward);
-        RaycastHit h;
-        if (Physics.Raycast(ray, out h, 230, ~CarLay) && Car_Generator.CarsToGenerate == 0 && deaccelrate)
-        {
-
-            Rigidbody speed = GetComponent<Rigidbody>();
-            if (speed.velocity.magnitude < 1)
+        if (AI.startCouting || Traditional_traffic_Controller.startCouting || Basic_algo.startCouting) {
+            Ray ray = new Ray(transform.position, transform.forward);
+            RaycastHit h;
+            if (Physics.Raycast(ray, out h, 230, ~CarLay) && Car_Generator.CarsToGenerate == 0 && deaccelrate)
             {
-                waitngTime += Time.deltaTime;
+
+                Rigidbody speed = GetComponent<Rigidbody>();
+                if (speed.velocity.magnitude <= 2)
+                {
+                    waitngTime += Time.deltaTime;
+                }
+
+
             }
 
-            
+            Avg_wating_time.updateAvg(transform.name, waitngTime, left, right, transform.parent.name);
+
+            // Debug code
+            // Debug.DrawRay(ray.origin, transform.forward*300, Color.blue);
         }
-
-        Avg_wating_time.updateAvg(transform.name, waitngTime, left, right, transform.parent.name);
-
-        // Debug code
-        // Debug.DrawRay(ray.origin, transform.forward*300, Color.blue);
-
     }
 
     /// <summary>
@@ -384,10 +384,10 @@ public class CarController : MonoBehaviour
             if (transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude <= 30)
             {   
                 Rigidbody speed = GetComponent<Rigidbody>();
-                if (speed.velocity.magnitude > 10)
+                if (speed.velocity.magnitude > 8)
                 {
                     colide = transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude;
-                    deaccelerate(10);
+                    deaccelerate(8);
                 }
                 
 

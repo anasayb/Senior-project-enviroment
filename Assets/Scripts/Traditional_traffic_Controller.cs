@@ -9,6 +9,8 @@ using UnityEngine.UI;
 
 public class Traditional_traffic_Controller : MonoBehaviour
 {
+    public static bool startCouting = false;
+
     public Component[] trafficLights;
     
     public float[] time;
@@ -30,7 +32,7 @@ public class Traditional_traffic_Controller : MonoBehaviour
     void Start()
     {
         
-
+        Traditional_traffic_Controller.startCouting = false;
         time = Scence_Manger.providedTime;
         direction = Scence_Manger.dir;
         if (direction == 0)
@@ -53,22 +55,12 @@ public class Traditional_traffic_Controller : MonoBehaviour
 
         }
 
-        if (Scence_Manger.algorthim == "CarLoad Based Traffic Light System")
+        if (Scence_Manger.algorthim != "Traditional Traffic Light System")
         {
-
-            GetComponent<Basic_algo>().enabled = true;
-            GetComponent<Traditional_traffic_Controller>().enabled = false;
-            return;
-
-        }
-        else if (Scence_Manger.algorthim == "AI Traffic Light System")
-        {
-
-            GetComponent<AI>().enabled = true;
-            //GetComponent<AI_TLC>().enabled = true;
             GetComponent<Traditional_traffic_Controller>().enabled = false;
             return;
         }
+
 
         ChangeLightGreen(direction);
        
@@ -77,7 +69,7 @@ public class Traditional_traffic_Controller : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
- 
+        Traditional_traffic_Controller.startCouting = true;
         timeVariable += Time.deltaTime;
         timer.GetComponentInChildren<TMP_Text>().text = Math.Max((Math.Ceiling(time[direction]-timeVariable)), 0).ToString();
         timer.transform.GetChild(1).GetComponent<Image>().fillAmount = (1-(timeVariable/time[direction]));

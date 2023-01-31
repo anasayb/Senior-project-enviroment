@@ -10,6 +10,8 @@ using UnityEngine.UI;
 
 public class Basic_algo : MonoBehaviour
 {
+    public static bool startCouting = false;
+
     public Component[] trafficLights;
 
     private float[] time = { 0, 0, 0, 0 }; // i assumed we will show him without the menu because its not fixed as u know 
@@ -49,19 +51,24 @@ public class Basic_algo : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        Basic_algo.startCouting = false;
         direction = Scence_Manger.dir;
         NodeClass North = new NodeClass(0, CarCount[0].carsCounter);
         queue.Enqueue(North);
         time[queue.Peek().direction] = GreenTimeCalc(CarCount[queue.Peek().direction].carsCounter);
 
-
+        if (Scence_Manger.algorthim != "CarLoad Based Traffic Light System")
+        {
+            GetComponent<Basic_algo>().enabled = false;
+            return;
+        }
 
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        Basic_algo.startCouting = true;
         // This piece of code job is to check if there is emergency car if true it wil give it priority without specific time 
         if (currentEmergencyDirection != -1)
         {
@@ -336,7 +343,7 @@ public class Basic_algo : MonoBehaviour
 
     // The timer calculation its UI 
     private void Timer()
-    {
+    {   
         timeVariable += Time.deltaTime;
         timer.GetComponentInChildren<TMP_Text>().text = Math.Max((Math.Ceiling(time[direction] - timeVariable)), 0).ToString();
         timer.transform.GetChild(1).GetComponent<Image>().fillAmount = (1 - (timeVariable / time[direction]));

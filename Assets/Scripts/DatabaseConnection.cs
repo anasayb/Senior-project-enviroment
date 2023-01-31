@@ -337,7 +337,13 @@ public class DatabaseConnection : MonoBehaviour
                 }
 
             }
-            
+
+
+            using (UnityWebRequest newwww = UnityWebRequest.Get("http://localhost/sqlconnect/SaveTablesInfo.php"))
+            {
+                yield return newwww.SendWebRequest();
+            }
+
         }
 
     }

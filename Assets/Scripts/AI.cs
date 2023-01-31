@@ -12,6 +12,8 @@ using TMPro;
 public class AI : Agent
 {
 
+    public static bool startCouting = false;
+
     // Enviroment Varaibles
     //public GameObject prefab;
     public GameObject cars;
@@ -47,10 +49,22 @@ public class AI : Agent
 
     public void Start()
     {
+        AI.startCouting = false;
         cars = GameObject.Find("Cars");
+
+        if (Scence_Manger.algorthim != "AI Traffic Light System")
+        {
+            GetComponent<AI>().enabled = false;
+            return;
+        }
+
+        // Check for Emergency car
         for (int i = 0; i < 4; i++)
         {
-            GetComponent<AI_TLC>().ChangeLightRed(i);
+            if (CarCount[i].emergencyExist)
+            {
+                currentEmergencyDirection = i;
+            }
         }
 
     }
@@ -60,6 +74,10 @@ public class AI : Agent
         // This piece of code job is to check if there is emergency car if true it wil give it priority without specific time 
         if (currentEmergencyDirection != -1)
         {
+            if (AI.startCouting == false)
+            {
+                AI.startCouting = true;
+            }
             EmegencyTimeVariable += Time.deltaTime;
             timer.GetComponentInChildren<TMP_Text>().text = "EM";
             if (EmegencyTimeVariable <= yellowLightDuration)
@@ -109,16 +127,10 @@ public class AI : Agent
             }
         }
 
-        if (Avg_wating_time.numberOfCars == 0 || Avg_wating_time.Avg_wating >= 100)
+        if (Avg_wating_time.numberOfCars == 0 || Avg_wating_time.Avg_wating >= 160)
         {
-            if (Avg_wating_time.numberOfCars == 0)
-            {
-                SetReward(1f);
-            }
-            else
-            {
-                SetReward(-1f);
-            }
+
+             SetReward(1 - (Avg_wating_time.Avg_wating/ 160));
 
             //EndEpisode();
             //Destroy(temp);
@@ -136,42 +148,10 @@ public class AI : Agent
 
     public override void OnEpisodeBegin()
     {
-        /*
-
-        if (episodeNumber == 0)
-        {
-            episodeNumber++;
-            return;
-        }
-        episodeNumber++;
-        Debug.Log("ep: " + episodeNumber);
-        //GameObject temp = cars;
-        
-        Destroy(cars);
-        cars = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.Euler(Vector3.zero));
-        cars.transform.name = "Cars";
-        cars.transform.SetParent(transform.parent.parent.parent);
-        cars.transform.localPosition = new Vector3(0,0,0);
-        //avg = newCar.GetComponent<Avg_wating_time>();    
-        foreach (Transform dir in cars.transform)
-        {
-            Transform left = transform.parent.parent.GetChild(0).Find("Turnining Left Path " + dir.transform.name).transform;
-            Transform right = transform.parent.parent.GetChild(1).Find("Turnining Right Path " + dir.transform.name).transform;
-            foreach (Transform car in dir)
-            {
-                car.GetComponent<CarController>().pathGourpLeft = left;
-                car.GetComponent<CarController>().pathGourpRight = right;
-            }
-
-        }
-        //newCar.GetComponent<Avg_wating_time>().Text = GameObject.Find("Avg_waiting_time_text");
-        //cars.GetComponent<Avg_wating_time>().Avg_wating = 0;
-
-        */
 
         // Resest variabels
-        time = 0;
-        direct = 0;
+        //time = 0;
+        //direct = 0;
 
     }
 
@@ -221,6 +201,10 @@ public class AI : Agent
 
         }
 
+        if (AI.startCouting == false)
+        {
+            AI.startCouting = true;
+        }
         timeVariable += Time.deltaTime;
         if (timeVariable < time - yellowLightDuration - 1)
         {
@@ -235,7 +219,6 @@ public class AI : Agent
             if (once)
             {
                 once = false;
-                SetReward(-(Avg_wating_time.Avg_wating / 100));
                 RequestDecision();
             }
 
