@@ -22,10 +22,10 @@ public class Car_Generator : MonoBehaviour
     private GameObject selector;
     private bool emergency = false;
 
-    Vector3[] startPos = {  new Vector3(6.44f, 1, -33.256f), new Vector3(13.21318f, 1, -33.256f),
-                            new Vector3(32.31f, 1, 6.62f), new Vector3(32.31f, 1, 13.07f),
-                            new Vector3(-6.68f, 1, 35.39f), new Vector3(-13.39f, 1, 35.39f),
-                            new Vector3(-33.0f, 1, -6.8f), new Vector3(-33.0f, 1, -13.16f)};
+    Vector3[] startPos = {  new Vector3(6.44f, 2, -33.256f), new Vector3(13.21318f, 2, -33.256f),
+                            new Vector3(32.31f, 2, 6.62f), new Vector3(32.31f, 2, 13.07f),
+                            new Vector3(-6.68f, 2, 35.39f), new Vector3(-13.39f, 2, 35.39f),
+                            new Vector3(-33.0f, 2, -6.8f), new Vector3(-33.0f, 2, -13.16f)};
 
     // Start is called before the first frame update
     void Start()    
@@ -180,10 +180,10 @@ public class Car_Generator : MonoBehaviour
 
             if (CarsPrefabs[carIndex].tag == "Truck")
             {
-                frontCarLeft.y = 2.4f;
+                frontCarLeft.y = 4f;
             }else if (CarsPrefabs[carIndex].tag == "Bus")
             {
-                frontCarLeft.y = 2.3f;
+                frontCarLeft.y = 4f;
             }
             GameObject newCar = Instantiate(CarsPrefabs[carIndex], frontCarLeft, Quaternion.Euler(rot));
             newCar.GetComponent<CarController>().pathGourpLeft = TurningPathsLeft[streat];
@@ -275,11 +275,11 @@ public class Car_Generator : MonoBehaviour
 
             if (CarsPrefabs[carIndex].tag == "Truck")
             {
-                frontCarLeft.y = 2.4f;
+                frontCarLeft.y = 4f;
             }
             else if (CarsPrefabs[carIndex].tag == "Bus")
             {
-                frontCarLeft.y = 2.3f;
+                frontCarLeft.y = 4f;
             }
             newCar = Instantiate(CarsPrefabs[carIndex], frontCarRight, Quaternion.Euler(rot));
             newCar.GetComponent<CarController>().pathGourpLeft = TurningPathsLeft[streat];
