@@ -10,17 +10,33 @@
     }
 
     $table = $_POST["table"];
-    $name = $_POST["name"];
-    $time = $_POST["waiting_time"];
-    $streat = $_POST["streat"];
-    $turning = $_POST["turningDirection"];
     
-    echo ($name." and ".$time." and ".$streat." and ".$turning);
+    $data = explode(" ",$_POST["data"]);
 
-    // add times to the table
-    $insertQuey = "INSERT INTO `$table`(`name`, `waitingTime`, `Direction`, `Streat`) VALUES ('".$name."','". $time."', '". $turning."','". $streat."');";
-    mysqli_query($con, $insertQuey) or die("4: Insert Failed");
+    foreach($data as $item){
+        if($item == ""){
+            continue;
+        }
+        $info = explode("_" , $item);
+        $name = $info[0];
+        $time = $info[1];
+        $streat = "";
+        $turning = "";
+        if($name != "AVG#Waiting#time" || $name != "Flow#rate" || $name != "Congestion#north" || $name != "Congestion#west" || $name != "Congestion#south" || $name != "Congestion#east"){
+            $streat = $info[2];
+            $turning = $info[3];
+        }
+       
+        echo ($name." and ".$time." and ".$streat." and ".$turning);
 
+        // add times to the table
+        $insertQuey = "INSERT INTO `$table`(`name`, `waitingTime`, `Direction`, `Streat`) VALUES ('".$name."','". $time."', '". $turning."','". $streat."');";
+        mysqli_query($con, $insertQuey) or die("4: Insert Failed");
+
+    }
+
+    
+    
     echo("0");
 
 ?>

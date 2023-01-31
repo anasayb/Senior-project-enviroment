@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
+using static UnityEditor.Progress;
 
 
 public class Response
@@ -100,26 +101,26 @@ public class DatabaseConnection : MonoBehaviour
     public IEnumerator CheckConnection(Response res)
     {
 
-        UnityWebRequest www = UnityWebRequest.Get("http://localhost/sqlconnect/GetData.php");
-
-        //www.SendWebRequest();
-        yield return www.SendWebRequest();
-
-        while (!www.isDone)
-            yield return true;
-
-        if (www.result == UnityWebRequest.Result.Success)
+        using (UnityWebRequest www = UnityWebRequest.Get("http://localhost/sqlconnect/GetData.php"))
         {
-            // Debug.Log(www.error);
-            res.result = "Yes";
-        }
-        else
-        {
-            res.result = "No";
-        }
 
+            //www.SendWebRequest();
+            yield return www.SendWebRequest();
 
-        www.Dispose();
+            while (!www.isDone)
+                yield return true;
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                // Debug.Log(www.error);
+                res.result = "Yes";
+            }
+            else
+            {
+                res.result = "No";
+            }
+
+        }
 
     }
 
@@ -134,26 +135,26 @@ public class DatabaseConnection : MonoBehaviour
         if (DatabaseConnection.connection)
         {
 
-            UnityWebRequest www = UnityWebRequest.Get("http://localhost/sqlconnect/GetData.php");
-
-            //www.SendWebRequest();
-            yield return www.SendWebRequest();
-
-            while (!www.isDone)
-                yield return true;
-
-            if (www.result != UnityWebRequest.Result.Success)
+            using (UnityWebRequest www = UnityWebRequest.Get("http://localhost/sqlconnect/GetData.php"))
             {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                res.result = www.downloadHandler.text;
+
+                //www.SendWebRequest();
+                yield return www.SendWebRequest();
+
+                while (!www.isDone)
+                    yield return true;
+
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    res.result = www.downloadHandler.text;
+
+                }
 
             }
-
-
-            www.Dispose();
         }
 
     }
@@ -169,29 +170,30 @@ public class DatabaseConnection : MonoBehaviour
         res.result = "";
         if (DatabaseConnection.connection)
         {
+
             WWWForm form = new WWWForm();
             form.AddField("name", tableName);
 
-            UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/GetData.php", form);
-
-
-            //www.SendWebRequest();
-            yield return www.SendWebRequest();
-
-            while (!www.isDone)
-                yield return true;
-
-            if (www.result != UnityWebRequest.Result.Success)
+            using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/GetData.php", form))
             {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                res.result = www.downloadHandler.text;
+
+                //www.SendWebRequest();
+                yield return www.SendWebRequest();
+
+                while (!www.isDone)
+                    yield return true;
+
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    res.result = www.downloadHandler.text;
+                }
+
             }
 
-
-            www.Dispose();
         }
     }
 
@@ -252,10 +254,11 @@ public class DatabaseConnection : MonoBehaviour
         {
             WWWForm form = new WWWForm();
             form.AddField("table", table);
-            UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/DeleteExistingData.php", form);
-            yield return www.SendWebRequest();
+            using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/DeleteExistingData.php", form))
+            {
+                yield return www.SendWebRequest();
 
-            www.Dispose();
+            }            
         }
 
 
@@ -263,50 +266,17 @@ public class DatabaseConnection : MonoBehaviour
         foreach (var item in watingTime)
         {
             carsData += item.Key.Replace(" ", "#") + "_" + item.Value.waiting_time.ToString() + "_" + item.Value.direction + "_" + item.Value.streat + " ";
-            StartCoroutine(saveToDatabase(table, item));
 
         }
 
 
         // Average waiting time      
         carsData += "AVG#Waiting#time_" + Avg_wating_time.Avg_wating.ToString() + " ";
-           
-        if (DatabaseConnection.connection)
-        {
-            WWWForm form = new WWWForm();
-            form.AddField("table", table);
-            form.AddField("name", "AVG#Waiting#time");
-            form.AddField("waiting_time", Avg_wating_time.Avg_wating.ToString());
-            form.AddField("streat", "");
-            form.AddField("turningDirection", "");
 
-            UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form);
-
-            //www.SendWebRequest();
-            yield return www.SendWebRequest();
-
-            www.Dispose();
-        }
 
         // Traffic Flow rate
         carsData += "Flow#rate_" + Avg_wating_time.FlowRate.ToString() + " ";
-        
-        if (DatabaseConnection.connection)
-        {
-            WWWForm form = new WWWForm();
-            form.AddField("table", table);
-            form.AddField("name", "Flow#rate");
-            form.AddField("waiting_time", Avg_wating_time.FlowRate.ToString());
-            form.AddField("streat", "");
-            form.AddField("turningDirection", "");
 
-            UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form);
-
-            //www.SendWebRequest();
-            yield return www.SendWebRequest();
-
-            www.Dispose();
-        }
 
         string[] streets = { "north", "west", "south", "east"};
 
@@ -315,27 +285,12 @@ public class DatabaseConnection : MonoBehaviour
         {
             
             carsData += "Congestion#"+streets[i]+"_" + Avg_wating_time.congestion[i].ToString() + " ";
-            
-            // Send data to database
-            if (DatabaseConnection.connection)
-            {
-                WWWForm form = new WWWForm();
-                form.AddField("table", table);
-                form.AddField("name", "Congestion#" + streets[i]);
-                form.AddField("waiting_time", Avg_wating_time.congestion[i].ToString());
-                form.AddField("streat", "");
-                form.AddField("turningDirection", "");
-
-                UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form);
-
-                //www.SendWebRequest();
-                yield return www.SendWebRequest();
-
-                www.Dispose();
-            }
 
         }
-       
+
+
+        StartCoroutine(saveToDatabase(table, carsData));
+
 
         if (DatabaseConnection.data.ContainsKey(table))
         {
@@ -356,35 +311,33 @@ public class DatabaseConnection : MonoBehaviour
     /// </summary>
     /// <param name="table">Table name</param>
     /// /// <param name="item">A pair of the car name with the crossponding car's data</param>
-    private IEnumerator saveToDatabase(string table, KeyValuePair<string, data> item)
+    private IEnumerator saveToDatabase(string table, string data)
     {
 
         if (DatabaseConnection.connection)
         {
             WWWForm form = new WWWForm();
             form.AddField("table", table);
-            form.AddField("name", item.Key.Replace(" ", "#"));
-            form.AddField("waiting_time", item.Value.waiting_time.ToString());
-            form.AddField("streat", item.Value.streat);
-            form.AddField("turningDirection", item.Value.direction);
+            form.AddField("data", data);
 
 
-            UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form);
-
-            //www.SendWebRequest();
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
+            using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form))
             {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log("Form upload complete!");
-            }
 
+                //www.SendWebRequest();
+                yield return www.SendWebRequest();
 
-            www.Dispose();
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    Debug.Log("Form upload complete!");
+                }
+
+            }
+            
         }
 
     }

@@ -117,7 +117,7 @@ public class Summary : MonoBehaviour
         row.SetActive(true);
         foreach (var item in DatabaseConnection.tabelsNames)
         {
-            if (item == "")
+            if (item == "" || item == "information")
             {
                 continue;
             }
@@ -258,7 +258,7 @@ public class Summary : MonoBehaviour
         row.SetActive(true);
         foreach (var item in DatabaseConnection.tabelsNames)
         {
-            if (item == "")
+            if (item == "" || item == "information")
             {
                 continue;
             }

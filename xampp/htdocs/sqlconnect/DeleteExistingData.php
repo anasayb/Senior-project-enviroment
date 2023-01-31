@@ -22,14 +22,28 @@
     else
     {
         //I can't find it, Create table
-
-        $insertQuey = "CREATE TABLE `".$table."` (
-            `name` text NOT NULL,
-            `waitingTime` double NOT NULL,
-            `Direction` text NOT NULL,
-            `Streat` text NOT NULL
-          ) ;";
-          mysqli_query($con, $insertQuey) or die("4: creation Failed");
+        $insertQuey = "";
+        if($table != "information"){
+            $insertQuey = "CREATE TABLE `".$table."` (
+                `name` text NOT NULL,
+                `waitingTime` double NOT NULL,
+                `Direction` text NOT NULL,
+                `Streat` text NOT NULL
+            ) ;";
+        }else{
+            $insertQuey = "CREATE TABLE `".$table."` (
+                `algorithm` text NOT NULL,
+                `carNumber` INT NOT NULL,
+                `startingDirection` text NOT NULL,
+                `avg` double NOT NULL,
+                `flowRate` double NOT NULL,
+                `CongestionNorth` double NOT NULL,
+                `CongestionWest` double NOT NULL,
+                `CongestionSouth` double NOT NULL,
+                `CongestionEast` double NOT NULL
+            ) ;";
+        }
+        mysqli_query($con, $insertQuey) or die("4: creation Failed");
     }
     
 
