@@ -87,5 +87,10 @@ public class PriorityQueue<T> where T : IComparable<T>
             if (rci <= li && data[pi].CompareTo(data[rci]) > 0) return false; // check the right child too.
         }
         return true; // passed all checks
-    } // IsConsistent
-} // PriorityQueue
+    }
+
+    public object Clone()
+    {
+        return this.MemberwiseClone();
+    }
+}

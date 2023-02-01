@@ -71,78 +71,81 @@ public class AI : Agent
 
     public void FixedUpdate()
     {
-        // This piece of code job is to check if there is emergency car if true it wil give it priority without specific time 
-        if (currentEmergencyDirection != -1)
+        if (CarCount[0].carsCounter + CarCount[1].carsCounter + CarCount[2].carsCounter + CarCount[3].carsCounter != 0)
         {
-            if (AI.startCouting == false)
+            // This piece of code job is to check if there is emergency car if true it wil give it priority without specific time 
+            if (currentEmergencyDirection != -1)
             {
-                AI.startCouting = true;
-            }
-            EmegencyTimeVariable += Time.deltaTime;
-            timer.GetComponentInChildren<TMP_Text>().text = "EM";
-            if (EmegencyTimeVariable <= yellowLightDuration)
-            {
-                ChangeLightYellow(direct);
-                timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
-            }
-
-            if (EmegencyTimeVariable >= yellowLightDuration && EmegencyTimeVariable < yellowLightDuration + delay)
-            {
-                ChangeLightRed(direct);
-            }
-
-            if (EmegencyTimeVariable >= yellowLightDuration + delay)
-            {
-                if (CarCount[currentEmergencyDirection].emergencyExist)
+                if (AI.startCouting == false)
                 {
-                    ChangeLightGreen(currentEmergencyDirection);
-                    timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                    AI.startCouting = true;
                 }
-                else
+                EmegencyTimeVariable += Time.deltaTime;
+                timer.GetComponentInChildren<TMP_Text>().text = "EM";
+                if (EmegencyTimeVariable <= yellowLightDuration)
                 {
-                    timeVariable = 0f;
-                    EmegencyTimeVariable = 0;
-                    time = 0;
-                    direct = currentEmergencyDirection;
-                    time = (int)yellowLightDuration+1;
-                    currentEmergencyDirection = -1;
-
+                    ChangeLightYellow(direct);
+                    timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
                 }
-            }
-            return;
-        }
-        else
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                if (CarCount[i].emergencyExist)
+
+                if (EmegencyTimeVariable >= yellowLightDuration && EmegencyTimeVariable < yellowLightDuration + delay)
                 {
-                    currentEmergencyDirection = i;
-                    if (currentEmergencyDirection == direct)
+                    ChangeLightRed(direct);
+                }
+
+                if (EmegencyTimeVariable >= yellowLightDuration + delay)
+                {
+                    if (CarCount[currentEmergencyDirection].emergencyExist)
                     {
-                        EmegencyTimeVariable = yellowLightDuration + delay;
+                        ChangeLightGreen(currentEmergencyDirection);
+                        timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
                     }
-                    return;
+                    else
+                    {
+                        timeVariable = 0f;
+                        EmegencyTimeVariable = 0;
+                        time = 0;
+                        direct = currentEmergencyDirection;
+                        time = (int)yellowLightDuration + 1;
+                        currentEmergencyDirection = -1;
+
+                    }
+                }
+                return;
+            }
+            else
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (CarCount[i].emergencyExist)
+                    {
+                        currentEmergencyDirection = i;
+                        if (currentEmergencyDirection == direct)
+                        {
+                            EmegencyTimeVariable = yellowLightDuration + delay;
+                        }
+                        return;
+                    }
                 }
             }
-        }
 
-        if (Avg_wating_time.numberOfCars == 0 || Avg_wating_time.Avg_wating >= 160)
-        {
+            if (Avg_wating_time.numberOfCars == 0 || Avg_wating_time.Avg_wating >= 160)
+            {
 
-             SetReward(1 - (Avg_wating_time.Avg_wating/ 160));
+                SetReward(1 - (Avg_wating_time.Avg_wating / 160));
 
-            //EndEpisode();
-            //Destroy(temp);
-            //cars.GetComponent<Avg_wating_time>().Avg_wating = 0;
- 
-        }
-        else
-        {
-            timer.GetComponentInChildren<TMP_Text>().text = "AI";
-            timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
-            TrafficLightControlling();
+                //EndEpisode();
+                //Destroy(temp);
+                //cars.GetComponent<Avg_wating_time>().Avg_wating = 0;
 
+            }
+            else
+            {
+                timer.GetComponentInChildren<TMP_Text>().text = "AI";
+                timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                TrafficLightControlling();
+
+            }
         }
     }
 

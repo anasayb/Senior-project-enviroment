@@ -24,7 +24,7 @@ public class Basic_algo : MonoBehaviour
     private bool noStarvation = false;
     private int oldDirection = 1;
     private float EmegencyTimeVariable;
-    int temp=-1;
+    int temp = -1;
     private int currentEmergencyDirection = -1;
     private bool justFinishedEmergency = false;
     private int[] turnWaiting = { 0, 0, 0, 0 };
@@ -55,7 +55,8 @@ public class Basic_algo : MonoBehaviour
         direction = Scence_Manger.dir;
         NodeClass North = new NodeClass(0, CarCount[0].carsCounter);
         queue.Enqueue(North);
-        time[queue.Peek().direction] = GreenTimeCalc(CarCount[queue.Peek().direction].carsCounter);
+        Debug.Log(CarCount[0].carsCounter);
+        time[queue.Peek().direction] = GreenTimeCalc(CarCount[queue.Peek().direction].carsCounter) - 2;
 
         if (Scence_Manger.algorthim != "CarLoad Based Traffic Light System")
         {
@@ -68,99 +69,87 @@ public class Basic_algo : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Basic_algo.startCouting = true;
-        // This piece of code job is to check if there is emergency car if true it wil give it priority without specific time 
-        if (currentEmergencyDirection != -1)
+        if (CarCount[0].carsCounter + CarCount[1].carsCounter + CarCount[2].carsCounter + CarCount[3].carsCounter != 0)
         {
-            EmegencyTimeVariable += Time.deltaTime;
-            timer.GetComponentInChildren<TMP_Text>().text = "EM";
-            timer.transform.GetChild(1).GetComponent<Image>().fillAmount = 1;
-            if (EmegencyTimeVariable <= yellowLightDuration)
+            // This piece of code job is to check if there is emergency car if true it wil give it priority without specific time 
+            if (currentEmergencyDirection != -1)
+            {
+                Basic_algo.startCouting = true;
+                EmegencyTimeVariable += Time.deltaTime;
+                timer.GetComponentInChildren<TMP_Text>().text = "EM";
+                timer.transform.GetChild(1).GetComponent<Image>().fillAmount = 1;
+                if (EmegencyTimeVariable <= yellowLightDuration)
+                {
+                    ChangeLightYellow(direction);
+                    timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
+                }
+
+                if (EmegencyTimeVariable >= yellowLightDuration && EmegencyTimeVariable < yellowLightDuration + delay)
+                {
+                    ChangeLightRed(direction);
+                }
+
+                if (EmegencyTimeVariable >= yellowLightDuration + delay)
+                {
+                    if (CarCount[currentEmergencyDirection].emergencyExist)
+                    {
+                        ChangeLightGreen(currentEmergencyDirection);
+                        timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                    }
+                    else
+                    {
+                        if (oneTimeRun)
+                        {
+                            temp = direction;
+                        }
+                        ResetEmergency();
+
+                    }
+                }
+                return;
+            }
+            else
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (CarCount[i].emergencyExist)
+                    {
+                        currentEmergencyDirection = i;
+                        if (currentEmergencyDirection == direction)
+                        {
+                            EmegencyTimeVariable = yellowLightDuration + delay;
+                        }
+                        return;
+                    }
+                }
+            }
+            // End of the Emergency car control
+            Basic_algo.startCouting = true;
+            Timer();
+            // Normal System Behaviour 
+            if (timeVariable >= time[direction] - yellowLightDuration && timeVariable <= time[direction])
             {
                 ChangeLightYellow(direction);
                 timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
             }
 
-            if (EmegencyTimeVariable >= yellowLightDuration && EmegencyTimeVariable < yellowLightDuration + delay)
+            if (timeVariable >= time[direction])
             {
                 ChangeLightRed(direction);
             }
 
-            if (EmegencyTimeVariable >= yellowLightDuration + delay)
+            if (timeVariable >= time[direction] + delay)
             {
-                if (CarCount[currentEmergencyDirection].emergencyExist)
+                if (oneTimeRun)
                 {
-                    ChangeLightGreen(currentEmergencyDirection);
-                    timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
-                }
-                else
-                {
-                    if (oneTimeRun) { 
-                     temp = direction;
-                    }
-                    ResetEmergency();
-
-                }
-            }
-            return;
-        }
-        else
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                if (CarCount[i].emergencyExist)
-                {
-                    currentEmergencyDirection = i;
-                    if (currentEmergencyDirection == direction)
-                    {
-                        EmegencyTimeVariable = yellowLightDuration + delay;
-                    }
-                    return;
-                }
-            }
-        }
-        // End of the Emergency car control
-        Timer();
-        // Normal System Behaviour 
-        if (timeVariable >= time[direction] - yellowLightDuration && timeVariable <= time[direction])
-        {
-            ChangeLightYellow(direction);
-            timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
-        }
-
-        if (timeVariable >= time[direction])
-        {
-            ChangeLightRed(direction);
-        }
-
-        if (timeVariable >= time[direction] + delay)
-        {
-            if (oneTimeRun)
-            {
-                Debug.Log("TEST");
-                oneTimeRun = false;
-                ResetQueue();
-                if(temp == direction)
-                {
-                    getNextTurn();
-                    return;
-                }
-                if (time[direction] != 0)
-                {
-                    timeVariable = 0f;
-                    ChangeLightGreen(direction);
-                    timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
-                }
-
-            }
-            else
-            {
-                turnWaitingCount();
-                Aging();
-                if (justFinishedEmergency)
-                {
-                    justFinishedEmergency = false;
+                    Debug.Log("TEST");
+                    oneTimeRun = false;
                     ResetQueue();
+                    if (temp == direction)
+                    {
+                        getNextTurn();
+                        return;
+                    }
                     if (time[direction] != 0)
                     {
                         timeVariable = 0f;
@@ -169,14 +158,29 @@ public class Basic_algo : MonoBehaviour
                     }
 
                 }
-                else if (noStarvation)
+                else
                 {
-                    getNextTurn();
+                    turnWaitingCount();
+                    Aging();
+                    if (justFinishedEmergency)
+                    {
+                        justFinishedEmergency = false;
+                        ResetQueue();
+                        if (time[direction] != 0)
+                        {
+                            timeVariable = 0f;
+                            ChangeLightGreen(direction);
+                            timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                        }
+
+                    }
+                    else if (noStarvation)
+                    {
+                        getNextTurn();
+                    }
                 }
             }
         }
-
-
     }
 
     // Changes the Light to Red
@@ -320,7 +324,8 @@ public class Basic_algo : MonoBehaviour
             }
             else
             {
-                turnWaiting[i]++;
+                if (CarCount[i].carsCounter == 0)
+                    turnWaiting[i]++;
             }
         }
     }
@@ -343,7 +348,7 @@ public class Basic_algo : MonoBehaviour
 
     // The timer calculation its UI 
     private void Timer()
-    {   
+    {
         timeVariable += Time.deltaTime;
         timer.GetComponentInChildren<TMP_Text>().text = Math.Max((Math.Ceiling(time[direction] - timeVariable)), 0).ToString();
         timer.transform.GetChild(1).GetComponent<Image>().fillAmount = (1 - (timeVariable / time[direction]));
