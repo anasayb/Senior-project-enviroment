@@ -402,12 +402,14 @@ MonoBehaviour:
   - {fileID: 3915841799752904784}
   - {fileID: 3915841800448593299}
   MAX_SPEED: 20
-  left: 0
-  right: 0
+  left: 0000
+  right: 0000
   pathGourpLeft: {fileID: 0}
   pathGourpRight: {fileID: 0}
   distanceFromPath: 2
   posForwardCenter: {x: 0, y: 0, z: 0}
+  CurrentIntersection: 0
+  CurrentDirection: 0
   sensorLength: 7
   CarLay:
     serializedVersion: 2

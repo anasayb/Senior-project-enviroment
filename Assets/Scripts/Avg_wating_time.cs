@@ -22,11 +22,11 @@ public class Avg_wating_time : MonoBehaviour
     public static float numberOfCars = 0;
     public static Dictionary<string, data> waitingTimes;
     public static float RunningTime;
-    public static float FlowRate;
+    public static float[] FlowRate = { 0, 0 };
     public static bool FlowCalcualted;
-    public static float[] congestion;
+    public static float[][] congestion;
 
-    public CarCounter[] streets;
+    private CarCounter[][] streets;
 
     [Header("GUI")]
     public GameObject summary;
@@ -45,9 +45,36 @@ public class Avg_wating_time : MonoBehaviour
         Avg_wating_time.numberOfCars = 0;
         Avg_wating_time.waitingTimes = new Dictionary<string, data>();
         Avg_wating_time.RunningTime = 0;
-        Avg_wating_time.FlowRate = 0;
+        Avg_wating_time.FlowRate[0] =  0;
+        Avg_wating_time.FlowRate[1] = 0;
         Avg_wating_time.FlowCalcualted = false;
-        Avg_wating_time.congestion = new float[4];
+        Avg_wating_time.congestion = new float[2][];
+        Avg_wating_time.congestion[0] = new float[4];
+        Avg_wating_time.congestion[1] = new float[4];
+        for (int i = 0; i < 4; i++)
+        {
+            Avg_wating_time.congestion[0][i] = 0;
+            Avg_wating_time.congestion[1][i] = 0;
+        }
+
+        streets = new CarCounter[2][];
+        streets[0] = new CarCounter[4];
+        streets[1] = new CarCounter[4];
+        // streats
+        GameObject intersection0 = GameObject.Find("Intersection0");
+        streets[0][0] = intersection0.transform.Find("Turning Paths").GetChild(2).GetChild(0).GetChild(0).GetChild(0).GetComponent<CarCounter>();
+        streets[0][1] = intersection0.transform.Find("Turning Paths").GetChild(2).GetChild(1).GetChild(0).GetChild(0).GetComponent<CarCounter>();
+        streets[0][2] = intersection0.transform.Find("Turning Paths").GetChild(2).GetChild(2).GetChild(0).GetChild(0).GetComponent<CarCounter>();
+        streets[0][3] = intersection0.transform.Find("Turning Paths").GetChild(2).GetChild(3).GetChild(0).GetChild(0).GetComponent<CarCounter>();
+
+        GameObject intersection1 = GameObject.Find("Intersection1");
+        streets[1][0] = intersection1.transform.Find("Turning Paths").GetChild(2).GetChild(0).GetChild(0).GetChild(0).GetComponent<CarCounter>();
+        streets[1][1] = intersection1.transform.Find("Turning Paths").GetChild(2).GetChild(1).GetChild(0).GetChild(0).GetComponent<CarCounter>();
+        streets[1][2] = intersection1.transform.Find("Turning Paths").GetChild(2).GetChild(2).GetChild(0).GetChild(0).GetComponent<CarCounter>();
+        streets[1][3] = intersection1.transform.Find("Turning Paths").GetChild(2).GetChild(3).GetChild(0).GetChild(0).GetComponent<CarCounter>();
+
+
+
     }
 
     // Update is called once per frame
@@ -68,7 +95,8 @@ public class Avg_wating_time : MonoBehaviour
             // Calculate the traffic flow if the running time is less than 1 min
             if (!FlowCalcualted)
             {
-                FlowRate = (streets[0].leaveCarsCounter + streets[1].leaveCarsCounter + streets[2].leaveCarsCounter + streets[3].leaveCarsCounter);
+                FlowRate[0] = (streets[0][0].leaveCarsCounter + streets[0][1].leaveCarsCounter + streets[0][2].leaveCarsCounter + streets[0][3].leaveCarsCounter);
+                FlowRate[1] = (streets[1][0].leaveCarsCounter + streets[1][1].leaveCarsCounter + streets[1][2].leaveCarsCounter + streets[1][3].leaveCarsCounter);
                 FlowCalcualted = true;
             }
 
@@ -85,9 +113,10 @@ public class Avg_wating_time : MonoBehaviour
                 runningTimeText.SetActive(false);
 
                 // Avreging the congestion
-                for(int i = 0; i < congestion.Length; i++)
+                for(int i = 0; i < 4; i++)
                 {
-                   Avg_wating_time.congestion[i] = Avg_wating_time.congestion[i] / (((int)(RunningTime * 100)) / 100f);
+                   Avg_wating_time.congestion[0][i] = Avg_wating_time.congestion[0][i] / (((int)(RunningTime * 100)) / 100f);
+                   Avg_wating_time.congestion[1][i] = Avg_wating_time.congestion[1][i] / (((int)(RunningTime * 100)) / 100f);
                 }
 
                 // store the run inforamtion and show the summary
@@ -109,7 +138,8 @@ public class Avg_wating_time : MonoBehaviour
             // Calculate the traffic flow
             if (Avg_wating_time.RunningTime >= 60 && !FlowCalcualted)
             {
-                FlowRate = (streets[0].leaveCarsCounter+streets[1].leaveCarsCounter + streets[2].leaveCarsCounter + streets[3].leaveCarsCounter);
+                FlowRate[0] = (streets[0][0].leaveCarsCounter + streets[0][1].leaveCarsCounter + streets[0][2].leaveCarsCounter + streets[0][3].leaveCarsCounter);
+                FlowRate[1] = (streets[1][0].leaveCarsCounter + streets[1][1].leaveCarsCounter + streets[1][2].leaveCarsCounter + streets[1][3].leaveCarsCounter);
                 FlowCalcualted = true;
             }
 
@@ -118,9 +148,10 @@ public class Avg_wating_time : MonoBehaviour
             if (timeVariable >= 1)
             {
                 // Calculate the congetsion
-                for (int i = 0; i < streets.Length; i++)
+                for (int i = 0; i < 4; i++)
                 {
-                    congestion[i] += streets[i].carsCounter;
+                    congestion[0][i] += streets[0][i].carsCounter;
+                    congestion[1][i] += streets[1][i].carsCounter;
                 }
                 timeVariable = 0;
             }
@@ -175,10 +206,26 @@ public class Avg_wating_time : MonoBehaviour
     /// </summary>
     public void calculateTheNumberOfCar()
     {
-        numberOfCars = 0;
-        foreach (Transform intersection in transform)
+
+        if (Scence_Manger.startingNumberOfCars != 22) {
+            numberOfCars = 0;
+            foreach (Transform intersection in transform)
+            {
+                foreach (Transform childe in intersection)
+                {
+                    foreach (Transform car in childe)
+                    {
+                        numberOfCars++;
+                    }
+
+                }
+            }
+        }
+        else
         {
-            foreach (Transform childe in intersection)
+            numberOfCars = 0;
+            GameObject intersection0 = GameObject.Find("Intersection0");
+            foreach (Transform childe in intersection0.transform.Find("Cars"))
             {
                 foreach (Transform car in childe)
                 {
@@ -186,6 +233,18 @@ public class Avg_wating_time : MonoBehaviour
                 }
 
             }
+
+            GameObject intersection1 = GameObject.Find("Intersection1");
+            foreach (Transform childe in intersection1.transform.Find("Cars"))
+            {
+                foreach (Transform car in childe)
+                {
+                    numberOfCars++;
+                }
+
+            }
+
+
         }
     }
 

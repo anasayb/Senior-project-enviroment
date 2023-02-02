@@ -84,12 +84,14 @@ MonoBehaviour:
   - {fileID: 5892631307557082601}
   - {fileID: 5892631308878654421}
   MAX_SPEED: 20
-  left: 0
-  right: 0
+  left: 0000
+  right: 0000
   pathGourpLeft: {fileID: 0}
   pathGourpRight: {fileID: 0}
   distanceFromPath: 2
   posForwardCenter: {x: 0, y: 0, z: 0}
+  CurrentIntersection: 0
+  CurrentDirection: 0
   sensorLength: 7
   CarLay:
     serializedVersion: 2
@@ -97,6 +99,7 @@ MonoBehaviour:
   waitngTime: 0
   carInfo: {fileID: 0}
   tent: {fileID: 2100000, guid: 53b8bd045bfd497479447566212b96d8, type: 2}
+  sel: {fileID: 0}
 --- !u!1 &5892631307203925078
 GameObject:
   m_ObjectHideFlags: 0

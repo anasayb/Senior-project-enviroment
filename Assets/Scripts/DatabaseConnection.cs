@@ -284,7 +284,7 @@ public class DatabaseConnection : MonoBehaviour
         for (int i = 0; i < streets.Length; i++)
         {
             
-            carsData += "Congestion#"+streets[i]+"_" + Avg_wating_time.congestion[i].ToString() + " ";
+            carsData += "Congestion#"+streets[i]+"_" + Avg_wating_time.congestion[0][i].ToString() + " ";
 
         }
 

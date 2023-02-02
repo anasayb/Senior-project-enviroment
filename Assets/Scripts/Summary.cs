@@ -212,7 +212,7 @@ public class Summary : MonoBehaviour
         Transform congestion = summary.transform.Find("Congestion");
         for (int i = 1; i < congestion.childCount; i++)
         {
-                congestion.GetChild(i).GetChild(1).GetComponent<TMP_Text>().text = Avg_wating_time.congestion[i-1].ToString("F2");
+                congestion.GetChild(i).GetChild(1).GetComponent<TMP_Text>().text = Avg_wating_time.congestion[0][i -1].ToString("F2");
         }
 
 

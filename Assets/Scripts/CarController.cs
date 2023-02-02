@@ -382,18 +382,27 @@ public class CarController : MonoBehaviour
     /// </summary>
     private void getPaths()
     {
-        int count = pathGourpLeft.childCount;
-        for (int i = 0; i < count; i++)
+        if (CurrentIntersection < 2)
         {
-            LeftPath.Add(pathGourpLeft.GetChild(i).transform);          
+            pathGourpLeft = Paths.LeftPaths[CurrentIntersection, CurrentDirection];
+            pathGourpRight = Paths.RightPaths[CurrentIntersection, CurrentDirection];
+
+            LeftPath.Clear();
+            RightPath.Clear();
+
+            int count = pathGourpLeft.childCount;
+            for (int i = 0; i < count; i++)
+            {
+                LeftPath.Add(pathGourpLeft.GetChild(i).transform);
+            }
+
+            count = pathGourpRight.childCount;
+            for (int i = 0; i < count; i++)
+            {
+                RightPath.Add(pathGourpRight.GetChild(i).transform);
+            }
         }
 
-        count = pathGourpRight.childCount;
-        for (int i = 0; i < count; i++)
-        {
-            RightPath.Add(pathGourpRight.GetChild(i).transform);
-        }
-       
     }
 
 

@@ -57,7 +57,7 @@ public class Car_Generator : MonoBehaviour
         TurningPathsRight[2] = Intersection.transform.Find("Turning Paths").Find("Right").Find("Turnining Right Path South").transform;
         TurningPathsRight[3] = Intersection.transform.Find("Turning Paths").Find("Right").Find("Turnining Right Path East").transform;
 
-
+        /*
         if (CarsToGenerate == 22)
         {
             GameObject template = Intersection.transform.Find("Cars Template").gameObject;
@@ -68,7 +68,7 @@ public class Car_Generator : MonoBehaviour
             CarsToGenerate = 0;
             return;
         }
-
+        */
        
         GenerateCar();
 
@@ -157,6 +157,13 @@ public class Car_Generator : MonoBehaviour
             else       // if a is not 0, make the bool true
                 turn = false;
 
+            int b = Random.Range(0, 2);  // Random number from 0 to 1
+            bool turn2 = false;
+            if (b == 1) // if a is 0 make the bool false
+                turn2 = true;
+            else       // if a is not 0, make the bool true
+                turn2 = false;
+
 
 
             Vector3 rot = new Vector3(0, 0, 0);
@@ -176,7 +183,7 @@ public class Car_Generator : MonoBehaviour
 
             frontCarLeft.y = CarsPrefabs[carIndex].GetComponent<BoxCollider>().size.y / 2 + 0.5f;
 
-            GameObject newCar = Instantiate(CarsPrefabs[carIndex], frontCarLeft, Quaternion.Euler(rot));
+            GameObject newCar = Instantiate(CarsPrefabs[carIndex], transform.localPosition + frontCarLeft, Quaternion.Euler(rot));
             newCar.GetComponent<CarController>().pathGourpLeft = TurningPathsLeft[streat];
             newCar.GetComponent<CarController>().pathGourpRight = TurningPathsRight[streat];
             if (newCar.tag == "Truck")
@@ -200,8 +207,10 @@ public class Car_Generator : MonoBehaviour
             newCar.transform.SetParent(parents[streat], true);
             newCar.GetComponent<CarController>().sel = selector;
             newCar.GetComponent<CarController>().carInfo = GameObject.Find("Canvas").transform.Find("CarInfo").gameObject;
-            newCar.GetComponent<CarController>().left = turn;
-
+            newCar.GetComponent<CarController>().left[0] = turn;
+            newCar.GetComponent<CarController>().left[1] = turn;
+            newCar.GetComponent<CarController>().CurrentIntersection = Intersection.name[Intersection.name.Length-1] - '0';
+            newCar.GetComponent<CarController>().CurrentDirection = streat;    
 
             frontCarLeft -= (newCar.transform.forward * (newCar.GetComponent<BoxCollider>().size.z + 3));
 
@@ -246,7 +255,12 @@ public class Car_Generator : MonoBehaviour
             else       // if a is not 0, make the bool true
                 turn = false;
 
-
+            b = Random.Range(0, 2);  // Random number from 0 to 1
+            turn2 = false;
+            if (b == 1) // if a is 0 make the bool false
+                turn2 = true;
+            else       // if a is not 0, make the bool true
+                turn2 = false;
 
             rot = new Vector3(0, 0, 0);
             st = Streats[streat].transform.right;
@@ -271,7 +285,10 @@ public class Car_Generator : MonoBehaviour
             newCar.transform.SetParent(parents[streat], true);
             newCar.GetComponent<CarController>().sel = selector;
             newCar.GetComponent<CarController>().carInfo = GameObject.Find("Canvas").transform.Find("CarInfo").gameObject;
-            newCar.GetComponent<CarController>().right = turn;
+            newCar.GetComponent<CarController>().left[0] = turn;
+            newCar.GetComponent<CarController>().left[1] = turn;
+            newCar.GetComponent<CarController>().CurrentIntersection = Intersection.name[Intersection.name.Length - 1] - '0';
+            newCar.GetComponent<CarController>().CurrentDirection = streat;
             if (newCar.tag == "Truck")
             {
                 newCar.name = "Truck " + NameTruckNumber++;
