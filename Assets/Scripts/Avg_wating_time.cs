@@ -136,7 +136,7 @@ public class Avg_wating_time : MonoBehaviour
     /// </summary>
     /// <param name="name">the name of the car to update its watining time</param>
     /// <param name="waitingTime">the new waiting time</param>
-    public static void updateAvg(string name, float waitingTime, bool left, bool right, string st)
+    public static void updateAvg(string name, float waitingTime, bool left, bool right, bool left2, bool right2, string st)
     {
         if (waitingTimes.ContainsKey(name))
         {
@@ -176,13 +176,16 @@ public class Avg_wating_time : MonoBehaviour
     public void calculateTheNumberOfCar()
     {
         numberOfCars = 0;
-        foreach (Transform childe in transform)
+        foreach (Transform intersection in transform)
         {
-            foreach (Transform car in childe)
+            foreach (Transform childe in intersection)
             {
-                numberOfCars++;
-            }
+                foreach (Transform car in childe)
+                {
+                    numberOfCars++;
+                }
 
+            }
         }
     }
 

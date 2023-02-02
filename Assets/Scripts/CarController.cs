@@ -16,11 +16,13 @@ public class CarController : MonoBehaviour
     public float MAX_SPEED = 20f;
 
     [Header("Turning")]
-    public bool left = false;
-    public bool right = false;
+    public bool[] left = { false, false };
+    public bool[] right = { false, false };
     public Transform pathGourpLeft, pathGourpRight;
     public float distanceFromPath = 2f;
     public Vector3 posForwardCenter;
+    public int CurrentIntersection = 0;
+    public int CurrentDirection = 0;
 
     private bool doneTurning = false;
     private float MAX_TURNING_ANGLE = 20f;
@@ -181,18 +183,27 @@ public class CarController : MonoBehaviour
         // Turning Code
         if (Physics.Raycast(posForwardCenter, -(transform.up), out hit, sensorLength))
         {
-            if (hit.collider.tag == "NorthTrafficLight")
-            {
-                Basic_algo.carNumberNorth += 1;
-            }
+
             // If the car enter the intersection sqaure 
-            if (hit.collider.tag == "IntersectionArea")
+            if (hit.collider.tag == "IntersectionArea0" || hit.collider.tag == "IntersectionArea1")
             {
                 turning = true;
             }
             else
             {
                 turning = false;
+                if (hit.collider.name != transform.name && CurrentIntersection != (hit.collider.tag[hit.collider.tag.Length - 1] - '0'))
+                {
+                    fixPostion();
+                    doneTurning = false;
+                    currentIndexLeft = 0;
+                    currentIndexRight = 0;
+                    CurrentIntersection = hit.collider.tag[hit.collider.tag.Length - 1] - '0';
+                    string[] names = { "North", "West", "South", "East" };
+                    string temp = hit.collider.transform.parent.name.Split(' ')[0];
+                    for (int i = 0; i < names.Length; i++) if (names[i] == temp) CurrentDirection = i;
+                    getPaths();
+                }
             }
 
         }
@@ -230,7 +241,7 @@ public class CarController : MonoBehaviour
 
             }
 
-            Avg_wating_time.updateAvg(transform.name, waitngTime, left, right, transform.parent.name);
+            Avg_wating_time.updateAvg(transform.name, waitngTime, left[0], right[0], left[1], right[1], transform.parent.name);
 
             // Debug code
             // Debug.DrawRay(ray.origin, transform.forward*300, Color.blue);
@@ -256,13 +267,13 @@ public class CarController : MonoBehaviour
 
         // If you are in the area and the left flag is ON
    
-        if (left)
+        if (left[CurrentIntersection])
         {
 
             turnLeft();
 
         }
-        else if (right)
+        else if (right[CurrentIntersection])
         {
             turnRight();
         }
@@ -307,7 +318,21 @@ public class CarController : MonoBehaviour
                 wheels[i].brakeTorque = 0;
             }
         }
-        
+        else
+        {
+            // Calculate the force need tos top the car
+            float acc = (MAX_SPEED - speed.velocity.magnitude) / colide;
+            float force = -1 * speed.mass * acc;
+
+            // Apply break torque on all wheels
+            speed.drag = 1;
+            for (int i = 0; i < wheels.Length; i++)
+            {
+                wheels[i].motorTorque = 0;
+                wheels[i].brakeTorque = force / wheels.Length;
+            }
+        }
+
     }
 
 
@@ -570,6 +595,24 @@ public class CarController : MonoBehaviour
     }
 
 
+    private void fixPostion()
+    {
+        //Vector3 val = Vector3.Scale(transform.right, transform.localPosition);
+        float pos = transform.localPosition.z;
+        float m = Math.Min(Math.Abs(pos - 6.6f), Math.Min(Math.Abs(pos - 13.07f), Math.Min(Math.Abs(pos - -6.8f), pos - -13.16f)));
+        if (pos + m == 6.6f || pos + m == 13.07f || pos + m == -6.8f || pos + m == -13.16f)
+        {
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, pos + m);
+
+        }
+        else
+        {
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, pos - m);
+        }
+
+    }
+
+
     /// <summary>
     /// Method <c>roundToFullAngle</c> This function reset the stear angle to zeros.
     /// </summary>
@@ -644,6 +687,7 @@ public class CarController : MonoBehaviour
             }
         }
 
+        /*
         if (!(right || left))
         {
             carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 2) % 4];
@@ -656,6 +700,8 @@ public class CarController : MonoBehaviour
         {
             carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 3) % 4];
         }
+
+        */
 
         //carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
 
