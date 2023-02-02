@@ -10,7 +10,9 @@ public class Car_Generator : MonoBehaviour
     public GameObject[] CarsPrefabs;
     public GameObject[] Streats;
     public static int CarsToGenerate;
-    public GameObject template;
+    //public GameObject template;
+    public GameObject selector;
+    public GameObject Intersection;
 
     private Transform[] parents;
     private Transform[] TurningPathsLeft;
@@ -18,8 +20,7 @@ public class Car_Generator : MonoBehaviour
     private int NameCarNumber = 1;
     private int NameTruckNumber = 1;
     private int NameEmergencyNumber = 1;
-    private int NameBusNumber = 1;
-    private GameObject selector;
+    private int NameBusNumber = 1; 
     private bool emergency = false;
 
     Vector3[] startPos = {  new Vector3(6.44f, 1, -33.256f), new Vector3(13.21318f, 1, -33.256f),
@@ -32,33 +33,34 @@ public class Car_Generator : MonoBehaviour
     {
 
         // selector
-        selector = GameObject.Find("Selector").gameObject;
-        selector.SetActive(false);
+        //selector = GameObject.Find("Selector").gameObject;
+        //selector.SetActive(false);
         emergency = Scence_Manger.EmergencyCar;
 
         CarsToGenerate = System.Math.Min(Scence_Manger.startingNumberOfCars, 45 * 4);
 
         parents = new Transform[4];
         parents[0] = transform.Find("North").transform;
-        parents[1] = GameObject.Find("West").transform;
-        parents[2] = GameObject.Find("South").transform;
-        parents[3] = GameObject.Find("East").transform;
+        parents[1] = transform.Find("West").transform;
+        parents[2] = transform.Find("South").transform;
+        parents[3] = transform.Find("East").transform;
 
         TurningPathsLeft = new Transform[4];
-        TurningPathsLeft[0] = GameObject.Find("Turnining Left Path North").transform;
-        TurningPathsLeft[1] = GameObject.Find("Turnining Left Path West").transform;
-        TurningPathsLeft[2] = GameObject.Find("Turnining Left Path South").transform;
-        TurningPathsLeft[3] = GameObject.Find("Turnining Left Path East").transform;
+        TurningPathsLeft[0] = Intersection.transform.Find("Turning Paths").Find("Left").Find("Turnining Left Path North").transform;
+        TurningPathsLeft[1] = Intersection.transform.Find("Turning Paths").Find("Left").Find("Turnining Left Path West").transform;
+        TurningPathsLeft[2] = Intersection.transform.Find("Turning Paths").Find("Left").Find("Turnining Left Path South").transform;
+        TurningPathsLeft[3] = Intersection.transform.Find("Turning Paths").Find("Left").Find("Turnining Left Path East").transform;
 
         TurningPathsRight = new Transform[4];
-        TurningPathsRight[0] = GameObject.Find("Turnining Right Path North").transform;
-        TurningPathsRight[1] = GameObject.Find("Turnining Right Path West").transform;
-        TurningPathsRight[2] = GameObject.Find("Turnining Right Path South").transform;
-        TurningPathsRight[3] = GameObject.Find("Turnining Right Path East").transform;
+        TurningPathsRight[0] = Intersection.transform.Find("Turning Paths").Find("Right").Find("Turnining Right Path North").transform;
+        TurningPathsRight[1] = Intersection.transform.Find("Turning Paths").Find("Right").Find("Turnining Right Path West").transform;
+        TurningPathsRight[2] = Intersection.transform.Find("Turning Paths").Find("Right").Find("Turnining Right Path South").transform;
+        TurningPathsRight[3] = Intersection.transform.Find("Turning Paths").Find("Right").Find("Turnining Right Path East").transform;
 
 
         if (CarsToGenerate == 22)
         {
+            GameObject template = Intersection.transform.Find("Cars Template").gameObject;
             template.SetActive(true);
             transform.name = "Garbage";
             transform.gameObject.SetActive(false);

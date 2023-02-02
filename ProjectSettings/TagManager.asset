@@ -15,6 +15,10 @@ TagManager:
   - WestTrafficLight
   - Bus
   - Emergency
+  - IntersectionArea0
+  - IntersectionArea1
+  - Intersection0
+  - Intersection1
   layers:
   - Default
   - TransparentFX
