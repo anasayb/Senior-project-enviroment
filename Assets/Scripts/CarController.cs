@@ -229,7 +229,7 @@ public class CarController : MonoBehaviour
         if (AI.startCouting || Traditional_traffic_Controller.startCouting || Basic_algo.startCouting) {
             Ray ray = new Ray(transform.position, transform.forward);
             RaycastHit h;
-            if (Physics.Raycast(ray, out h, 230, ~CarLay) && Car_Generator.CarsToGenerate == 0 && deaccelrate)
+            if (Physics.Raycast(ray, out h, 230, ~CarLay) && deaccelrate)
             {
 
                 Rigidbody speed = GetComponent<Rigidbody>();

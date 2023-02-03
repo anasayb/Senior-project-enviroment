@@ -9,7 +9,7 @@ public class Paths : MonoBehaviour
     public static Transform[,] RightPaths;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         // Inizilize 
         LeftPaths = new Transform[2, 4];

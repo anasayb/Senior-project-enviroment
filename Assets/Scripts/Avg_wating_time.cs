@@ -207,7 +207,6 @@ public class Avg_wating_time : MonoBehaviour
     public void calculateTheNumberOfCar()
     {
 
-        if (Scence_Manger.startingNumberOfCars != 22) {
             numberOfCars = 0;
             foreach (Transform intersection in transform)
             {
@@ -220,32 +219,8 @@ public class Avg_wating_time : MonoBehaviour
 
                 }
             }
-        }
-        else
-        {
-            numberOfCars = 0;
-            GameObject intersection0 = GameObject.Find("Intersection0");
-            foreach (Transform childe in intersection0.transform.Find("Cars"))
-            {
-                foreach (Transform car in childe)
-                {
-                    numberOfCars++;
-                }
-
-            }
-
-            GameObject intersection1 = GameObject.Find("Intersection1");
-            foreach (Transform childe in intersection1.transform.Find("Cars"))
-            {
-                foreach (Transform car in childe)
-                {
-                    numberOfCars++;
-                }
-
-            }
-
-
-        }
+    
+      
     }
 
 

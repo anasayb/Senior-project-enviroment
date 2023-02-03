@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
+using Unity.MLAgents.Integrations.Match3;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,8 +11,8 @@ public class Car_Generator : MonoBehaviour
 {
     public GameObject[] CarsPrefabs;
     public GameObject[] Streats;
-    public static int CarsToGenerate;
-    //public GameObject template;
+    public int CarsToGenerate;
+    public GameObject CarsTemplate;
     public GameObject selector;
     public GameObject Intersection;
 
@@ -23,9 +25,9 @@ public class Car_Generator : MonoBehaviour
     private int NameBusNumber = 1; 
     private bool emergency = false;
 
-    Vector3[] startPos = {  new Vector3(6.44f, 1, -33.256f), new Vector3(13.21318f, 1, -33.256f),
+    Vector3[] startPos = {  new Vector3(6.97998f, 1, -33.25642f), new Vector3(13.75314f, 1, -33.256f),
                             new Vector3(32.31f, 1, 6.62f), new Vector3(32.31f, 1, 13.07f),
-                            new Vector3(-6.68f, 1, 33.73298f), new Vector3(-13.39f, 1, 33.73298f),
+                            new Vector3(-6.68f, 1, 33.73298f), new Vector3(-13.4f, 1, 33.90339f),
                             new Vector3(-33.0f, 1, -6.8f), new Vector3(-33.0f, 1, -13.16f)};
 
     // Start is called before the first frame update
@@ -57,18 +59,61 @@ public class Car_Generator : MonoBehaviour
         TurningPathsRight[2] = Intersection.transform.Find("Turning Paths").Find("Right").Find("Turnining Right Path South").transform;
         TurningPathsRight[3] = Intersection.transform.Find("Turning Paths").Find("Right").Find("Turnining Right Path East").transform;
 
-        /*
+        
         if (CarsToGenerate == 22)
         {
-            GameObject template = Intersection.transform.Find("Cars Template").gameObject;
-            template.SetActive(true);
-            transform.name = "Garbage";
-            transform.gameObject.SetActive(false);
-            template.name = "Cars";
+            Transform template = CarsTemplate.transform;
+            for (int direction = 0; direction < template.childCount; direction++)
+            {
+                foreach (Transform car in template.GetChild(direction))
+                {
+
+                    Vector3 rot = new Vector3(0, 0, 0);
+                    Vector3 st = Streats[direction].transform.right;
+                    if (st.x == 1f)
+                    {
+                        rot.y = 90;
+                    }
+                    else if (st.x == -1)
+                    {
+                        rot.y = -90;
+                    }
+                    else if (st.z < 0)
+                    {
+                        rot.y = 180;
+                    }
+
+                    GameObject newCar = Instantiate(car.gameObject,  car.position , Quaternion.Euler(rot), transform.GetChild(direction));
+                    newCar.name += "colne " + Intersection.name;
+                    //newCar.transform.SetParent(transform);
+                    //newCar.transform.localPosition = car.localPosition;
+                    //newCar.transform.rotation = Quaternion.Euler(rot);
+                    /*
+                    if (newCar.tag == "Truck")
+                    {
+                        newCar.name = "Truck " + NameTruckNumber++;
+
+                    }
+                    else if (newCar.tag == "Emergency")
+                    {
+                        newCar.name = "Poilice " + NameEmergencyNumber++;
+                    }
+                    else if (newCar.tag == "Bus")
+                    {
+                        newCar.name = "Bus " + NameBusNumber++;
+                    }
+                    else
+                    {
+                        newCar.name = "Car " + NameCarNumber++;
+                    }
+                    */
+                }
+            }
+            
             CarsToGenerate = 0;
             return;
         }
-        */
+        
        
         GenerateCar();
 
