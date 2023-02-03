@@ -1,6 +1,6 @@
 <?php
 
-    $con = mysqli_connect('localhost', 'root', '', 'trafficLightResults');
+    $con = mysqli_connect('localhost', 'root', '', 'trafficLightResults(Two)');
 
     // Check the connection
     if(mysqli_connect_errno())
@@ -19,18 +19,24 @@
         }
         $info = explode("_" , $item);
         $name = $info[0];
-        $time = $info[1];
+        $time0 = $info[1];
+        $time1 = "";
+        if($name != "Overall#AVG#Waiting#time"){
+            $time1 = $info[2];
+        }
         $streat = "";
-        $turning = "";
-        if($name != "AVG#Waiting#time" || $name != "Flow#rate" || $name != "Congestion#north" || $name != "Congestion#west" || $name != "Congestion#south" || $name != "Congestion#east"){
-            $streat = $info[2];
-            $turning = $info[3];
+        $turning0 = "";
+        $turning1 = "";
+        if($name != "Overall#AVG#Waiting#time" || $name != "AVG#Waiting#time" || $name != "Flow#rate" || $name != "Congestion#north" || $name != "Congestion#west" || $name != "Congestion#south" || $name != "Congestion#east"){
+            $streat = $info[3];
+            $turning0 = $info[4];
+            $turning1 = $info[5];
         }
        
         echo ($name." and ".$time." and ".$streat." and ".$turning);
 
         // add times to the table
-        $insertQuey = "INSERT INTO `$table`(`name`, `waitingTime`, `Direction`, `Streat`) VALUES ('".$name."','". $time."', '". $turning."','". $streat."');";
+        $insertQuey = "INSERT INTO `$table`(`name`, `waitingTimeIntersection0`, `waitingTimeIntersection1`, `Direction0`, `Direction1`, `Streat`) VALUES ('".$name."','". $time0."','". $time1."','". $turning0."','". $turning1."','". $streat."');";
         mysqli_query($con, $insertQuey) or die("4: Insert Failed");
 
     }

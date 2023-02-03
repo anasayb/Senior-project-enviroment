@@ -241,7 +241,7 @@ public class CarController : MonoBehaviour
 
             }
 
-            Avg_wating_time.updateAvg(transform.name, waitngTime, left[0], right[0], left[1], right[1], transform.parent.name);
+            Avg_wating_time.updateAvg(transform.name, waitngTime, left[0], right[0], left[1], right[1], CurrentIntersection, transform.parent.name);
 
             // Debug code
             // Debug.DrawRay(ray.origin, transform.forward*300, Color.blue);

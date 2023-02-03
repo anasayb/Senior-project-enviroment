@@ -20,6 +20,7 @@ public class DatabaseConnection : MonoBehaviour
     public static List<string> tabelsNames;
     public static Dictionary<string, string> data;
     public static bool connection = false;
+    public GameObject[] TrafficLightController;
 
     public void Start()
     {
@@ -60,7 +61,7 @@ public class DatabaseConnection : MonoBehaviour
                     // Get the data in each table
                     foreach (string table in tabelsNames)
                     {
-                        if (table == "" || table == " ")
+                        if (table == "" || table == " " )
                         {
                             continue;
                         }
@@ -203,14 +204,16 @@ public class DatabaseConnection : MonoBehaviour
     /// </summary>
     /// <param name="watingTime">All the cars in the simulation with thier corresponidng info</param>
     /// /// <param name="TrafficLightController">Object of the traffic Light controller</param>
-    public IEnumerator SaveWatingTime(Dictionary<string, data> watingTime, GameObject TrafficLightController)
+    public IEnumerator SaveWatingTime(Dictionary<string, data> watingTime)
     {
-        string table = "";
-        if (TrafficLightController.GetComponent<Traditional_traffic_Controller>().enabled == true)
+        string table = "two_";
+        if (TrafficLightController[0].GetComponent<Traditional_traffic_Controller>().enabled == true)
         {
 
             string name = Scence_Manger.startingNumberOfCars + "_traditional";
-            float[] temp = TrafficLightController.GetComponent<Traditional_traffic_Controller>().time;
+
+            // Intersection 0
+            float[] temp = TrafficLightController[0].GetComponent<Traditional_traffic_Controller>().time;
             name += "_n" + temp[0].ToString();
             name += "_w" + temp[1].ToString();
             name += "_s" + temp[2].ToString();
@@ -220,19 +223,28 @@ public class DatabaseConnection : MonoBehaviour
             else if (Scence_Manger.dir == 2) name += "_south";
             else if (Scence_Manger.dir == 3) name += "_east";
 
-
+            //Intersection 1
+            temp = TrafficLightController[1].GetComponent<Traditional_traffic_Controller>().time;
+            name += "_n" + temp[0].ToString();
+            name += "_w" + temp[1].ToString();
+            name += "_s" + temp[2].ToString();
+            name += "_e" + temp[3].ToString();
+            if (Scence_Manger.dir == 0) name += "_north";
+            else if (Scence_Manger.dir == 1) name += "_west";
+            else if (Scence_Manger.dir == 2) name += "_south";
+            else if (Scence_Manger.dir == 3) name += "_east";
 
             table = name;
 
 
         }
-        else if (TrafficLightController.GetComponent<Basic_algo>().enabled == true)
+        else if (TrafficLightController[0].GetComponent<Basic_algo>().enabled == true)
         {
             string name = Scence_Manger.startingNumberOfCars + "_carload#based_dynamic";
             table = name;
 
         }
-        else if (TrafficLightController.GetComponent<AI>().enabled == true)
+        else if (TrafficLightController[0].GetComponent<AI>().enabled == true)
         {
             string name = Scence_Manger.startingNumberOfCars + "_ai#based_dynamic";
             table = name;
@@ -263,19 +275,35 @@ public class DatabaseConnection : MonoBehaviour
 
 
         string carsData = "";
+        float sum0 = 0, sum1 = 0;
+        int count0 = 0, count1 = 0;
         foreach (var item in watingTime)
         {
-            carsData += item.Key.Replace(" ", "#") + "_" + item.Value.waiting_time.ToString() + "_" + item.Value.direction + "_" + item.Value.streat + " ";
+            carsData += item.Key.Replace(" ", "#") + "_" + item.Value.waiting_time[0].ToString() + "_" + item.Value.waiting_time[1].ToString() + "_" + item.Value.Turn1 + "_" +item.Value.Turn2 + "_" + item.Value.streat + " ";
+
+            if (item.Value.waiting_time[0] != -1)
+            {
+                sum0 += item.Value.waiting_time[0];
+                count0++;
+            }
+
+            if (item.Value.waiting_time[1] != -1)
+            {
+                sum1 += item.Value.waiting_time[1];
+                count1++;
+            }
+
 
         }
 
 
-        // Average waiting time      
-        carsData += "AVG#Waiting#time_" + Avg_wating_time.Avg_wating.ToString() + " ";
+        // Average waiting time
+        carsData += "AVG#Waiting#time_" + (1.0f *sum0/count0).ToString() + "_"+ (1.0f * sum1 / count1).ToString() + " ";
+        carsData += "Overall#AVG#Waiting#time_" + Avg_wating_time.Avg_wating.ToString() + " ";
 
 
         // Traffic Flow rate
-        carsData += "Flow#rate_" + Avg_wating_time.FlowRate.ToString() + " ";
+        carsData += "Flow#rate_" + Avg_wating_time.FlowRate[0].ToString() + "_" + Avg_wating_time.FlowRate[1].ToString() + " ";
 
 
         string[] streets = { "north", "west", "south", "east"};
@@ -284,7 +312,7 @@ public class DatabaseConnection : MonoBehaviour
         for (int i = 0; i < streets.Length; i++)
         {
             
-            carsData += "Congestion#"+streets[i]+"_" + Avg_wating_time.congestion[0][i].ToString() + " ";
+            carsData += "Congestion#"+streets[i]+"_" + Avg_wating_time.congestion[0][i].ToString() + "_"+ Avg_wating_time.congestion[1][i].ToString() + " ";
 
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-    $con = mysqli_connect('localhost', 'root', '', 'trafficLightResults');
+    $con = mysqli_connect('localhost', 'root', '', 'trafficLightResults(Two)');
 
     // Check the connection
     if(mysqli_connect_errno())
@@ -26,8 +26,10 @@
         if($table != "information"){
             $insertQuey = "CREATE TABLE `".$table."` (
                 `name` text NOT NULL,
-                `waitingTime` double NOT NULL,
-                `Direction` text NOT NULL,
+                `waitingTimeIntersection0` double NOT NULL,
+                `waitingTimeIntersection1` double NOT NULL,
+                `Direction0` text NOT NULL,
+                `Direction1` text NOT NULL,
                 `Streat` text NOT NULL
             ) ;";
         }else{
@@ -35,12 +37,19 @@
                 `algorithm` text NOT NULL,
                 `carNumber` INT NOT NULL,
                 `startingDirection` text NOT NULL,
-                `avg` double NOT NULL,
-                `flowRate` double NOT NULL,
-                `CongestionNorth` double NOT NULL,
-                `CongestionWest` double NOT NULL,
-                `CongestionSouth` double NOT NULL,
-                `CongestionEast` double NOT NULL
+                `overall#avg` double NOT NULL,
+                `avg0` double NOT NULL,
+                `avg1` double NOT NULL,
+                `flowRate0` double NOT NULL,
+                `flowRate1` double NOT NULL,
+                `CongestionNorth0` double NOT NULL,
+                `CongestionWest0` double NOT NULL,
+                `CongestionSouth0` double NOT NULL,
+                `CongestionEast0` double NOT NULL,
+                `CongestionNorth1` double NOT NULL,
+                `CongestionWest1` double NOT NULL,
+                `CongestionSouth1` double NOT NULL,
+                `CongestionEast1` double NOT NULL
             ) ;";
         }
         mysqli_query($con, $insertQuey) or die("4: creation Failed");

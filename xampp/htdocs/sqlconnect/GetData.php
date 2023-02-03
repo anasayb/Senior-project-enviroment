@@ -1,6 +1,6 @@
 <?php
 
-    $con = mysqli_connect('localhost', 'root', '', 'trafficLightResults');
+    $con = mysqli_connect('localhost', 'root', '', 'trafficLightResults(Two)');
 
     // Check the connection
     if(mysqli_connect_errno())
@@ -18,7 +18,10 @@
         if($result -> num_rows > 0){
 
             while($row = $result->fetch_assoc()){
-                echo $row["Tables_in_trafficlightresults"] . " ";
+                if($row["Tables_in_trafficlightresults(two)"] != "information"){
+                    echo $row["Tables_in_trafficlightresults(two)"] . " ";
+                }
+                
             }
 
         }else{
@@ -37,7 +40,7 @@
                 if($row["name"] == "AVG_Waiting_time"){
                     echo ($row["name"] . "_" . $row["waitingTime"]);
                 }else{
-                    echo ($row["name"] . "_" . $row["waitingTime"] . "_" . $row["Direction"] . "_" . $row["Streat"] . " ");
+                    echo ($row["name"] . "_" . $row["waitingTimeIntersection0"] . "_" . $row["waitingTimeIntersection1"] . "_" . $row["Direction0"] . "_" . $row["Direction1"] . "_" . $row["Streat"] . " ");
                 }
             }
 

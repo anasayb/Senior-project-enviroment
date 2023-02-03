@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
@@ -9,9 +10,11 @@ using UnityEngine;
 
 public struct data
 {
-    public float waiting_time;
+    public float[] waiting_time;
     public string streat;
-    public string direction;
+    public string Turn1;
+    public string Turn2;
+
 }
 
 
@@ -27,6 +30,8 @@ public class Avg_wating_time : MonoBehaviour
     public static float[][] congestion;
 
     private CarCounter[][] streets;
+    private bool stored = false;
+    private float timeVariable = 0;
 
     [Header("GUI")]
     public GameObject summary;
@@ -34,9 +39,6 @@ public class Avg_wating_time : MonoBehaviour
     public GameObject runningTimeText;
     public GameObject CarInfo;
     public GameObject timer;
-
-    private bool stored = false;
-    private float timeVariable = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -120,7 +122,7 @@ public class Avg_wating_time : MonoBehaviour
                 }
 
                 // store the run inforamtion and show the summary
-                StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights"))); ;
+                StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes))); ;
                 //while (e.MoveNext()) ;
                 
                 Summary.CurrentRunSummary();
@@ -167,30 +169,46 @@ public class Avg_wating_time : MonoBehaviour
     /// </summary>
     /// <param name="name">the name of the car to update its watining time</param>
     /// <param name="waitingTime">the new waiting time</param>
-    public static void updateAvg(string name, float waitingTime, bool left, bool right, bool left2, bool right2, string st)
+    public static void updateAvg(string name, float waitingTime, bool left, bool right, bool left2, bool right2, int intersection, string st)
     {
         if (waitingTimes.ContainsKey(name))
-        {
+        {   
             data t = waitingTimes[name];
-            t.waiting_time = waitingTime;
+            t.waiting_time[intersection] = waitingTime;
             waitingTimes[name] = t;
         }
         else
         {
             data temp = new data();
-            temp.waiting_time = waitingTime;
+            temp.waiting_time = new float[2];
+            temp.waiting_time[0] = temp.waiting_time[1] = - 1;
+            temp.waiting_time[intersection] = waitingTime;
             temp.streat = st;
             if (left)
             {
-                temp.direction = "Left";
+                temp.Turn1 = "Left";
             }
             else if (right)
             {
-                temp.direction = "Right";
+                temp.Turn1 = "Right";
             }
             else
             {
-                temp.direction = "None";
+                temp.Turn1 = "None";
+            }
+
+
+            if (left2)
+            {
+                temp.Turn1 = "Left";
+            }
+            else if (right2)
+            {
+                temp.Turn2 = "Right";
+            }
+            else
+            {
+                temp.Turn2 = "None";
             }
 
             waitingTimes.Add(name, temp);
@@ -238,8 +256,17 @@ public class Avg_wating_time : MonoBehaviour
         float sum = 0;
         foreach (var item in waitingTimes)
         {
-            sum += item.Value.waiting_time;
+            if (item.Value.waiting_time[0] != -1)
+            {
+                sum += item.Value.waiting_time[0];
+            }
+            if (item.Value.waiting_time[1] != -1)
+            {
+                sum += item.Value.waiting_time[1];
+            }
+            
         }
+
 
         Avg_wating = sum / waitingTimes.Count;
     }
