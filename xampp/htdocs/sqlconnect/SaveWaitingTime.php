@@ -27,7 +27,7 @@
         $streat = "";
         $turning0 = "";
         $turning1 = "";
-        if($name != "Overall#AVG#Waiting#time" || $name != "AVG#Waiting#time" || $name != "Flow#rate" || $name != "Congestion#north" || $name != "Congestion#west" || $name != "Congestion#south" || $name != "Congestion#east"){
+        if($name != "Overall#AVG#Waiting#time" || $name != "AVG#Waiting#time" || $name != "Flow#rate" || $name != "Congestion#north" || $name != "Congestion#west" || $name != "Congestion#south" || $name != "Congestion#east" || $name != "Max#Waiting#time"){
             $streat = $info[3];
             $turning0 = $info[4];
             $turning1 = $info[5];

@@ -64,6 +64,8 @@
             $overallAvg = "";
             $avg0 = "";
             $avg1 = "";
+            $Max0 = "";
+            $Max1 = "";
             $flow0 = "";
             $flow1 = "";
             $congestionNorth0 = "";
@@ -81,6 +83,9 @@
                 }else if($info[0] == "AVG#Waiting#time"){
                     $avg0 = $info[1];
                     $avg1 = $info[2];
+                }else if($info[0] == "Max#Waiting#time"){
+                    $Max0 = $info[1];
+                    $Max1 = $info[2];
                 }else if($info[0] == "Flow#rate"){
                     $flow0 = $info[1];
                     $flow1 = $info[2];
@@ -104,8 +109,8 @@
             $method = $name[1];
             $starting = end($name);
             //echo gettype($name) . " ";
-            $insertQuey = "INSERT INTO `information`(`algorithm`, `carNumber`, `startingDirection`, `overall#avg`, `avg0`, `avg1`, `flowRate0`, `flowRate1`, `CongestionNorth0`, `CongestionWest0`, `CongestionSouth0`, `CongestionEast0`, `CongestionNorth1`, `CongestionWest1`, `CongestionSouth1`, `CongestionEast1`  )
-                           VALUES ('".$method."','". $carnumber."', '". $starting."','". $overallAvg."','". $avg0."','". $avg1."', '". $flow0."','".$flow1."','". $congestionNorth0."', '". $congestionWest0."','". $congestionSouth0."', '". $congestionEast0."','". $congestionNorth1."', '". $congestionWest1."','". $congestionSouth1."', '". $congestionEast1."');";
+            $insertQuey = "INSERT INTO `information`(`algorithm`, `carNumber`, `startingDirection`, `overall#avg`, `avg0`, `avg1`, `max0`, `max1`, `flowRate0`, `flowRate1`, `CongestionNorth0`, `CongestionWest0`, `CongestionSouth0`, `CongestionEast0`, `CongestionNorth1`, `CongestionWest1`, `CongestionSouth1`, `CongestionEast1`  )
+                           VALUES ('".$method."','". $carnumber."', '". $starting."','". $overallAvg."','". $avg0."','". $avg1."','". $Max0."','". $Max1."','". $flow0."','".$flow1."','". $congestionNorth0."', '". $congestionWest0."','". $congestionSouth0."', '". $congestionEast0."','". $congestionNorth1."', '". $congestionWest1."','". $congestionSouth1."', '". $congestionEast1."');";
             mysqli_query($con, $insertQuey) or die("4: Insert Failed");
         }
 

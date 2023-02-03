@@ -38,6 +38,8 @@
                 `carNumber` INT NOT NULL,
                 `startingDirection` text NOT NULL,
                 `overall#avg` double NOT NULL,
+                `max0` double NOT NULL,
+                `max1` double NOT NULL,
                 `avg0` double NOT NULL,
                 `avg1` double NOT NULL,
                 `flowRate0` double NOT NULL,
