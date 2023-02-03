@@ -324,7 +324,7 @@ public class Basic_algo : MonoBehaviour
             }
             else
             {
-                if (CarCount[i].carsCounter == 0)
+                if (CarCount[i].carsCounter != 0)
                     turnWaiting[i]++;
             }
         }

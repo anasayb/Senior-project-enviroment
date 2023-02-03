@@ -236,20 +236,20 @@ public class Car_Generator : MonoBehaviour
             newCar.GetComponent<CarController>().pathGourpRight = TurningPathsRight[streat];
             if (newCar.tag == "Truck")
             {
-                newCar.name = "Truck " + NameTruckNumber++ + "-" + Intersection.name;
+                newCar.name = "Truck " + NameTruckNumber++;
 
             }
             else if (newCar.tag == "Emergency")
             {
-                newCar.name = "Poilice " + NameEmergencyNumber++ + "-" + Intersection.name;
+                newCar.name = "Poilice " + NameEmergencyNumber++;
             }
             else if (newCar.tag == "Bus")
             {
-                newCar.name = "Bus " + NameBusNumber++ + "-" + Intersection.name;
+                newCar.name = "Bus " + NameBusNumber++;
             }
             else
             {
-                newCar.name = "Car " + NameCarNumber++ + "-" + Intersection.name ;
+                newCar.name = "Car " + NameCarNumber++ ;
             }
             
             newCar.transform.SetParent(parents[streat], true);
@@ -339,19 +339,19 @@ public class Car_Generator : MonoBehaviour
             newCar.GetComponent<CarController>().CurrentDirection = streat;
             if (newCar.tag == "Truck")
             {
-                newCar.name = "Truck " + NameTruckNumber++ + "-" + Intersection.name;
+                newCar.name = "Truck " + NameTruckNumber++;
             }
             else if (newCar.tag == "Emergency")
             {
-                newCar.name = "Poilice " + NameEmergencyNumber++ + "-" + Intersection.name;
+                newCar.name = "Poilice " + NameEmergencyNumber++;
             }
             else if (newCar.tag == "Bus")
             {
-                newCar.name = "Bus " + NameBusNumber++ + "-" + Intersection.name;
+                newCar.name = "Bus " + NameBusNumber++;
             }
             else
             {
-                newCar.name = "Car " + NameCarNumber++ + "-" + Intersection.name;
+                newCar.name = "Car " + NameCarNumber++;
             }
 
             frontCarRight -= (newCar.transform.forward * (newCar.GetComponent<BoxCollider>().size.z + 3));

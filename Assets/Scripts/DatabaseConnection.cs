@@ -275,7 +275,7 @@ public class DatabaseConnection : MonoBehaviour
 
 
         string carsData = "";
-        float sum0 = 0, sum1 = 0;
+        float sum0 = 0, sum1 = 0, max0 = 0, max1= 0 ;
         int count0 = 0, count1 = 0;
         foreach (var item in watingTime)
         {
@@ -285,17 +285,27 @@ public class DatabaseConnection : MonoBehaviour
             {
                 sum0 += item.Value.waiting_time[0];
                 count0++;
+                if (item.Value.waiting_time[0] > max0)
+                {
+                    max0 = item.Value.waiting_time[0];
+                }
             }
 
             if (item.Value.waiting_time[1] != -1)
             {
                 sum1 += item.Value.waiting_time[1];
                 count1++;
+                if (item.Value.waiting_time[1] > max1)
+                {
+                    max1 = item.Value.waiting_time[1];
+                }
             }
 
 
         }
 
+        // Max waiting time
+        carsData += "Max#Waiting#time_" + max0.ToString() + "_" + max1.ToString() + " ";
 
         // Average waiting time
         carsData += "AVG#Waiting#time_" + (1.0f *sum0/count0).ToString() + "_"+ (1.0f * sum1 / count1).ToString() + " ";
