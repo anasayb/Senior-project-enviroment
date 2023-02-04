@@ -101,7 +101,7 @@ public class DatabaseConnection : MonoBehaviour
     public IEnumerator CheckConnection(Response res)
     {
 
-        using (UnityWebRequest www = UnityWebRequest.Get("http://localhost/sqlconnect/GetData.php"))
+        using (UnityWebRequest www = UnityWebRequest.Get("http://localhost/sqlconnect/OneIntersection/GetData.php"))
         {
 
             //www.SendWebRequest();
@@ -135,7 +135,7 @@ public class DatabaseConnection : MonoBehaviour
         if (DatabaseConnection.connection)
         {
 
-            using (UnityWebRequest www = UnityWebRequest.Get("http://localhost/sqlconnect/GetData.php"))
+            using (UnityWebRequest www = UnityWebRequest.Get("http://localhost/sqlconnect/OneIntersection/GetData.php"))
             {
 
                 //www.SendWebRequest();
@@ -174,7 +174,7 @@ public class DatabaseConnection : MonoBehaviour
             WWWForm form = new WWWForm();
             form.AddField("name", tableName);
 
-            using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/GetData.php", form))
+            using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/OneIntersection/GetData.php", form))
             {
 
                 //www.SendWebRequest();
@@ -254,7 +254,7 @@ public class DatabaseConnection : MonoBehaviour
         {
             WWWForm form = new WWWForm();
             form.AddField("table", table);
-            using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/DeleteExistingData.php", form))
+            using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/OneIntersection/DeleteExistingData.php", form))
             {
                 yield return www.SendWebRequest();
 
@@ -321,7 +321,7 @@ public class DatabaseConnection : MonoBehaviour
             form.AddField("data", data);
 
 
-            using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/SaveWaitingTime.php", form))
+            using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/sqlconnect/OneIntersection/SaveWaitingTime.php", form))
             {
 
                 //www.SendWebRequest();
@@ -339,7 +339,7 @@ public class DatabaseConnection : MonoBehaviour
             }
 
 
-            using (UnityWebRequest newwww = UnityWebRequest.Get("http://localhost/sqlconnect/SaveTablesInfo.php"))
+            using (UnityWebRequest newwww = UnityWebRequest.Get("http://localhost/sqlconnect/OneIntersection/SaveTablesInfo.php"))
             {
                 yield return newwww.SendWebRequest();
             }

@@ -52,29 +52,42 @@ public class SummaryTwo : MonoBehaviour
         // Avg_waiting
         float Avg_wating = 0;
         foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "AVG#Waiting#time") Avg_wating = float.Parse(s.Split("_")[1]);
-        summary.transform.Find("AVG").Find("Time").GetComponent<TMP_Text>().text = (((int)(Avg_wating * 100)) / 100f).ToString("F2") + " s";
+        summary.transform.Find("AVG").Find("Time0").GetComponent<TMP_Text>().text = (((int)(Avg_wating * 100)) / 100f).ToString("F2") + " s";
 
         // Flow Rate
-        float trafficFlow = 0;
-        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Flow#rate") trafficFlow = float.Parse(s.Split("_")[1]);
-        summary.transform.Find("TrafficFlow").Find("Rate").GetComponent<TMP_Text>().text = trafficFlow.ToString() + " Car/Minute";
+        float trafficFlow0 = 0, trafficFlow1 = 0;
+        foreach (string s in CarsData)
+        {
+            if (s != "" && s.Split("_")[0] == "Flow#rate")
+            {
+                trafficFlow0 = float.Parse(s.Split("_")[1]);
+                trafficFlow1 = float.Parse(s.Split("_")[2]);
+            }
+        }
+        summary.transform.Find("TrafficFlow").Find("Rate0").GetComponent<TMP_Text>().text = trafficFlow0.ToString() + " Car/Minute";
+        summary.transform.Find("TrafficFlow").Find("Rate1").GetComponent<TMP_Text>().text = trafficFlow1.ToString() + " Car/Minute";
 
         // Avrage Congestion
-        float CongestionNorth = 0, CongestionWest = 0,CongestionSouth = 0, CongestionEast = 0;
-        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#north") CongestionNorth = float.Parse(s.Split("_")[1]);
-        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#west") CongestionWest = float.Parse(s.Split("_")[1]);
-        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#south") CongestionSouth = float.Parse(s.Split("_")[1]);
-        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#east") CongestionEast = float.Parse(s.Split("_")[1]);
-        float[] congestionData = {CongestionNorth, CongestionWest, CongestionSouth, CongestionEast};
+        float CongestionNorth0 = 0, CongestionWest0 = 0,CongestionSouth0 = 0, CongestionEast0 = 0;
+        float CongestionNorth1 = 0, CongestionWest1 = 0, CongestionSouth1 = 0, CongestionEast1 = 0;
+        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#north") { CongestionNorth0 = float.Parse(s.Split("_")[1]); CongestionNorth1 = float.Parse(s.Split("_")[2]); }
+        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#west") { CongestionWest0 = float.Parse(s.Split("_")[1]); CongestionWest1 = float.Parse(s.Split("_")[2]); }
+        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#south") { CongestionSouth0 = float.Parse(s.Split("_")[1]); CongestionSouth1 = float.Parse(s.Split("_")[2]); }
+        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#east") { CongestionEast0 = float.Parse(s.Split("_")[1]); CongestionEast1 = float.Parse(s.Split("_")[2]); }
+        float[,] congestionData = { { CongestionNorth0, CongestionWest0, CongestionSouth0, CongestionEast0 }, { CongestionNorth1, CongestionWest1, CongestionSouth1, CongestionEast1 } };
+        
         Transform congestion = summary.transform.Find("Congestion");
         for (int i = 1; i < congestion.childCount; i++)
         {
-            congestion.GetChild(i).GetChild(1).GetComponent<TMP_Text>().text = congestionData[i-1].ToString("F2");
+            for (int j = 0; j < congestion.GetChild(i).childCount; j++)
+            {
+                congestion.GetChild(i).GetChild(j).GetChild(1).GetComponent<TMP_Text>().text = congestionData[i-1,j].ToString("F2");
+            }
         }
 
 
         // Cars Number
-        summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = tableInfo[0] + " Cars";
+        summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = (int.Parse(tableInfo[0]) * 2).ToString() +" Cars";
 
         // Cars informations
         GameObject cont = summary.transform.Find("CarInfo").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;
@@ -84,7 +97,7 @@ public class SummaryTwo : MonoBehaviour
         foreach (var item in CarsData)
         {
             string[] record = item.Split('_');
-            if (record[0] == "AVG#Waiting#time" || record[0] == "Flow#rate" || record[0].Split("#")[0] == "Congestion" || record[0] == "")
+            if (record[0] == "AVG#Waiting#time" || record[0] == "Flow#rate" || record[0].Split("#")[0] == "Congestion" || record[0] == "" || record[0] == "Overall#AVG#Waiting#time" || record[0] == "Max#Waiting#time")
             {
                 continue;
             }
@@ -97,19 +110,43 @@ public class SummaryTwo : MonoBehaviour
             GameObject newRow = GameObject.Instantiate(row);
             // Car name
             newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = record[0].Replace("#", " ");
-            // Waiting Time
-            newRow.transform.GetChild(1).GetComponent<TMP_Text>().text = (((int)(float.Parse(record[1]) * 100)) / 100f).ToString("F2");
             // Start Direction
-            newRow.transform.GetChild(2).GetComponent<TMP_Text>().text = record[3];
-            // Turning
-            newRow.transform.GetChild(3).GetComponent<TMP_Text>().text = record[2];
+            newRow.transform.GetChild(1).GetComponent<TMP_Text>().text = record[5];
+            // Waiting Time0
+            if (((int)(float.Parse(record[1])) != -1))
+            {
+                newRow.transform.GetChild(2).GetComponent<TMP_Text>().text = (((int)(float.Parse(record[1]) * 100)) / 100f).ToString("F2");
+            }
+            else
+            {
+                newRow.transform.GetChild(2).GetComponent<TMP_Text>().text = "N/A";
+            }
+            // Waiting Time1
+            if (((int)(float.Parse(record[2])) != -1))
+            {
+                newRow.transform.GetChild(3).GetComponent<TMP_Text>().text = (((int)(float.Parse(record[2]) * 100)) / 100f).ToString("F2");
+            }
+            else
+            {
+                newRow.transform.GetChild(3).GetComponent<TMP_Text>().text = "N/A";
+            }
+
             newRow.transform.SetParent(cont.transform);
         }
         row.SetActive(false);
 
         // Max waiting
-        summary.transform.Find("Max Waiting Time").Find("Time").GetComponent<TMP_Text>().text = (((int)(mx * 100)) / 100f).ToString("F2") + " s";
-
+        float mx0 = 0, mx1 = 0;
+        foreach (string s in CarsData)
+        {
+            if (s != "" && s.Split("_")[0] == "Max#Waiting#time")
+            {
+                mx0 = float.Parse(s.Split("_")[1]);
+                mx1 = float.Parse(s.Split("_")[2]);
+            }
+        }
+        summary.transform.Find("Max Waiting Time").Find("Time0").GetComponent<TMP_Text>().text = (((int)(mx0 * 100)) / 100f).ToString("F2") + " s";
+        summary.transform.Find("Max Waiting Time").Find("Time1").GetComponent<TMP_Text>().text = (((int)(mx1 * 100)) / 100f).ToString("F2") + " s";
 
         // show histroy runs
         GameObject rec = summary.transform.Find("Records").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;
@@ -203,54 +240,76 @@ public class SummaryTwo : MonoBehaviour
         
 
         // Avg_waiting
-        summary.transform.Find("AVG").Find("Time").GetComponent<TMP_Text>().text = (((int)(Avg_wating_time_two.Avg_wating * 100)) / 100f).ToString("F2") + " s";
+        summary.transform.Find("AVG").Find("Time0").GetComponent<TMP_Text>().text = (((int)(Avg_wating_time_two.Avg_wating * 100)) / 100f).ToString("F2") + " s";
 
         // Flow Rate
-        summary.transform.Find("TrafficFlow").Find("Rate").GetComponent<TMP_Text>().text = Avg_wating_time_two.FlowRate +" Car/Minute";
+        summary.transform.Find("TrafficFlow").Find("Rate0").GetComponent<TMP_Text>().text = Avg_wating_time_two.FlowRate[0] +" Car/Minute";
+        summary.transform.Find("TrafficFlow").Find("Rate1").GetComponent<TMP_Text>().text = Avg_wating_time_two.FlowRate[1] + " Car/Minute";
 
         // Avrage Congestion
         Transform congestion = summary.transform.Find("Congestion");
         for (int i = 1; i < congestion.childCount; i++)
         {
-                congestion.GetChild(i).GetChild(1).GetComponent<TMP_Text>().text = Avg_wating_time_two.congestion[0][i -1].ToString("F2");
+            for (int j = 0; j < congestion.GetChild(i).childCount; j++) {
+                congestion.GetChild(i).GetChild(j).GetChild(1).GetComponent<TMP_Text>().text = Avg_wating_time_two.congestion[i-1][j].ToString("F2");
+            }
         }
 
 
         // Cars Number
-        summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = Scence_Manger.startingNumberOfCars.ToString() + " Cars";
+        summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = (Scence_Manger.startingNumberOfCars*2).ToString() + " Cars";
 
 
         // Cars informations
         GameObject cont = summary.transform.Find("CarInfo").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;
         GameObject row = cont.transform.GetChild(0).gameObject;
         row.SetActive(true);
-        float mx = 0;
+        float mx0 = 0, mx1 = 0;
         Dictionary<string, dataTwoIntersection> Data = Avg_wating_time_two.waitingTimes;
         foreach (var item in Data)
         {
 
-            if (item.Value.waiting_time[0] > mx)
+            if (item.Value.waiting_time[0] > mx0)
             {
-                mx = item.Value.waiting_time[0];
+                mx0 = item.Value.waiting_time[0];
+            }
+            if (item.Value.waiting_time[1] > mx1)
+            {
+                mx1 = item.Value.waiting_time[1];
             }
 
             GameObject newRow = GameObject.Instantiate(row);
             // Car name
             newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = item.Key;
-            // Waiting Time
-            newRow.transform.GetChild(1).GetComponent<TMP_Text>().text = (((int)(item.Value.waiting_time[0] * 100)) / 100f).ToString("F2");
             // Start Direction
-            newRow.transform.GetChild(2).GetComponent<TMP_Text>().text = item.Value.streat;
-            // Turning
-            newRow.transform.GetChild(3).GetComponent<TMP_Text>().text = item.Value.Turn1;
+            newRow.transform.GetChild(1).GetComponent<TMP_Text>().text = item.Value.streat;
+            // Waiting Time0
+            if (((int)item.Value.waiting_time[0]) != -1) {
+                newRow.transform.GetChild(2).GetComponent<TMP_Text>().text = (((int)(item.Value.waiting_time[0] * 100)) / 100f).ToString("F2");
+            }
+            else
+            {
+                newRow.transform.GetChild(2).GetComponent<TMP_Text>().text = "N/A";
+            }
+
+            // Waiting Time1
+            if (((int)item.Value.waiting_time[1]) != -1)
+            {
+                newRow.transform.GetChild(3).GetComponent<TMP_Text>().text = (((int)(item.Value.waiting_time[1] * 100)) / 100f).ToString("F2");
+            }
+            else
+            {
+                newRow.transform.GetChild(3).GetComponent<TMP_Text>().text = "N/A";
+            }
+            
             newRow.transform.SetParent(cont.transform);
         }
         row.SetActive(false);
 
 
         // Max waiting
-        summary.transform.Find("Max Waiting Time").Find("Time").GetComponent<TMP_Text>().text = (((int)(mx * 100)) / 100f).ToString("F2") + " s";
-
+        summary.transform.Find("Max Waiting Time").Find("Time0").GetComponent<TMP_Text>().text = (((int)(mx0 * 100)) / 100f).ToString("F2") + " s";
+        summary.transform.Find("Max Waiting Time").Find("Time1").GetComponent<TMP_Text>().text = (((int)(mx1 * 100)) / 100f).ToString("F2") + " s";
 
         // show histroy runs
         GameObject rec = summary.transform.Find("Records").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;

@@ -21,7 +21,9 @@ public class AI : Agent
     //public int episodeNumber = 0;
 
     [Header("Cameras")]
-    public GameObject Maincamera;
+    public GameObject cameraController;
+
+    private int Intersection;
 
     [Header("GUI")]
     public GameObject timer;
@@ -51,7 +53,7 @@ public class AI : Agent
     {
         AI.startCouting = false;
         cars = GameObject.Find("Cars");
-
+        Intersection = (transform.parent.name[transform.name.Length - 1] - '0') - 1;
         if (Scence_Manger.algorthim != "AI Traffic Light System")
         {
             GetComponent<AI>().enabled = false;
@@ -295,7 +297,7 @@ public class AI : Agent
             ChangeLightRed(i);
         }
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
-        Maincamera.GetComponent<User_Controll>().updateCameras(to);
+        cameraController.GetComponent<User_Controll>().updateCameras(to, Intersection);
 
     }
 

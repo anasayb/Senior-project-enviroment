@@ -619,61 +619,61 @@ public class CarController : MonoBehaviour
     /// </summary>
     private void OnMouseDown()
     {
+        if (Scence_Manger.inv == 0) {
+            // Activate the selector and change its postion ot the center of the car
+            sel.SetActive(true);
+            sel.transform.position = new Vector3(transform.position.x, 5f, transform.position.z);
 
-        // Activate the selector and change its postion ot the center of the car
-        sel.SetActive(true);
-        sel.transform.position = new Vector3(transform.position.x, 5f, transform.position.z);
 
+            // Activate the carInfo boc
+            carInfo.SetActive(true);
 
-        // Activate the carInfo boc
-        carInfo.SetActive(true);
+            // Fill the infroamtion of the carInfo box
+            carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text = name;
+            carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString("F2") + " km/s";
+            carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + (((int)(waitngTime * 100)) / 100f).ToString() + " s";
+            carInfo.transform.Find("Intersection Enter").GetComponent<TMP_Text>().text = "Intersection Enter Direction: " + transform.parent.name;
 
-        // Fill the infroamtion of the carInfo box
-        carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text = name;
-        carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString("F2") + " km/s";
-        carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + (((int)(waitngTime * 100)) / 100f).ToString() + " s";
-        carInfo.transform.Find("Intersection Enter").GetComponent<TMP_Text>().text = "Intersection Enter Direction: " + transform.parent.name;
-
-        string[] direction = { "North", "West", "South", "East" };
-        int index = 0;
-        for (int i = 0; i < direction.Length; i++)
-        {
-            if (direction[i] == transform.parent.name)
+            string[] direction = { "North", "West", "South", "East" };
+            int index = 0;
+            for (int i = 0; i < direction.Length; i++)
             {
-                index = i;
+                if (direction[i] == transform.parent.name)
+                {
+                    index = i;
+                }
             }
-        }
 
-        if (!(right || left))
-        {
-            carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 2) % 4];
-        }
-        else if (right)
-        {
-            carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 1) % 4];
-        }
-        else if (left)
-        {
-            carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 3) % 4];
-        }
+            if (!(right || left))
+            {
+                carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 2) % 4];
+            }
+            else if (right)
+            {
+                carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 1) % 4];
+            }
+            else if (left)
+            {
+                carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 3) % 4];
+            }
 
-        //carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
+            //carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
 
-        /*
-        if (colide == -1)
-        {
-            carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
+            /*
+            if (colide == -1)
+            {
+                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
+            }
+            else
+            {
+                Ray ray = new Ray(transform.position, transform.forward);
+                RaycastHit h;
+                Physics.Raycast(ray, out h, 200, ~CarLay);
+                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: " + h.distance + " m";
+            }
+            */
+
         }
-        else
-        {
-            Ray ray = new Ray(transform.position, transform.forward);
-            RaycastHit h;
-            Physics.Raycast(ray, out h, 200, ~CarLay);
-            carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: " + h.distance + " m";
-        }
-        */
-
-
     }
 
 
@@ -682,18 +682,21 @@ public class CarController : MonoBehaviour
     /// Method <c>OnMouseDown</c> This function is called when the user mouse enter the car object in order to highlight the car.
     /// </summary>
     private void OnMouseEnter()
-    {   
-        // Change the matrial used to color the car into a slightly darker one
-        orignal = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials[0];
-        Material[] mt = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials;
-        mt[0] = tent;
-        if (transform.tag == "Truck")
+    {
+        if (Scence_Manger.inv == 0)
         {
-            Material[] mt2 = transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials;
-            mt2[0] = tent;
-            transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials = mt2;
+            // Change the matrial used to color the car into a slightly darker one
+            orignal = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials[0];
+            Material[] mt = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials;
+            mt[0] = tent;
+            if (transform.tag == "Truck")
+            {
+                Material[] mt2 = transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials;
+                mt2[0] = tent;
+                transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials = mt2;
+            }
+            transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials = mt;
         }
-        transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials = mt;
     }
 
 
@@ -702,16 +705,19 @@ public class CarController : MonoBehaviour
     /// </summary>
     private void OnMouseExit()
     {
-        // Change the matrial used to the original one
-        Material[] mt = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials;
-        mt[0] = orignal;
-        if (transform.tag == "Truck")
-        {
-            Material[] mt2 = transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials;
-            mt2[0] = orignal;
-            transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials = mt2;
-        }
-        transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials = mt;
+            if (Scence_Manger.inv == 0)
+            {
+                // Change the matrial used to the original one
+                Material[] mt = transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials;
+                mt[0] = orignal;
+                if (transform.tag == "Truck")
+                {
+                    Material[] mt2 = transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials;
+                    mt2[0] = orignal;
+                    transform.Find("Body").GetChild(0).GetChild(0).GetComponentInChildren<MeshRenderer>().materials = mt2;
+                }
+                transform.Find("Body").GetComponentInChildren<MeshRenderer>().materials = mt;
+            }
     }
 
 

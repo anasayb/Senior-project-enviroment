@@ -22,7 +22,9 @@ public class Traditional_traffic_Controller : MonoBehaviour
     public GameObject timer;
 
     [Header("Cameras")]
-    public GameObject Maincamera;
+    public GameObject cameraContoller;
+
+    private int Intersection = 0;
     //public GameObject CameraController;
 
     private float timeVariable = 0;
@@ -35,23 +37,24 @@ public class Traditional_traffic_Controller : MonoBehaviour
         Traditional_traffic_Controller.startCouting = false;
         time = Scence_Manger.providedTime;
         direction = Scence_Manger.dir;
+        Intersection = transform.parent.name[transform.parent.name.Length - 1] - '0' - 1;
         if (direction == 0)
         {
-            Maincamera.GetComponent<User_Controll>().currentPostionOfCamera = "North";
+            cameraContoller.GetComponent<User_Controll>().currentPostionOfCamera[Intersection] = "North";
 
         }else if (direction == 1)
         {
-            Maincamera.GetComponent<User_Controll>().currentPostionOfCamera = "West";
+            cameraContoller.GetComponent<User_Controll>().currentPostionOfCamera[Intersection] = "West";
 
         }
         else if (direction == 2)
         {
-            Maincamera.GetComponent<User_Controll>().currentPostionOfCamera = "South";
+            cameraContoller.GetComponent<User_Controll>().currentPostionOfCamera[Intersection] = "South";
 
         }
         else if (direction == 3)
         {
-            Maincamera.GetComponent<User_Controll>().currentPostionOfCamera = "East";
+            cameraContoller.GetComponent<User_Controll>().currentPostionOfCamera[Intersection] = "East";
 
         }
 
@@ -71,12 +74,17 @@ public class Traditional_traffic_Controller : MonoBehaviour
     {
         Traditional_traffic_Controller.startCouting = true;
         timeVariable += Time.deltaTime;
-        timer.GetComponentInChildren<TMP_Text>().text = Math.Max((Math.Ceiling(time[direction]-timeVariable)), 0).ToString();
-        timer.transform.GetChild(1).GetComponent<Image>().fillAmount = (1-(timeVariable/time[direction]));
+        if (User_Controll.Intersection == transform.parent.name[transform.parent.name.Length-1]-'0'-1) {
+            timer.GetComponentInChildren<TMP_Text>().text = Math.Max((Math.Ceiling(time[direction] - timeVariable)), 0).ToString();
+            timer.transform.GetChild(1).GetComponent<Image>().fillAmount = (1 - (timeVariable / time[direction]));
+        }
         if (timeVariable >= time[direction] - yellowLightDuration && timeVariable < time[direction])
         {
             ChangeLightYellow(direction);
-            timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
+            if (User_Controll.Intersection == Intersection)
+            {
+                timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
+            }
         }
         if (timeVariable >= time[direction])
         {
@@ -89,7 +97,10 @@ public class Traditional_traffic_Controller : MonoBehaviour
             direction %= 4;
             ChangeLightGreen(direction);    
             timeVariable = 0;
-            timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+            if (User_Controll.Intersection == Intersection)
+            {
+                timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+            }
         }
 
     }
@@ -125,7 +136,7 @@ public class Traditional_traffic_Controller : MonoBehaviour
     {
 
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
-        Maincamera.GetComponent<User_Controll>().updateCameras(to);
+        cameraContoller.GetComponent<User_Controll>().updateCameras(to, Intersection);
         
     }
 }

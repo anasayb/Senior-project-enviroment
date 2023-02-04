@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using UnityEditor;
 using UnityEngine.UI;
+using JetBrains.Annotations;
 
 public class AI_TLC : MonoBehaviour
 {
@@ -15,7 +16,9 @@ public class AI_TLC : MonoBehaviour
     public float yellowLightDuration = 3f;
 
     [Header("Cameras")]
-    public GameObject Maincamera;
+    public GameObject cameraController;
+
+    private int Intersection;
     //public GameObject CameraController;
 
     [Header("GUI")]
@@ -34,6 +37,7 @@ public class AI_TLC : MonoBehaviour
     void Start()
     {
         //direct = Scence_Manger.dir;
+        Intersection = (transform.parent.name[transform.name.Length - 1] - '0') - 1;
     }
 
     // Update is called once per frame
@@ -42,32 +46,7 @@ public class AI_TLC : MonoBehaviour
     {
         //updateCarsNumbers();
 
-        timeVariable += Time.deltaTime;
-        timer.GetComponentInChildren<TMP_Text>().text = Math.Max((Math.Ceiling(time - timeVariable)), 0).ToString();
-        timer.transform.GetChild(1).GetComponent<Image>().fillAmount = (1 - (timeVariable/time));
-        if (timeVariable < time - yellowLightDuration)
-        {
-            timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
-            ChangeLightGreen(direct);
-        }
-        else if (timeVariable >= time - yellowLightDuration && timeVariable < time)
-        {
-            ChangeLightYellow(direct);
-            timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
-        }
-        else if (timeVariable >= time && timeVariable < time + delay)
-        {
-
-            ChangeLightRed(direct);
-            //timeVariable = 0;
-
-        }
-        else
-        {
-            ChangeLightRed(direct);
-            finish = true;
-            timeVariable = 0;
-        }
+       
 
     }
 
@@ -102,7 +81,7 @@ public class AI_TLC : MonoBehaviour
     {
 
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
-        Maincamera.GetComponent<User_Controll>().updateCameras(to);
+        cameraController.GetComponent<User_Controll>().updateCameras(to, Intersection);
 
     }
 

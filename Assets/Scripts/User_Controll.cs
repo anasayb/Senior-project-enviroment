@@ -5,49 +5,60 @@ using TMPro;
 using UnityEngine;
 
 public class User_Controll : MonoBehaviour
-{
-    public GameObject MainCamera;
-    public string currentPostionOfCamera = "North";
+{   
+    public static int Intersection;
+
+    public GameObject[] MainCamera;
+    public string[] currentPostionOfCamera = { "North", "North" };
     public GameObject streetText;
+    public GameObject IntersectionText;
+    public GameObject RightButton;
+    public GameObject LeftButton;
     public GameObject simulationSpeed;
     
 
-    private string updatePostion = "";
+    private string[] updatePostion = { "", "" };
     private bool isKeyPressed = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (currentPostionOfCamera == "North")
+        User_Controll.Intersection = 0;
+
+        if (Scence_Manger.inv == 1) {
+            IntersectionText.GetComponent<TMP_Text>().text = "Intersection 1";
+        }
+
+        if (currentPostionOfCamera[User_Controll.Intersection] == "North")
         {
 
-            MainCamera.transform.position = new Vector3(0,30,50);
-            MainCamera.transform.rotation = Quaternion.Euler(30,180,0);
-            streetText.GetComponent<TMP_Text>().text = "University Street\n("+currentPostionOfCamera+")";
+            MainCamera[User_Controll.Intersection].transform.position = new Vector3(0,30,50);
+            MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30,180,0);
+            streetText.GetComponent<TMP_Text>().text = "University Street\n("+currentPostionOfCamera[User_Controll.Intersection] + ")";
 
         }
-        else if (currentPostionOfCamera == "West")
+        else if (currentPostionOfCamera[User_Controll.Intersection] == "West")
         {
 
-            MainCamera.transform.position = new Vector3(-50, 30, 0);
-            MainCamera.transform.rotation = Quaternion.Euler(30, 90, 0);
-            streetText.GetComponent<TMP_Text>().text = "Stadium Street\n("+currentPostionOfCamera + ")";
+            MainCamera[User_Controll.Intersection].transform.position = new Vector3(-50, 30, 0);
+            MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, 90, 0);
+            streetText.GetComponent<TMP_Text>().text = "Stadium Street\n("+currentPostionOfCamera[User_Controll.Intersection] + ")";
 
         }
-        else if (currentPostionOfCamera == "South")
+        else if (currentPostionOfCamera[User_Controll.Intersection] == "South")
         {
 
-            MainCamera.transform.position = new Vector3(0, 30, -50);
-            MainCamera.transform.rotation = Quaternion.Euler(30, 0, 0);
-            streetText.GetComponent<TMP_Text>().text = "University Street\n("+currentPostionOfCamera + ")";
+            MainCamera[User_Controll.Intersection].transform.position = new Vector3(0, 30, -50);
+            MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, 0, 0);
+            streetText.GetComponent<TMP_Text>().text = "University Street\n("+currentPostionOfCamera[User_Controll.Intersection] + ")";
 
         }
-        else if (currentPostionOfCamera == "East")
+        else if (currentPostionOfCamera[User_Controll.Intersection] == "East")
         {
 
-            MainCamera.transform.position = new Vector3(50, 30, 0);
-            MainCamera.transform.rotation = Quaternion.Euler(30, -90, 0);
-            streetText.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera + ")";
+            MainCamera[User_Controll.Intersection].transform.position = new Vector3(50, 30, 0);
+            MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, -90, 0);
+            streetText.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera[User_Controll.Intersection] + ")";
 
         }
 
@@ -61,25 +72,12 @@ public class User_Controll : MonoBehaviour
     void FixedUpdate()
     {
 
-        // Camera Updating 
-        if (updatePostion != "" && updatePostion != currentPostionOfCamera) {
-            string animation = currentPostionOfCamera + "_To_" + updatePostion;
-            GetComponent<Animation>().Play(animation);
-            currentPostionOfCamera = updatePostion;
-            if (currentPostionOfCamera == "North" || currentPostionOfCamera == "South")
-            {
-                streetText.GetComponent<TMP_Text>().text = "University Street\n(" + currentPostionOfCamera + ")";
-            }
-            else
-            {
-                streetText.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera + ")";
-            }
-            updatePostion = "";
-        }
 
+        MoveCamera(0);
+        MoveCamera(1);
 
         // Speed of the simulation, if there are still some cars in the simulation
-        if (Avg_wating_time.numberOfCars != 0)
+        if (Avg_wating_time_two.numberOfCars != 0 || Avg_wating_time.numberOfCars != 0)
         {
             // Simultaion speed
             simulationSpeed.SetActive(true);
@@ -102,33 +100,59 @@ public class User_Controll : MonoBehaviour
 
     }
 
+    public void MoveCamera(int intersection)
+    {
+        // Camera Updating 
+        if (updatePostion[intersection] != "" && updatePostion[intersection] != currentPostionOfCamera[intersection])
+        {
+            string animation = currentPostionOfCamera[intersection] + "_To_" + updatePostion[intersection];
+            MainCamera[intersection].GetComponent<Animation>().Play(animation);
+            currentPostionOfCamera[intersection] = updatePostion[intersection];
+            if (currentPostionOfCamera[intersection] == "North" || currentPostionOfCamera[intersection] == "South")
+            {
+                if (User_Controll.Intersection == 0) {
+                    streetText.GetComponent<TMP_Text>().text = "University Street\n(" + currentPostionOfCamera[intersection] + ")";
+                }
+                else
+                {
+                    streetText.GetComponent<TMP_Text>().text = "Park Street\n(" + currentPostionOfCamera[intersection] + ")";
+                }
+            }
+            else
+            {
+                streetText.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera[intersection] + ")";
+            }
+            updatePostion[intersection] = "";
+        }
+    }
+
 
     /// <summary>
     /// Method <c>updateCameras</c> activate the corect camera.
     /// </summary>
-    public void updateCameras(int cam)
+    public void updateCameras(int cam, int intersection)
     {
  
         if (cam == 0)
         {
-               updatePostion = "North";
+               updatePostion[intersection] = "North";
         }
         else if (cam == 1)
         {
 
-            updatePostion = "West";
+            updatePostion[intersection] = "West";
 
         }
         else if (cam == 2)
         {
 
-            updatePostion = "South";
+            updatePostion[intersection] = "South";
 
         }
         else if (cam == 3)
         {
 
-            updatePostion = "East";
+            updatePostion[intersection] = "East";
 
         }
 
@@ -152,5 +176,31 @@ public class User_Controll : MonoBehaviour
     }
 
 
+    public void UpdatedIntersection()
+    {
+        // Disable current Intersection camera
+        MainCamera[User_Controll.Intersection].SetActive(false);
+
+        // Go to next intersection
+        User_Controll.Intersection = (User_Controll.Intersection + 1) % 2;
+
+        // Enable new Intersection Camera
+        MainCamera[User_Controll.Intersection].SetActive(true);
+
+        // Update Name of the intersection
+        IntersectionText.GetComponent<TMP_Text>().text = "Intersection " + (User_Controll.Intersection + 1);
+
+        if (User_Controll.Intersection == 0)
+        {
+            RightButton.SetActive(true);
+            LeftButton.SetActive(false);
+        }
+        else
+        {
+            RightButton.SetActive(false);
+            LeftButton.SetActive(true);
+        }
+
+    }
 
 }

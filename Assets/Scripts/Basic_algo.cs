@@ -42,9 +42,9 @@ public class Basic_algo : MonoBehaviour
 
 
     [Header("Cameras")]
-    public GameObject Maincamera;
-    public GameObject CameraController;
-
+    //public GameObject Maincamera;
+    public GameObject cameraController;
+    private int Intersection = 0;
 
 
 
@@ -57,7 +57,7 @@ public class Basic_algo : MonoBehaviour
         queue.Enqueue(North);
         Debug.Log(CarCount[0].carsCounter);
         time[queue.Peek().direction] = GreenTimeCalc(CarCount[queue.Peek().direction].carsCounter) - 2;
-
+        Intersection = transform.parent.name[transform.parent.name.Length - 1] - '0' - 1;
         if (Scence_Manger.algorthim != "CarLoad Based Traffic Light System")
         {
             GetComponent<Basic_algo>().enabled = false;
@@ -76,12 +76,18 @@ public class Basic_algo : MonoBehaviour
             {
                 Basic_algo.startCouting = true;
                 EmegencyTimeVariable += Time.deltaTime;
-                timer.GetComponentInChildren<TMP_Text>().text = "EM";
-                timer.transform.GetChild(1).GetComponent<Image>().fillAmount = 1;
+                if (User_Controll.Intersection == Intersection)
+                {
+                    timer.GetComponentInChildren<TMP_Text>().text = "EM";
+                    timer.transform.GetChild(1).GetComponent<Image>().fillAmount = 1;
+                }
                 if (EmegencyTimeVariable <= yellowLightDuration)
                 {
                     ChangeLightYellow(direction);
-                    timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
+                    if (User_Controll.Intersection == Intersection)
+                    {
+                        timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
+                    }
                 }
 
                 if (EmegencyTimeVariable >= yellowLightDuration && EmegencyTimeVariable < yellowLightDuration + delay)
@@ -94,7 +100,10 @@ public class Basic_algo : MonoBehaviour
                     if (CarCount[currentEmergencyDirection].emergencyExist)
                     {
                         ChangeLightGreen(currentEmergencyDirection);
-                        timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                        if (User_Controll.Intersection == Intersection)
+                        {
+                            timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                        }
                     }
                     else
                     {
@@ -130,7 +139,10 @@ public class Basic_algo : MonoBehaviour
             if (timeVariable >= time[direction] - yellowLightDuration && timeVariable <= time[direction])
             {
                 ChangeLightYellow(direction);
-                timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
+                if (User_Controll.Intersection == Intersection)
+                {
+                    timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
+                }
             }
 
             if (timeVariable >= time[direction])
@@ -154,7 +166,10 @@ public class Basic_algo : MonoBehaviour
                     {
                         timeVariable = 0f;
                         ChangeLightGreen(direction);
-                        timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                        if (User_Controll.Intersection == Intersection)
+                        {
+                            timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                        }
                     }
 
                 }
@@ -170,7 +185,10 @@ public class Basic_algo : MonoBehaviour
                         {
                             timeVariable = 0f;
                             ChangeLightGreen(direction);
-                            timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                                if (User_Controll.Intersection == Intersection)
+                                {
+                                    timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                                }
                         }
 
                     }
@@ -200,7 +218,7 @@ public class Basic_algo : MonoBehaviour
     {
 
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
-        Maincamera.GetComponent<User_Controll>().updateCameras(to);
+        cameraController.GetComponent<User_Controll>().updateCameras(to, Intersection);
 
     }
 
@@ -303,7 +321,10 @@ public class Basic_algo : MonoBehaviour
                 {
                     timeVariable = 0f;
                     ChangeLightGreen(direction);
-                    timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                    if (User_Controll.Intersection == Intersection)
+                    {
+                        timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                    }
                 }
                 turnWaiting[i] = 0;
                 break;
@@ -341,7 +362,10 @@ public class Basic_algo : MonoBehaviour
         {
             timeVariable = 0f;
             ChangeLightGreen(direction);
-            timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+            if (User_Controll.Intersection == Intersection)
+            {
+                timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+            }
         }
         queue.Enqueue(new NodeClass(oldDirection, CarCount[oldDirection].carsCounter));
     }
@@ -350,8 +374,11 @@ public class Basic_algo : MonoBehaviour
     private void Timer()
     {
         timeVariable += Time.deltaTime;
-        timer.GetComponentInChildren<TMP_Text>().text = Math.Max((Math.Ceiling(time[direction] - timeVariable)), 0).ToString();
-        timer.transform.GetChild(1).GetComponent<Image>().fillAmount = (1 - (timeVariable / time[direction]));
+        if (User_Controll.Intersection == Intersection)
+        {
+            timer.GetComponentInChildren<TMP_Text>().text = Math.Max((Math.Ceiling(time[direction] - timeVariable)), 0).ToString();
+            timer.transform.GetChild(1).GetComponent<Image>().fillAmount = (1 - (timeVariable / time[direction]));
+        }
     }
 }
 

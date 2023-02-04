@@ -21,7 +21,9 @@ public class AI_two_single : Agent
     //public int episodeNumber = 0;
 
     [Header("Cameras")]
-    public GameObject Maincamera;
+    public GameObject cameraController;
+
+    private int Intersection;
 
     [Header("GUI")]
     public GameObject timer;
@@ -51,7 +53,7 @@ public class AI_two_single : Agent
     {
         AI_two_single.startCouting = false;
         cars = GameObject.Find("Cars");
-
+        Intersection = (transform.parent.name[transform.name.Length - 1] - '0') - 1;
         if (Scence_Manger.algorthim != "AI Traffic Light System")
         {
             GetComponent<AI_two_single>().enabled = false;
@@ -81,11 +83,17 @@ public class AI_two_single : Agent
                     AI_two_single.startCouting = true;
                 }
                 EmegencyTimeVariable += Time.deltaTime;
-                timer.GetComponentInChildren<TMP_Text>().text = "EM";
+                if (User_Controll.Intersection == Intersection)
+                {
+                    timer.GetComponentInChildren<TMP_Text>().text = "EM";
+                }
                 if (EmegencyTimeVariable <= yellowLightDuration)
                 {
                     ChangeLightYellow(direct);
-                    timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
+                    if (User_Controll.Intersection == Intersection)
+                    {
+                        timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
+                    }
                 }
 
                 if (EmegencyTimeVariable >= yellowLightDuration && EmegencyTimeVariable < yellowLightDuration + delay)
@@ -98,7 +106,10 @@ public class AI_two_single : Agent
                     if (CarCount[currentEmergencyDirection].emergencyExist)
                     {
                         ChangeLightGreen(currentEmergencyDirection);
-                        timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                        if (User_Controll.Intersection == Intersection)
+                        {
+                            timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                        }
                     }
                     else
                     {
@@ -141,8 +152,11 @@ public class AI_two_single : Agent
             }
             else
             {
-                timer.GetComponentInChildren<TMP_Text>().text = "AI";
-                timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                if (User_Controll.Intersection == Intersection)
+                {
+                    timer.GetComponentInChildren<TMP_Text>().text = "AI";
+                    timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                }
                 TrafficLightControlling();
 
             }
@@ -213,8 +227,11 @@ public class AI_two_single : Agent
         {
 
             ChangeLightGreen(direct);
-            timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
-            timer.GetComponentInChildren<TMP_Text>().text = "AI";
+            if (User_Controll.Intersection == Intersection)
+            {
+                timer.GetComponentInChildren<TMP_Text>().color = new Color(1, 1, 1);
+                timer.GetComponentInChildren<TMP_Text>().text = "AI";
+            }
 
         }
         else if (timeVariable >= time - yellowLightDuration - 1 && timeVariable < time - yellowLightDuration)
@@ -228,8 +245,10 @@ public class AI_two_single : Agent
         }
         else if (timeVariable >= time - yellowLightDuration && timeVariable < time)
         {
-
-            timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
+            if (User_Controll.Intersection == Intersection)
+            {
+                timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
+            }
             if (direct == nextDirect)
             {
                 time = nextTime;
@@ -295,7 +314,7 @@ public class AI_two_single : Agent
             ChangeLightRed(i);
         }
         trafficLights[to].GetComponent<Light_Conteroler>().chagneToGreen();
-        Maincamera.GetComponent<User_Controll>().updateCameras(to);
+        cameraController.GetComponent<User_Controll>().updateCameras(to, Intersection);
 
     }
 
