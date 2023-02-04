@@ -32,7 +32,7 @@ public class User_Controll : MonoBehaviour
         if (currentPostionOfCamera[User_Controll.Intersection] == "North")
         {
 
-            MainCamera[User_Controll.Intersection].transform.position = new Vector3(0,30,50);
+            MainCamera[User_Controll.Intersection].transform.localPosition = new Vector3(0,30,50);
             MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30,180,0);
             streetText.GetComponent<TMP_Text>().text = "University Street\n("+currentPostionOfCamera[User_Controll.Intersection] + ")";
 
@@ -40,7 +40,7 @@ public class User_Controll : MonoBehaviour
         else if (currentPostionOfCamera[User_Controll.Intersection] == "West")
         {
 
-            MainCamera[User_Controll.Intersection].transform.position = new Vector3(-50, 30, 0);
+            MainCamera[User_Controll.Intersection].transform.localPosition = new Vector3(-50, 30, 0);
             MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, 90, 0);
             streetText.GetComponent<TMP_Text>().text = "Stadium Street\n("+currentPostionOfCamera[User_Controll.Intersection] + ")";
 
@@ -48,7 +48,7 @@ public class User_Controll : MonoBehaviour
         else if (currentPostionOfCamera[User_Controll.Intersection] == "South")
         {
 
-            MainCamera[User_Controll.Intersection].transform.position = new Vector3(0, 30, -50);
+            MainCamera[User_Controll.Intersection].transform.localPosition = new Vector3(0, 30, -50);
             MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, 0, 0);
             streetText.GetComponent<TMP_Text>().text = "University Street\n("+currentPostionOfCamera[User_Controll.Intersection] + ")";
 
@@ -56,7 +56,7 @@ public class User_Controll : MonoBehaviour
         else if (currentPostionOfCamera[User_Controll.Intersection] == "East")
         {
 
-            MainCamera[User_Controll.Intersection].transform.position = new Vector3(50, 30, 0);
+            MainCamera[User_Controll.Intersection].transform.localPosition = new Vector3(50, 30, 0);
             MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, -90, 0);
             streetText.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera[User_Controll.Intersection] + ")";
 
@@ -103,25 +103,34 @@ public class User_Controll : MonoBehaviour
     public void MoveCamera(int intersection)
     {
         // Camera Updating 
+        
         if (updatePostion[intersection] != "" && updatePostion[intersection] != currentPostionOfCamera[intersection])
         {
-            string animation = currentPostionOfCamera[intersection] + "_To_" + updatePostion[intersection];
-            MainCamera[intersection].GetComponent<Animation>().Play(animation);
+            if (User_Controll.Intersection == intersection) {
+                string animation = currentPostionOfCamera[intersection] + "_To_" + updatePostion[intersection];
+                MainCamera[intersection].GetComponent<Animation>().Play(animation);
+                
+            }
             currentPostionOfCamera[intersection] = updatePostion[intersection];
-            if (currentPostionOfCamera[intersection] == "North" || currentPostionOfCamera[intersection] == "South")
+            if (User_Controll.Intersection == intersection)
             {
-                if (User_Controll.Intersection == 0) {
-                    streetText.GetComponent<TMP_Text>().text = "University Street\n(" + currentPostionOfCamera[intersection] + ")";
+                if (currentPostionOfCamera[intersection] == "North" || currentPostionOfCamera[intersection] == "South")
+                {
+                    if (User_Controll.Intersection == 0)
+                    {
+                        streetText.GetComponent<TMP_Text>().text = "University Street\n(" + currentPostionOfCamera[intersection] + ")";
+                    }
+                    else
+                    {
+                        streetText.GetComponent<TMP_Text>().text = "Park Street\n(" + currentPostionOfCamera[intersection] + ")";
+                    }
                 }
                 else
                 {
-                    streetText.GetComponent<TMP_Text>().text = "Park Street\n(" + currentPostionOfCamera[intersection] + ")";
+                    streetText.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera[intersection] + ")";
                 }
             }
-            else
-            {
-                streetText.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera[intersection] + ")";
-            }
+
             updatePostion[intersection] = "";
         }
     }
@@ -184,8 +193,44 @@ public class User_Controll : MonoBehaviour
         // Go to next intersection
         User_Controll.Intersection = (User_Controll.Intersection + 1) % 2;
 
+
         // Enable new Intersection Camera
         MainCamera[User_Controll.Intersection].SetActive(true);
+
+
+        // change the postion
+        if (currentPostionOfCamera[User_Controll.Intersection] == "North")
+        {
+
+            MainCamera[User_Controll.Intersection].transform.localPosition = new Vector3(0, 30, 50);
+            MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, 180, 0);
+            streetText.GetComponent<TMP_Text>().text = "University Street\n(" + currentPostionOfCamera[User_Controll.Intersection] + ")";
+
+        }
+        else if (currentPostionOfCamera[User_Controll.Intersection] == "West")
+        {
+
+            MainCamera[User_Controll.Intersection].transform.localPosition = new Vector3(-50, 30, 0);
+            MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, 90, 0);
+            streetText.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera[User_Controll.Intersection] + ")";
+
+        }
+        else if (currentPostionOfCamera[User_Controll.Intersection] == "South")
+        {
+
+            MainCamera[User_Controll.Intersection].transform.localPosition = new Vector3(0, 30, -50);
+            MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, 0, 0);
+            streetText.GetComponent<TMP_Text>().text = "University Street\n(" + currentPostionOfCamera[User_Controll.Intersection] + ")";
+
+        }
+        else if (currentPostionOfCamera[User_Controll.Intersection] == "East")
+        {
+
+            MainCamera[User_Controll.Intersection].transform.localPosition = new Vector3(50, 30, 0);
+            MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, -90, 0);
+            streetText.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera[User_Controll.Intersection] + ")";
+
+        }
 
         // Update Name of the intersection
         IntersectionText.GetComponent<TMP_Text>().text = "Intersection " + (User_Controll.Intersection + 1);

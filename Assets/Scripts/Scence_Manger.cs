@@ -1,12 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEditor.PackageManager;
+using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static TMPro.TMP_Dropdown;
 
 public class Scence_Manger : MonoBehaviour
 {
@@ -35,6 +38,9 @@ public class Scence_Manger : MonoBehaviour
     public GameObject Loading;
     public GameObject CheckBox;
 
+    private bool notadded = true;
+    private bool notremoved = true;
+
     public void FixedUpdate()
     {
     
@@ -47,16 +53,14 @@ public class Scence_Manger : MonoBehaviour
                 TradionalSystem.SetActive(true);
                 CarloadSystem.SetActive(false);
                 AISystem.SetActive(false);
-                //timeobject.SetActive(true);
-                //direction.SetActive(true);
+
             }
             else if (method.GetComponent<TMP_Dropdown>().value == 1)
             {
                 TradionalSystem.SetActive(false);
                 CarloadSystem.SetActive(true);
                 AISystem.SetActive(false);
-                //timeobject.SetActive(false);
-                //direction.SetActive(false);
+
             }
             else if (method.GetComponent<TMP_Dropdown>().value == 2)
             {
@@ -65,6 +69,29 @@ public class Scence_Manger : MonoBehaviour
                 AISystem.SetActive(true);
 
             }
+
+
+            if (Enviroment.transform.GetChild(1).GetComponent<TMP_Dropdown>().value == 1 )
+            {
+                if (notadded) {
+                    notadded = false;
+                    notremoved = true;
+                    method.GetComponent<TMP_Dropdown>().AddOptions(new List<String> { "AI Traffic Light System (multi)" });
+                }
+
+            }
+            else
+            {
+                notadded = true;
+                if (notremoved) {
+                    notremoved = false;
+                    OptionData option = method.GetComponent<TMP_Dropdown>().options.Find(o => string.Equals(o.text, "AI Traffic Light System (multi)"));
+                    method.GetComponent<TMP_Dropdown>().options.Remove(option);
+                }
+               
+            }
+            
+
         }
         
 
@@ -93,9 +120,13 @@ public class Scence_Manger : MonoBehaviour
         {
             algorthim = "CarLoad Based Traffic Light System";
         }
-        else
+        else if(meth == 2)
         {
             algorthim = "AI Traffic Light System";
+        }
+        else
+        {
+            algorthim = "AI Traffic Light System (multi)";
         }
 
         // Times of the traffic lights

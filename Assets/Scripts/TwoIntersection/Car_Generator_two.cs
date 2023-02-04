@@ -20,6 +20,7 @@ public class Car_Generator_two : MonoBehaviour
     private Transform[] parents;
     private Transform[] TurningPathsLeft;
     private Transform[] TurningPathsRight;
+    private static int num = 0;
     private static int NameCarNumber = 1;
     private static int NameTruckNumber = 1;
     private static int NameEmergencyNumber = 1;
@@ -59,6 +60,8 @@ public class Car_Generator_two : MonoBehaviour
         TurningPathsRight[1] = Intersection.transform.Find("Turning Paths").Find("Right").Find("Turnining Right Path West").transform;
         TurningPathsRight[2] = Intersection.transform.Find("Turning Paths").Find("Right").Find("Turnining Right Path South").transform;
         TurningPathsRight[3] = Intersection.transform.Find("Turning Paths").Find("Right").Find("Turnining Right Path East").transform;
+
+        
 
         /*
         if (CarsToGenerate == 22)
@@ -108,17 +111,17 @@ public class Car_Generator_two : MonoBehaviour
                     {
                         newCar.name = "Car " + NameCarNumber++;
                     }
-                    
+
                 }
             }
-                       
+
 
             CarsToGenerate = 0;
             return;
         }
          */
 
-        GenerateCar();
+         GenerateCar();
 
     }
 
@@ -158,9 +161,17 @@ public class Car_Generator_two : MonoBehaviour
         GenerateCrsForDirection(nums["eastCars"], 3, selector);
 
 
+        Car_Generator_two.num++;
+        if (Car_Generator_two.num == 2)
+        {
+            Car_Generator_two.NameCarNumber = 1;
+            Car_Generator_two.NameTruckNumber = 1;
+            Car_Generator_two.NameEmergencyNumber = 1;
+            Car_Generator_two.NameBusNumber = 1;
+            Car_Generator_two.num = 0;
+        }
 
 
- 
 
 
     }
@@ -358,8 +369,11 @@ public class Car_Generator_two : MonoBehaviour
 
             frontCarRight -= (newCar.transform.forward * (newCar.GetComponent<BoxCollider>().size.z + 3));
 
+           
+
         }
 
+        
         //yield return null;
     }
 }
