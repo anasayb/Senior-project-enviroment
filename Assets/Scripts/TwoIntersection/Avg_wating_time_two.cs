@@ -125,7 +125,7 @@ public class Avg_wating_time_two : MonoBehaviour
                 StartCoroutine(db.SaveWatingTime(new Dictionary<string, dataTwoIntersection>(waitingTimes))); ;
                 //while (e.MoveNext()) ;
                 
-                Summary.CurrentRunSummary();
+                SummaryTwo.CurrentRunSummary();
                 stored = true;
 
             }

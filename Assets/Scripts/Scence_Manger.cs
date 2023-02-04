@@ -18,10 +18,12 @@ public class Scence_Manger : MonoBehaviour
     public static int startingNumberOfCars = 22;
     public static string algorthim;
     public static bool EmergencyCar;
+    public static int inv = 0;
 
     public GameObject direction;
     public GameObject[] timeInputs;
     public GameObject timeobject;
+    public GameObject Enviroment;
     public GameObject method;
     public GameObject TotalNumberOfCars;
     public GameObject TradionalSystem;
@@ -142,8 +144,16 @@ public class Scence_Manger : MonoBehaviour
             EmergencyCar = false;
         }
 
-        SceneManager.LoadScene("SampleScene");
-     
+        if (Enviroment.transform.GetChild(1).GetComponent<TMP_Dropdown>().value == 0) {
+            inv = 0;
+            SceneManager.LoadScene("OneIntersectionScene");
+        }
+        else if(Enviroment.transform.GetChild(1).GetComponent<TMP_Dropdown>().value == 1)
+        {
+            inv = 1;
+            SceneManager.LoadScene("TwoIntersectionScene");
+        }
+
     }
 
 
@@ -156,7 +166,14 @@ public class Scence_Manger : MonoBehaviour
     public void Rerun()
     {
         //SceneManager.LoadScene("SampleScene");
-        SceneManager.LoadScene("SampleScene");
+        if (inv == 0)
+        {
+            SceneManager.LoadScene("OneIntersectionScene");
+        }
+        else if (inv == 1)
+        {
+            SceneManager.LoadScene("TwoIntersectionScene");
+        }
     }
 
     /*
