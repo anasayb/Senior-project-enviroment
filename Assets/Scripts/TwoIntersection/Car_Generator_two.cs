@@ -26,7 +26,7 @@ public class Car_Generator_two : MonoBehaviour
     private static int NameBusNumber = 1; 
     private bool emergency = false;
 
-    Vector3[] startPos = {  new Vector3(6.97998f, 1, -33.25642f), new Vector3(13.5f, 1, -33.25642f),
+    Vector3[] startPos = {  new Vector3(6.97998f, 1, -33.25642f), new Vector3(13.35f, 1, -33.25642f),
                             new Vector3(32.31f, 1, 6.62f), new Vector3(32.31f, 1, 13.07f),
                             new Vector3(-6.68f, 1, 33.73298f), new Vector3(-13.4f, 1, 33.90339f),
                             new Vector3(-33.0f, 1, -6.8f), new Vector3(-33.0f, 1, -13.16f)};
@@ -232,6 +232,7 @@ public class Car_Generator_two : MonoBehaviour
             frontCarLeft.y = CarsPrefabs[carIndex].GetComponent<BoxCollider>().size.y / 2 + 0.5f;
 
             GameObject newCar = Instantiate(CarsPrefabs[carIndex], transform.localPosition + frontCarLeft, Quaternion.Euler(rot));
+            newCar.GetComponent<CarControllerTwo>().enabled = true;
             newCar.GetComponent<CarControllerTwo>().pathGourpLeft = TurningPathsLeft[streat];
             newCar.GetComponent<CarControllerTwo>().pathGourpRight = TurningPathsRight[streat];
             if (newCar.tag == "Truck")
@@ -328,6 +329,7 @@ public class Car_Generator_two : MonoBehaviour
             frontCarRight.y = CarsPrefabs[carIndex].GetComponent<BoxCollider>().size.y / 2 + 0.5f;
 
             newCar = Instantiate(CarsPrefabs[carIndex], transform.position + frontCarRight, Quaternion.Euler(rot));
+            newCar.GetComponent<CarControllerTwo>().enabled = true;
             newCar.GetComponent<CarControllerTwo>().pathGourpLeft = TurningPathsLeft[streat];
             newCar.GetComponent<CarControllerTwo>().pathGourpRight = TurningPathsRight[streat];
             newCar.transform.SetParent(parents[streat], true);

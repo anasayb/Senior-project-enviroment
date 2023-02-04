@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 4232081553518420811}
   - component: {fileID: 4232081553518420808}
   - component: {fileID: 4232081553518420809}
+  - component: {fileID: 7715708879592117942}
   m_Layer: 6
   m_Name: Truck 1
   m_TagString: Truck
@@ -197,7 +198,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4232081553518420807}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a034c244df3cd4843993d37473886f3c, type: 3}
   m_Name: 
@@ -221,6 +222,42 @@ MonoBehaviour:
   CurrentIntersection: 0
   CurrentDirection: 0
   sensorLength: 7
+  CarLay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
+  carInfo: {fileID: 0}
+  tent: {fileID: 2100000, guid: 5e54fa8db04e6224281cc927ac997350, type: 2}
+  sel: {fileID: 0}
+--- !u!114 &7715708879592117942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4232081553518420807}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e61416daac715bd439a044935ddf565b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wheels:
+  - {fileID: 4232081554848619903}
+  - {fileID: 4232081553106695470}
+  - {fileID: 4232081554753505666}
+  - {fileID: 4232081555010720319}
+  - {fileID: 4232081554195394613}
+  - {fileID: 4232081554896600673}
+  - {fileID: 4232081553128916445}
+  - {fileID: 4232081554799802257}
+  MAX_SPEED: 20
+  left: 0
+  right: 0
+  pathGourpLeft: {fileID: 0}
+  pathGourpRight: {fileID: 0}
+  distanceFromPath: 2
+  posForwardCenter: {x: 0, y: 0, z: 0}
+  sensorLength: 10
   CarLay:
     serializedVersion: 2
     m_Bits: 64

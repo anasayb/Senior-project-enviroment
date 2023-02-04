@@ -175,6 +175,7 @@ public class Car_Generator : MonoBehaviour
             frontCarLeft.y = CarsPrefabs[carIndex].GetComponent<BoxCollider>().size.y / 2 + 0.5f;
 
             GameObject newCar = Instantiate(CarsPrefabs[carIndex], frontCarLeft, Quaternion.Euler(rot));
+            newCar.GetComponent<CarController>().enabled = true;
             newCar.GetComponent<CarController>().pathGourpLeft = TurningPathsLeft[streat];
             newCar.GetComponent<CarController>().pathGourpRight = TurningPathsRight[streat];
             if (newCar.tag == "Truck")
@@ -264,6 +265,7 @@ public class Car_Generator : MonoBehaviour
             frontCarRight.y = CarsPrefabs[carIndex].GetComponent<BoxCollider>().size.y / 2 + 0.5f;
 
             newCar = Instantiate(CarsPrefabs[carIndex], frontCarRight, Quaternion.Euler(rot));
+            newCar.GetComponent<CarController>().enabled = true;
             newCar.GetComponent<CarController>().pathGourpLeft = TurningPathsLeft[streat];
             newCar.GetComponent<CarController>().pathGourpRight = TurningPathsRight[streat];
             newCar.transform.SetParent(parents[streat], true);

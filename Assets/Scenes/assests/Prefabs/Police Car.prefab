@@ -783,6 +783,7 @@ GameObject:
   - component: {fileID: 7996629673361467688}
   - component: {fileID: 7996629673361467689}
   - component: {fileID: 7996629673361467694}
+  - component: {fileID: 6937916541329387053}
   m_Layer: 6
   m_Name: Police Car
   m_TagString: Emergency
@@ -844,7 +845,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7996629673361467692}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a034c244df3cd4843993d37473886f3c, type: 3}
   m_Name: 
@@ -864,6 +865,38 @@ MonoBehaviour:
   CurrentIntersection: 0
   CurrentDirection: 0
   sensorLength: 7
+  CarLay:
+    serializedVersion: 2
+    m_Bits: 64
+  waitngTime: 0
+  carInfo: {fileID: 0}
+  tent: {fileID: 2100000, guid: 2d390730628f67047932c8804b15b617, type: 2}
+  sel: {fileID: 0}
+--- !u!114 &6937916541329387053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7996629673361467692}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e61416daac715bd439a044935ddf565b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wheels:
+  - {fileID: 7996629672699938935}
+  - {fileID: 7996629672026898447}
+  - {fileID: 7996629672308618911}
+  - {fileID: 7996629673012339722}
+  MAX_SPEED: 20
+  left: 0
+  right: 0
+  pathGourpLeft: {fileID: 0}
+  pathGourpRight: {fileID: 0}
+  distanceFromPath: 2
+  posForwardCenter: {x: 0, y: 0, z: 0}
+  sensorLength: 10
   CarLay:
     serializedVersion: 2
     m_Bits: 64
