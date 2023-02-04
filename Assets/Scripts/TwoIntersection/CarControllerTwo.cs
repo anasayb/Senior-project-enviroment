@@ -9,7 +9,7 @@ using UnityEditor.AssetImporters;
 using UnityEditorInternal;
 using UnityEngine;
 
-public class CarController : MonoBehaviour
+public class CarControllerTwo : MonoBehaviour
 {
     
     public WheelCollider[] wheels;
@@ -226,7 +226,7 @@ public class CarController : MonoBehaviour
     /// </summary>
     private void calculateWatingTime()
     {
-        if (AI.startCouting || Traditional_traffic_Controller.startCouting || Basic_algo.startCouting) {
+        if (AI_two_single.startCouting || Traditional_traffic_Controller.startCouting || Basic_algo.startCouting) {
             Ray ray = new Ray(transform.position, transform.forward);
             RaycastHit h;
             if (Physics.Raycast(ray, out h, 230, ~CarLay) && deaccelrate)
@@ -241,7 +241,7 @@ public class CarController : MonoBehaviour
 
             }
 
-            Avg_wating_time.updateAvg(transform.name, waitngTime, left[0], right[0], left[1], right[1], CurrentIntersection, transform.parent.name);
+            Avg_wating_time_two.updateAvg(transform.name, waitngTime, left[0], right[0], left[1], right[1], CurrentIntersection, transform.parent.name);
 
             // Debug code
             // Debug.DrawRay(ray.origin, transform.forward*300, Color.blue);

@@ -212,7 +212,7 @@ public class Summary : MonoBehaviour
         Transform congestion = summary.transform.Find("Congestion");
         for (int i = 1; i < congestion.childCount; i++)
         {
-                congestion.GetChild(i).GetChild(1).GetComponent<TMP_Text>().text = Avg_wating_time.congestion[0][i -1].ToString("F2");
+                congestion.GetChild(i).GetChild(1).GetComponent<TMP_Text>().text = Avg_wating_time.congestion[i-1].ToString("F2");
         }
 
 
@@ -229,20 +229,20 @@ public class Summary : MonoBehaviour
         foreach (var item in Data)
         {
 
-            if (item.Value.waiting_time[0] > mx)
+            if (item.Value.waiting_time > mx)
             {
-                mx = item.Value.waiting_time[0];
+                mx = item.Value.waiting_time;
             }
 
             GameObject newRow = GameObject.Instantiate(row);
             // Car name
             newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = item.Key;
             // Waiting Time
-            newRow.transform.GetChild(1).GetComponent<TMP_Text>().text = (((int)(item.Value.waiting_time[0] * 100)) / 100f).ToString("F2");
+            newRow.transform.GetChild(1).GetComponent<TMP_Text>().text = (((int)(item.Value.waiting_time * 100)) / 100f).ToString("F2");
             // Start Direction
             newRow.transform.GetChild(2).GetComponent<TMP_Text>().text = item.Value.streat;
             // Turning
-            newRow.transform.GetChild(3).GetComponent<TMP_Text>().text = item.Value.Turn1;
+            newRow.transform.GetChild(3).GetComponent<TMP_Text>().text = item.Value.direction;
             newRow.transform.SetParent(cont.transform);
         }
         row.SetActive(false);

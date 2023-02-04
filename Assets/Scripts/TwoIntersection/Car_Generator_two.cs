@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 
-public class Car_Generator : MonoBehaviour
+public class Car_Generator_two : MonoBehaviour
 {
     public GameObject[] CarsPrefabs;
     public GameObject[] Streats;
@@ -232,8 +232,8 @@ public class Car_Generator : MonoBehaviour
             frontCarLeft.y = CarsPrefabs[carIndex].GetComponent<BoxCollider>().size.y / 2 + 0.5f;
 
             GameObject newCar = Instantiate(CarsPrefabs[carIndex], transform.localPosition + frontCarLeft, Quaternion.Euler(rot));
-            newCar.GetComponent<CarController>().pathGourpLeft = TurningPathsLeft[streat];
-            newCar.GetComponent<CarController>().pathGourpRight = TurningPathsRight[streat];
+            newCar.GetComponent<CarControllerTwo>().pathGourpLeft = TurningPathsLeft[streat];
+            newCar.GetComponent<CarControllerTwo>().pathGourpRight = TurningPathsRight[streat];
             if (newCar.tag == "Truck")
             {
                 newCar.name = "Truck " + NameTruckNumber++;
@@ -253,12 +253,12 @@ public class Car_Generator : MonoBehaviour
             }
             
             newCar.transform.SetParent(parents[streat], true);
-            newCar.GetComponent<CarController>().sel = selector;
-            newCar.GetComponent<CarController>().carInfo = GameObject.Find("Canvas").transform.Find("CarInfo").gameObject;
-            newCar.GetComponent<CarController>().left[0] = turn;
-            newCar.GetComponent<CarController>().left[1] = turn;
-            newCar.GetComponent<CarController>().CurrentIntersection = Intersection.name[Intersection.name.Length-1] - '0';
-            newCar.GetComponent<CarController>().CurrentDirection = streat;    
+            newCar.GetComponent<CarControllerTwo>().sel = selector;
+            newCar.GetComponent<CarControllerTwo>().carInfo = GameObject.Find("Canvas").transform.Find("CarInfo").gameObject;
+            newCar.GetComponent<CarControllerTwo>().left[0] = turn;
+            newCar.GetComponent<CarControllerTwo>().left[1] = turn;
+            newCar.GetComponent<CarControllerTwo>().CurrentIntersection = Intersection.name[Intersection.name.Length-1] - '0';
+            newCar.GetComponent<CarControllerTwo>().CurrentDirection = streat;    
 
             frontCarLeft -= (newCar.transform.forward * (newCar.GetComponent<BoxCollider>().size.z + 3));
 
@@ -328,15 +328,15 @@ public class Car_Generator : MonoBehaviour
             frontCarRight.y = CarsPrefabs[carIndex].GetComponent<BoxCollider>().size.y / 2 + 0.5f;
 
             newCar = Instantiate(CarsPrefabs[carIndex], transform.position + frontCarRight, Quaternion.Euler(rot));
-            newCar.GetComponent<CarController>().pathGourpLeft = TurningPathsLeft[streat];
-            newCar.GetComponent<CarController>().pathGourpRight = TurningPathsRight[streat];
+            newCar.GetComponent<CarControllerTwo>().pathGourpLeft = TurningPathsLeft[streat];
+            newCar.GetComponent<CarControllerTwo>().pathGourpRight = TurningPathsRight[streat];
             newCar.transform.SetParent(parents[streat], true);
-            newCar.GetComponent<CarController>().sel = selector;
-            newCar.GetComponent<CarController>().carInfo = GameObject.Find("Canvas").transform.Find("CarInfo").gameObject;
-            newCar.GetComponent<CarController>().right[0] = turn;
-            newCar.GetComponent<CarController>().right[1] = turn;
-            newCar.GetComponent<CarController>().CurrentIntersection = Intersection.name[Intersection.name.Length - 1] - '0';
-            newCar.GetComponent<CarController>().CurrentDirection = streat;
+            newCar.GetComponent<CarControllerTwo>().sel = selector;
+            newCar.GetComponent<CarControllerTwo>().carInfo = GameObject.Find("Canvas").transform.Find("CarInfo").gameObject;
+            newCar.GetComponent<CarControllerTwo>().right[0] = turn;
+            newCar.GetComponent<CarControllerTwo>().right[1] = turn;
+            newCar.GetComponent<CarControllerTwo>().CurrentIntersection = Intersection.name[Intersection.name.Length - 1] - '0';
+            newCar.GetComponent<CarControllerTwo>().CurrentDirection = streat;
             if (newCar.tag == "Truck")
             {
                 newCar.name = "Truck " + NameTruckNumber++;

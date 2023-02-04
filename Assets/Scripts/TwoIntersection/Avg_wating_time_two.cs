@@ -8,7 +8,7 @@ using TMPro;
 using UnityEngine;
 
 
-public struct data
+public struct dataTwoIntersection
 {
     public float[] waiting_time;
     public string streat;
@@ -18,12 +18,12 @@ public struct data
 }
 
 
-public class Avg_wating_time : MonoBehaviour
+public class Avg_wating_time_two : MonoBehaviour
 {
 
     public static float Avg_wating = 0;
     public static float numberOfCars = 0;
-    public static Dictionary<string, data> waitingTimes;
+    public static Dictionary<string, dataTwoIntersection> waitingTimes;
     public static float RunningTime;
     public static float[] FlowRate = { 0, 0 };
     public static bool FlowCalcualted;
@@ -43,20 +43,20 @@ public class Avg_wating_time : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Avg_wating_time.Avg_wating = 0;
-        Avg_wating_time.numberOfCars = 0;
-        Avg_wating_time.waitingTimes = new Dictionary<string, data>();
-        Avg_wating_time.RunningTime = 0;
-        Avg_wating_time.FlowRate[0] =  0;
-        Avg_wating_time.FlowRate[1] = 0;
-        Avg_wating_time.FlowCalcualted = false;
-        Avg_wating_time.congestion = new float[2][];
-        Avg_wating_time.congestion[0] = new float[4];
-        Avg_wating_time.congestion[1] = new float[4];
+        Avg_wating_time_two.Avg_wating = 0;
+        Avg_wating_time_two.numberOfCars = 0;
+        Avg_wating_time_two.waitingTimes = new Dictionary<string, dataTwoIntersection>();
+        Avg_wating_time_two.RunningTime = 0;
+        Avg_wating_time_two.FlowRate[0] =  0;
+        Avg_wating_time_two.FlowRate[1] = 0;
+        Avg_wating_time_two.FlowCalcualted = false;
+        Avg_wating_time_two.congestion = new float[2][];
+        Avg_wating_time_two.congestion[0] = new float[4];
+        Avg_wating_time_two.congestion[1] = new float[4];
         for (int i = 0; i < 4; i++)
         {
-            Avg_wating_time.congestion[0][i] = 0;
-            Avg_wating_time.congestion[1][i] = 0;
+            Avg_wating_time_two.congestion[0][i] = 0;
+            Avg_wating_time_two.congestion[1][i] = 0;
         }
 
         streets = new CarCounter[2][];
@@ -106,7 +106,7 @@ public class Avg_wating_time : MonoBehaviour
             if (!stored)
             {
                 // Database
-                DatabaseConnection db = GameObject.Find("Database").GetComponent<DatabaseConnection>();
+                DatabaseConnectionTwo db = GameObject.Find("Database").GetComponent<DatabaseConnectionTwo>();
 
                 // Change the GUI
                 CarInfo.SetActive(false);
@@ -117,12 +117,12 @@ public class Avg_wating_time : MonoBehaviour
                 // Avreging the congestion
                 for(int i = 0; i < 4; i++)
                 {
-                   Avg_wating_time.congestion[0][i] = Avg_wating_time.congestion[0][i] / (((int)(RunningTime * 100)) / 100f);
-                   Avg_wating_time.congestion[1][i] = Avg_wating_time.congestion[1][i] / (((int)(RunningTime * 100)) / 100f);
+                   Avg_wating_time_two.congestion[0][i] = Avg_wating_time_two.congestion[0][i] / (((int)(RunningTime * 100)) / 100f);
+                   Avg_wating_time_two.congestion[1][i] = Avg_wating_time_two.congestion[1][i] / (((int)(RunningTime * 100)) / 100f);
                 }
 
                 // store the run inforamtion and show the summary
-                StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes))); ;
+                StartCoroutine(db.SaveWatingTime(new Dictionary<string, dataTwoIntersection>(waitingTimes))); ;
                 //while (e.MoveNext()) ;
                 
                 Summary.CurrentRunSummary();
@@ -134,11 +134,11 @@ public class Avg_wating_time : MonoBehaviour
         {
 
             // Increase the running time of the simulation
-            Avg_wating_time.RunningTime += Time.deltaTime;
-            runningTimeText.GetComponent<TMP_Text>().text = "Running Time: " + Avg_wating_time.RunningTime.ToString("F2") + " s";
+            Avg_wating_time_two.RunningTime += Time.deltaTime;
+            runningTimeText.GetComponent<TMP_Text>().text = "Running Time: " + Avg_wating_time_two.RunningTime.ToString("F2") + " s";
 
             // Calculate the traffic flow
-            if (Avg_wating_time.RunningTime >= 60 && !FlowCalcualted)
+            if (Avg_wating_time_two.RunningTime >= 60 && !FlowCalcualted)
             {
                 FlowRate[0] = (streets[0][0].leaveCarsCounter + streets[0][1].leaveCarsCounter + streets[0][2].leaveCarsCounter + streets[0][3].leaveCarsCounter);
                 FlowRate[1] = (streets[1][0].leaveCarsCounter + streets[1][1].leaveCarsCounter + streets[1][2].leaveCarsCounter + streets[1][3].leaveCarsCounter);
@@ -172,14 +172,14 @@ public class Avg_wating_time : MonoBehaviour
     public static void updateAvg(string name, float waitingTime, bool left, bool right, bool left2, bool right2, int intersection, string st)
     {
         if (waitingTimes.ContainsKey(name))
-        {   
-            data t = waitingTimes[name];
+        {
+            dataTwoIntersection t = waitingTimes[name];
             t.waiting_time[intersection] = waitingTime;
             waitingTimes[name] = t;
         }
         else
         {
-            data temp = new data();
+            dataTwoIntersection temp = new dataTwoIntersection();
             temp.waiting_time = new float[2];
             temp.waiting_time[0] = temp.waiting_time[1] = - 1;
             temp.waiting_time[intersection] = waitingTime;
