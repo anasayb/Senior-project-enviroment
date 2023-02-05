@@ -49,10 +49,23 @@ public class SummaryTwo : MonoBehaviour
         // Starting Direction
         summary.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = tableInfo[tableInfo.Length - 1][0].ToString().ToUpper() + tableInfo[tableInfo.Length - 1].Substring(1);
 
-        // Avg_waiting
+        //OVerall Avg_waiting
         float Avg_wating = 0;
-        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "AVG#Waiting#time") Avg_wating = float.Parse(s.Split("_")[1]);
-        summary.transform.Find("AVG").Find("Time0").GetComponent<TMP_Text>().text = (((int)(Avg_wating * 100)) / 100f).ToString("F2") + " s";
+        foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Overall#AVG#Waiting#time") Avg_wating = float.Parse(s.Split("_")[1]);
+        summary.transform.Find("OverallAvg").Find("Time").GetComponent<TMP_Text>().text = (((int)(Avg_wating * 100)) / 100f).ToString("F2") + " s";
+
+        //Avg_waiting
+        float Avg_wating0 = 0, Avg_wating1 =0;
+        foreach (string s in CarsData)
+        {
+            if (s != "" && s.Split("_")[0] == "AVG#Waiting#time")
+            {
+                Avg_wating0 = float.Parse(s.Split("_")[1]);
+                Avg_wating1 = float.Parse(s.Split("_")[2]);
+            }
+        }
+        summary.transform.Find("AVG").Find("Time0").GetComponent<TMP_Text>().text = (((int)(Avg_wating0 * 100)) / 100f).ToString("F2") + " s";
+        summary.transform.Find("AVG").Find("Time1").GetComponent<TMP_Text>().text = (((int)(Avg_wating1 * 100)) / 100f).ToString("F2") + " s";
 
         // Flow Rate
         float trafficFlow0 = 0, trafficFlow1 = 0;
@@ -237,10 +250,13 @@ public class SummaryTwo : MonoBehaviour
         {
             summary.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = "Dynamic";
         }
-        
+
+        // Overall Avg_waiting
+        summary.transform.Find("OverallAvg").Find("Time").GetComponent<TMP_Text>().text = (((int)(Avg_wating_time_two.Avg_wating * 100)) / 100f).ToString("F2") + " s";
 
         // Avg_waiting
-        summary.transform.Find("AVG").Find("Time0").GetComponent<TMP_Text>().text = (((int)(Avg_wating_time_two.Avg_wating * 100)) / 100f).ToString("F2") + " s";
+        summary.transform.Find("AVG").Find("Time0").GetComponent<TMP_Text>().text = (((int)(Avg_wating_time_two.Intersection_Avg_wating[0] * 100)) / 100f).ToString("F2") + " s";
+        summary.transform.Find("AVG").Find("Time1").GetComponent<TMP_Text>().text = (((int)(Avg_wating_time_two.Intersection_Avg_wating[1] * 100)) / 100f).ToString("F2") + " s";
 
         // Flow Rate
         summary.transform.Find("TrafficFlow").Find("Rate0").GetComponent<TMP_Text>().text = Avg_wating_time_two.FlowRate[0] +" Car/Minute";

@@ -244,7 +244,7 @@ public class DatabaseConnectionTwo : MonoBehaviour
             string name = Scence_Manger.startingNumberOfCars + "_ai#based_dynamic";
             table = name;
 
-        }else if (multiIA.GetComponent<AI_TLC_two_multi>().enabled == true)
+        }else if (multiIA.GetComponent<AI_two_multi>().enabled == true)
         {
             string name = Scence_Manger.startingNumberOfCars + "_ai#based#multi_dynamic";
             table = name;

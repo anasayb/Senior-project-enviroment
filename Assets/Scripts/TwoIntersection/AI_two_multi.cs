@@ -62,6 +62,8 @@ public class AI_two_multi : Agent
             return;
         }
 
+        start = true;
+
         // traffic lights
         trafficLights = new GameObject[2,4];
         for (int j = 0; j < 4; j++)
@@ -286,7 +288,7 @@ public class AI_two_multi : Agent
             }
             else if (timeVariable[intersection] >= time[intersection] - yellowLightDuration - 1 && timeVariable[intersection] < time[intersection] - yellowLightDuration)
             {
-                if (once[intersection])
+                if (once[intersection] && request == -1)
                 {
                     once[intersection] = false;
                     request = intersection;

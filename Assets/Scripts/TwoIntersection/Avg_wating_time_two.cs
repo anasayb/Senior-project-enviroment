@@ -1,10 +1,12 @@
 
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using TMPro;
+using TMPro.Examples;
 using UnityEngine;
 
 
@@ -22,6 +24,7 @@ public class Avg_wating_time_two : MonoBehaviour
 {
 
     public static float Avg_wating = 0;
+    public static float[] Intersection_Avg_wating = { 0, 0};
     public static float numberOfCars = 0;
     public static Dictionary<string, dataTwoIntersection> waitingTimes;
     public static float RunningTime;
@@ -44,6 +47,10 @@ public class Avg_wating_time_two : MonoBehaviour
     void Start()
     {
         Avg_wating_time_two.Avg_wating = 0;
+        for (int i = 0; i < 2; i++)
+        {
+            Avg_wating_time_two.Intersection_Avg_wating[i] = 0;
+        }
         Avg_wating_time_two.numberOfCars = 0;
         Avg_wating_time_two.waitingTimes = new Dictionary<string, dataTwoIntersection>();
         Avg_wating_time_two.RunningTime = 0;
@@ -94,7 +101,6 @@ public class Avg_wating_time_two : MonoBehaviour
         // If all cars are disapeared, then finish the simulation
         if (numberOfCars == 0)
         {
-            Debug.Log(Avg_wating_time_two.Avg_wating);
 
             // Calculate the traffic flow if the running time is less than 1 min
             if (!FlowCalcualted)
@@ -255,22 +261,27 @@ public class Avg_wating_time_two : MonoBehaviour
             return;
         }
 
-        float sum = 0;
+        //float sum = 0;
+        float sum0 = 0, sum1 = 0;
+        float count0 = 0, count1 = 0;
         foreach (var item in waitingTimes)
         {
             if (item.Value.waiting_time[0] != -1)
             {
-                sum += item.Value.waiting_time[0];
+                sum0 += item.Value.waiting_time[0];
+                count0++;
             }
             if (item.Value.waiting_time[1] != -1)
             {
-                sum += item.Value.waiting_time[1];
+                sum1 += item.Value.waiting_time[1];
+                count1++;
             }
             
         }
 
-
-        Avg_wating = sum / waitingTimes.Count;
+        Intersection_Avg_wating[0] = sum0 / count0;
+        Intersection_Avg_wating[1] = sum1 / count1;
+        Avg_wating = (sum0+sum1) / waitingTimes.Count;
     }
 
 

@@ -195,6 +195,7 @@ public class CarControllerTwo : MonoBehaviour
                 if (hit.collider.name != transform.name && CurrentIntersection != (hit.collider.tag[hit.collider.tag.Length - 1] - '0'))
                 {
                     fixPostion();
+                    waitngTime = 0;
                     doneTurning = false;
                     currentIndexLeft = 0;
                     currentIndexRight = 0;
