@@ -94,6 +94,8 @@ public class Avg_wating_time_two : MonoBehaviour
         // If all cars are disapeared, then finish the simulation
         if (numberOfCars == 0)
         {
+            Debug.Log(Avg_wating_time_two.Avg_wating);
+
             // Calculate the traffic flow if the running time is less than 1 min
             if (!FlowCalcualted)
             {

@@ -300,7 +300,7 @@ public class AI_two_multi : Agent
                 {
                     timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
                 }
-                if (direct == nextDirect)
+                if (direct[intersection] == nextDirect[intersection])
                 {
                     time[intersection] = nextTime[intersection];
                     direct[intersection] = nextDirect[intersection];
