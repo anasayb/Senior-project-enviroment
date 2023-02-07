@@ -204,7 +204,13 @@ public class User_Controll : MonoBehaviour
 
             MainCamera[User_Controll.Intersection].transform.localPosition = new Vector3(0, 30, 50);
             MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, 180, 0);
-            streetText.GetComponent<TMP_Text>().text = "University Street\n(" + currentPostionOfCamera[User_Controll.Intersection] + ")";
+            if (User_Controll.Intersection == 0) {
+                streetText.GetComponent<TMP_Text>().text = "University Street\n(" + currentPostionOfCamera[User_Controll.Intersection] + ")";
+            }
+            else
+            {
+                streetText.GetComponent<TMP_Text>().text = "Park Street\n(" + currentPostionOfCamera[User_Controll.Intersection] + ")";
+            }
 
         }
         else if (currentPostionOfCamera[User_Controll.Intersection] == "West")
@@ -220,7 +226,14 @@ public class User_Controll : MonoBehaviour
 
             MainCamera[User_Controll.Intersection].transform.localPosition = new Vector3(0, 30, -50);
             MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, 0, 0);
-            streetText.GetComponent<TMP_Text>().text = "University Street\n(" + currentPostionOfCamera[User_Controll.Intersection] + ")";
+            if (User_Controll.Intersection == 0)
+            {
+                streetText.GetComponent<TMP_Text>().text = "University Street\n(" + currentPostionOfCamera[User_Controll.Intersection] + ")";
+            }
+            else
+            {
+                streetText.GetComponent<TMP_Text>().text = "Park Street\n(" + currentPostionOfCamera[User_Controll.Intersection] + ")";
+            }
 
         }
         else if (currentPostionOfCamera[User_Controll.Intersection] == "East")
