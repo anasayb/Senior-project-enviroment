@@ -646,19 +646,26 @@ public class CarControllerTwo : MonoBehaviour
             carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString("0.00") + " s";
             sel.transform.position = new Vector3(transform.position.x, 5f, transform.position.z);
 
-            /*
-            if (colide == -1)
+            string[] direction = { "North", "West", "South", "East" };
+            carInfo.transform.Find("Intersection Enter").GetComponent<TMP_Text>().text = "Intersection Enter Direction: " + direction[CurrentDirection];
+
+            // Display the intersection which the car at
+            carInfo.transform.Find("Intersection").GetComponent<TMP_Text>().text = "Intersection " + (CurrentIntersection+1);
+
+
+            if (!(right[CurrentIntersection] || left[CurrentIntersection]))
             {
-                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
+                carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(CurrentDirection + 2) % 4];
             }
-            else
+            else if (right[CurrentIntersection])
             {
-                Ray ray = new Ray(transform.position, transform.forward);
-                RaycastHit h;
-                Physics.Raycast(ray, out h, 200, ~CarLay);
-                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: " + h.distance + " m";
+                carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(CurrentDirection + 1) % 4];
             }
-            */
+            else if (left[CurrentIntersection])
+            {
+                carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(CurrentDirection + 3) % 4];
+            }
+
 
             // To enbale the animation
             sel.GetComponentInChildren<Animation>().enabled = true;
@@ -686,49 +693,28 @@ public class CarControllerTwo : MonoBehaviour
             carInfo.transform.Find("Car Name").GetComponent<TMP_Text>().text = name;
             carInfo.transform.Find("Speed").GetComponent<TMP_Text>().text = "Speed: " + Math.Floor(GetComponent<Rigidbody>().velocity.magnitude).ToString("F2") + " km/s";
             carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + (((int)(waitngTime * 100)) / 100f).ToString() + " s";
-            carInfo.transform.Find("Intersection Enter").GetComponent<TMP_Text>().text = "Intersection Enter Direction: " + transform.parent.name;
 
             string[] direction = { "North", "West", "South", "East" };
-            int index = 0;
-            for (int i = 0; i < direction.Length; i++)
+            carInfo.transform.Find("Intersection Enter").GetComponent<TMP_Text>().text = "Intersection Enter Direction: " + direction[CurrentDirection];
+
+            // Display the intersection which the car at
+            carInfo.transform.Find("Intersection").GetComponent<TMP_Text>().text = "Intersection " + (CurrentIntersection+1);
+
+
+            if (!(right[CurrentIntersection] || left[CurrentIntersection]))
             {
-                if (direction[i] == transform.parent.name)
-                {
-                    index = i;
-                }
+                carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(CurrentDirection + 2) % 4];
+            }
+            else if (right[CurrentIntersection])
+            {
+                carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(CurrentDirection + 1) % 4];
+            }
+            else if (left[CurrentIntersection])
+            {
+                carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(CurrentDirection + 3) % 4];
             }
 
-            /*
-            if (!(right || left))
-            {
-                carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 2) % 4];
-            }
-            else if (right)
-            {
-                carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 1) % 4];
-            }
-            else if (left)
-            {
-                carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 3) % 4];
-            }
-
-            */
-
-            //carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
-
-            /*
-            if (colide == -1)
-            {
-                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
-            }
-            else
-            {
-                Ray ray = new Ray(transform.position, transform.forward);
-                RaycastHit h;
-                Physics.Raycast(ray, out h, 200, ~CarLay);
-                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: " + h.distance + " m";
-            }
-            */
+            
         }
 
     }

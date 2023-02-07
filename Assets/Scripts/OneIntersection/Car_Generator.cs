@@ -59,10 +59,40 @@ public class Car_Generator : MonoBehaviour
 
         if (CarsToGenerate == 22)
         {
+
             template.SetActive(true);
             transform.name = "Garbage";
             transform.gameObject.SetActive(false);
             template.name = "Cars";
+
+            if (emergency)
+            {
+                Transform old = template.transform.Find("South").Find("Car 20");
+                GameObject newCar = Instantiate(CarsPrefabs[CarsPrefabs.Length-2], old.position, old.rotation);
+                newCar.transform.SetParent(old.parent);
+                newCar.name = "Police 2";
+                newCar.GetComponent<CarController>().enabled = true;
+                newCar.GetComponent<CarController>().pathGourpLeft = TurningPathsLeft[2];
+                newCar.GetComponent<CarController>().pathGourpRight = TurningPathsRight[2];
+                newCar.GetComponent<CarController>().sel = selector;
+                newCar.GetComponent<CarController>().carInfo = GameObject.Find("Canvas").transform.Find("CarInfo").gameObject;
+                Destroy(old.gameObject);
+
+                Transform old2 = template.transform.Find("West").Find("Car 21");
+                GameObject newCar2 = Instantiate(CarsPrefabs[3], old2.position, old2.rotation);
+                newCar2.transform.SetParent(old2.parent);
+                newCar2.name = "Police 1";
+                newCar2.GetComponent<CarController>().enabled = true;
+                newCar2.GetComponent<CarController>().pathGourpLeft = TurningPathsLeft[1];
+                newCar2.GetComponent<CarController>().pathGourpRight = TurningPathsRight[1];
+                newCar2.GetComponent<CarController>().sel = selector;
+                newCar2.GetComponent<CarController>().carInfo = GameObject.Find("Canvas").transform.Find("CarInfo").gameObject;
+                Destroy(old2.gameObject);
+
+
+            }
+
+
             CarsToGenerate = 0;
             return;
         }
