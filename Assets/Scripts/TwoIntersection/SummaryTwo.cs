@@ -10,8 +10,8 @@ public class SummaryTwo : MonoBehaviour
 {
     //public static GameObject summary;
 
-    private static Response res;
-    private static DatabaseConnectionTwo database;
+    //private static Response res;
+    //private static DatabaseConnectionTwo database;
 
     // Start is called before the first frame update
     void Start()
@@ -44,12 +44,25 @@ public class SummaryTwo : MonoBehaviour
 
         // Name of the method
         string nameOfAlgo = tableInfo[1].Replace("#", " ");
+        if (nameOfAlgo == "ai based")
+        {
+            nameOfAlgo = "AI based";
+        }
         summary.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = nameOfAlgo[0].ToString().ToUpper() + nameOfAlgo.Substring(1) + " Traffic Light System";
 
         // Starting Direction
-        summary.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = tableInfo[tableInfo.Length - 1][0].ToString().ToUpper() + tableInfo[tableInfo.Length - 1].Substring(1);
+        bool EmergencyCar = false;
+        if (tableInfo[tableInfo.Length - 1] == "emergency")
+        {
+            summary.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = tableInfo[tableInfo.Length - 2][0].ToString().ToUpper() + tableInfo[tableInfo.Length - 2].Substring(1);
+            EmergencyCar = true;
+        }
+        else
+        {
+            summary.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = tableInfo[tableInfo.Length - 1][0].ToString().ToUpper() + tableInfo[tableInfo.Length - 1].Substring(1);
+        }
 
-        //OVerall Avg_waiting
+        //Overall Avg_waiting
         float Avg_wating = 0;
         foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Overall#AVG#Waiting#time") Avg_wating = float.Parse(s.Split("_")[1]);
         summary.transform.Find("OverallAvg").Find("Time").GetComponent<TMP_Text>().text = (((int)(Avg_wating * 100)) / 100f).ToString("F2") + " s";
@@ -100,7 +113,14 @@ public class SummaryTwo : MonoBehaviour
 
 
         // Cars Number
-        summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = (int.Parse(tableInfo[0]) * 2).ToString() +" Cars";
+        if (EmergencyCar)
+        {
+            summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = (int.Parse(tableInfo[0])*2 - 2).ToString() + " Cars + 2 Emergency Car";
+        }
+        else
+        {
+            summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = (int.Parse(tableInfo[0]) * 2) + " Cars";
+        }
 
         // Cars informations
         GameObject cont = summary.transform.Find("CarInfo").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;
@@ -173,7 +193,23 @@ public class SummaryTwo : MonoBehaviour
             }
 
             GameObject newRow = GameObject.Instantiate(row);
-            string name = item.Split('_')[1][0].ToString().ToUpper() + item.Split('_')[1].Substring(1).Replace("#", " ") + " system-" + item.Split('_')[0] + "Cars";
+            string[] RunInfo = item.Split("_");
+            if (RunInfo[1] == "ai#based")
+            {
+                RunInfo[1] = "AI#based";
+            }
+            string name = RunInfo[1][0].ToString().ToUpper() + RunInfo[1].Split("#")[0].Substring(1) + "-" + RunInfo[0] + "Cars";
+            if (RunInfo[RunInfo.Length - 1] == "emergency")
+            {
+                name += "-EM";
+            }
+
+            // if tradional add directions timing
+            if (RunInfo[1] == "traditional")
+            {
+                name += "-N" + RunInfo[2].Substring(1) + "_W" + RunInfo[3].Substring(1) + "_S" + RunInfo[4].Substring(1) + "_E" + RunInfo[5].Substring(1);
+            }
+
             newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = " " + name;
             newRow.transform.SetParent(rec.transform);
             newRow.name = item;
@@ -273,8 +309,17 @@ public class SummaryTwo : MonoBehaviour
 
 
         // Cars Number
-        summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = (Scence_Manger.startingNumberOfCars*2).ToString() + " Cars";
+        if (Scence_Manger.EmergencyCar)
+        {
+            // Emergency car exist
+            summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = (Scence_Manger.startingNumberOfCars*2 - 2).ToString() + " Cars + 2 Emergency Car";
+        }
+        else
+        {
 
+            // No emergency car
+            summary.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = (Scence_Manger.startingNumberOfCars * 2).ToString() + " Cars";
+        }
 
         // Cars informations
         GameObject cont = summary.transform.Find("CarInfo").Find("Scroll View").Find("Viewport").GetChild(0).gameObject;
@@ -339,7 +384,23 @@ public class SummaryTwo : MonoBehaviour
             }
 
             GameObject newRow = GameObject.Instantiate(row);
-            string name = item.Split('_')[1][0].ToString().ToUpper() + item.Split('_')[1].Substring(1).Replace("#"," ") + " system-" + item.Split('_')[0] + "Cars";
+            string[] RunInfo = item.Split("_");
+            if (RunInfo[1] == "ai#based")
+            {
+                RunInfo[1] = "AI#based";
+            }
+            string name = RunInfo[1][0].ToString().ToUpper() + RunInfo[1].Split("#")[0].Substring(1) + "-" + RunInfo[0] + "Cars";
+            if (RunInfo[RunInfo.Length - 1] == "emergency")
+            {
+                name += "-EM";
+            }
+
+            // if tradional add directions timing
+            if (RunInfo[1] == "traditional")
+            {
+                name += "-N" + RunInfo[2].Substring(1) + "_W" + RunInfo[3].Substring(1) + "_S" + RunInfo[4].Substring(1) + "_E" + RunInfo[5].Substring(1);
+            }
+
             newRow.transform.GetChild(0).GetComponent<TMP_Text>().text = " " + name;
             newRow.transform.SetParent(rec.transform);
             newRow.name = item;

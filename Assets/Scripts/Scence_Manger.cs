@@ -118,11 +118,11 @@ public class Scence_Manger : MonoBehaviour
         }
         else if(meth == 1)
         {
-            algorthim = "CarLoad Based Traffic Light System";
+            algorthim = "Carload based Traffic Light System";
         }
         else if(meth == 2)
         {
-            algorthim = "AI Traffic Light System";
+            algorthim = "AI based Traffic Light System";
         }
         else
         {

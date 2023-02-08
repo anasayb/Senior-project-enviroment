@@ -54,7 +54,7 @@ public class AI : Agent
         AI.startCouting = false;
         cars = GameObject.Find("Cars");
         Intersection = (transform.parent.name[transform.name.Length - 1] - '0') - 1;
-        if (Scence_Manger.algorthim != "AI Traffic Light System")
+        if (Scence_Manger.algorthim != "AI based Traffic Light System")
         {
             GetComponent<AI>().enabled = false;
             return;
