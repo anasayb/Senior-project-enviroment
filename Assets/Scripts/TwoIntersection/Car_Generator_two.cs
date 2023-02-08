@@ -253,7 +253,7 @@ public class Car_Generator_two : MonoBehaviour
             }
             else if (newCar.tag == "Emergency")
             {
-                newCar.name = "Poilice " + NameEmergencyNumber++;
+                newCar.name = "Police " + NameEmergencyNumber++;
             }
             else if (newCar.tag == "Bus")
             {
@@ -356,7 +356,7 @@ public class Car_Generator_two : MonoBehaviour
             }
             else if (newCar.tag == "Emergency")
             {
-                newCar.name = "Poilice " + NameEmergencyNumber++;
+                newCar.name = "Police " + NameEmergencyNumber++;
             }
             else if (newCar.tag == "Bus")
             {

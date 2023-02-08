@@ -250,6 +250,11 @@ public class DatabaseConnectionTwo : MonoBehaviour
             table = name;
         }
 
+        // If the secence contain emergency car
+        if (Scence_Manger.EmergencyCar)
+        {
+            table += "_emergency";
+        }
 
         // check if a table with the same name is already exist
         int index = DatabaseConnectionTwo.tabelsNames.IndexOf(table);
