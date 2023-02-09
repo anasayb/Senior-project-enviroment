@@ -227,7 +227,7 @@ public class CarControllerTwo : MonoBehaviour
     /// </summary>
     private void calculateWatingTime()
     {
-        if (AI_two_single.startCouting || Traditional_traffic_Controller.startCouting || Basic_algo.startCouting) {
+        if (AI_two_single.startCouting || Traditional_traffic_Controller.startCouting || Basic_algo.startCouting || AI_two_multi.startCouting) {
             Ray ray = new Ray(transform.position, transform.forward);
             RaycastHit h;
             if (Physics.Raycast(ray, out h, 230, ~CarLay) && deaccelrate)

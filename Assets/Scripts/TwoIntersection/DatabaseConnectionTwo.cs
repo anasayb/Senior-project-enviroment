@@ -201,7 +201,7 @@ public class DatabaseConnectionTwo : MonoBehaviour
     /// /// <param name="TrafficLightController">Object of the traffic Light controller</param>
     public IEnumerator SaveWatingTime(Dictionary<string, dataTwoIntersection> watingTime)
     {
-        string table = "two_";
+        string table = "";
         if (TrafficLightController[0].GetComponent<Traditional_traffic_Controller>().enabled == true)
         {
 
@@ -244,7 +244,8 @@ public class DatabaseConnectionTwo : MonoBehaviour
             string name = Scence_Manger.startingNumberOfCars + "_ai#based_dynamic";
             table = name;
 
-        }else if (multiIA.GetComponent<AI_two_multi>().enabled == true)
+        }
+        else if (multiIA.GetComponent<AI_two_multi>().enabled == true)
         {
             string name = Scence_Manger.startingNumberOfCars + "_ai#based#multi_dynamic";
             table = name;

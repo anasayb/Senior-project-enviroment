@@ -56,7 +56,7 @@ public class AI_two_multi : Agent
     {
         AI_two_multi.startCouting = false;
 
-        if (Scence_Manger.algorthim != "AI Traffic Light System (multi)")
+        if (Scence_Manger.algorthim != "AI(multi) based Traffic Light System")
         {
             GetComponent<AI_two_multi>().enabled = false;
             return;
@@ -102,11 +102,11 @@ public class AI_two_multi : Agent
         if (CarCount[0,0].carsCounter + CarCount[0, 1].carsCounter + CarCount[0, 2].carsCounter + CarCount[0, 3].carsCounter != 0 || CarCount[1, 0].carsCounter + CarCount[1, 1].carsCounter + CarCount[1, 2].carsCounter + CarCount[1, 3].carsCounter != 0)
         {
             // check if the episode finish
-            if (Avg_wating_time_two.numberOfCars == 0  || Avg_wating_time_two.Avg_wating >= 200)
+            if (Avg_wating_time_two.numberOfCars == 0  || Avg_wating_time_two.Avg_wating >= 110)
             {
 
                 // Episode finish, Set reward according to result
-                SetReward(1 - (Avg_wating_time_two.Avg_wating / 200));
+                SetReward(1 - (Avg_wating_time_two.Avg_wating / 110));
 
                 // End Episode
                 //EndEpisode();
@@ -211,8 +211,8 @@ public class AI_two_multi : Agent
             sensor.AddObservation(CarCount[1, 2].carsCounter);
             sensor.AddObservation(CarCount[1, 3].carsCounter);
 
-            sensor.AddObservation(direct[request]);
-            sensor.AddObservation(time[request]);
+            sensor.AddObservation(direct[(request+1)%2]);
+            sensor.AddObservation(time[(request + 1) % 2]);
         }
 
     }

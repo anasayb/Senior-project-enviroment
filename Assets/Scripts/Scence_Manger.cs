@@ -126,7 +126,7 @@ public class Scence_Manger : MonoBehaviour
         }
         else
         {
-            algorthim = "AI Traffic Light System (multi)";
+            algorthim = "AI(multi) based Traffic Light System";
         }
 
         // Times of the traffic lights

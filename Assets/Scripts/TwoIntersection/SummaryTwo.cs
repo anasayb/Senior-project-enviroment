@@ -48,6 +48,10 @@ public class SummaryTwo : MonoBehaviour
         {
             nameOfAlgo = "AI based";
         }
+        else if (nameOfAlgo == "ai based multi")
+        {
+            nameOfAlgo = "AI(Multi) based";
+        }
         summary.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = nameOfAlgo[0].ToString().ToUpper() + nameOfAlgo.Substring(1) + " Traffic Light System";
 
         // Starting Direction
@@ -197,6 +201,10 @@ public class SummaryTwo : MonoBehaviour
             if (RunInfo[1] == "ai#based")
             {
                 RunInfo[1] = "AI#based";
+            }
+            else if (RunInfo[1] == "ai#based#multi")
+            {
+                RunInfo[1] = "AI-Multi#based";
             }
             string name = RunInfo[1][0].ToString().ToUpper() + RunInfo[1].Split("#")[0].Substring(1) + "-" + RunInfo[0] + "Cars";
             if (RunInfo[RunInfo.Length - 1] == "emergency")
@@ -388,6 +396,10 @@ public class SummaryTwo : MonoBehaviour
             if (RunInfo[1] == "ai#based")
             {
                 RunInfo[1] = "AI#based";
+            }
+            else if (RunInfo[1] == "ai#based#multi")
+            {
+                RunInfo[1] = "AI-Multi#based";
             }
             string name = RunInfo[1][0].ToString().ToUpper() + RunInfo[1].Split("#")[0].Substring(1) + "-" + RunInfo[0] + "Cars";
             if (RunInfo[RunInfo.Length - 1] == "emergency")
