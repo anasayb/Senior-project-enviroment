@@ -109,7 +109,7 @@ public class AI_two_multi : Agent
                 SetReward(1 - (Avg_wating_time_two.Avg_wating / 110));
 
                 // End Episode
-                //EndEpisode();
+                EndEpisode();
 
             }
             else
@@ -239,11 +239,11 @@ public class AI_two_multi : Agent
 
     private void TrafficLightControlling(int intersection)
     {
-        checkEmeregency(intersection);
-        if (currentEmergencyDirection[intersection] != -1)
-        {
-            return;
-        }
+        //checkEmeregency(intersection);
+        //if (currentEmergencyDirection[intersection] != -1)
+        //{
+        //    return;
+        // }
 
         if (!start || CarCount[0, 0].carsCounter + CarCount[0,1].carsCounter  + CarCount[0, 2].carsCounter + CarCount[0, 3].carsCounter + CarCount[1, 0].carsCounter + CarCount[1, 1].carsCounter + CarCount[1, 2].carsCounter + CarCount[1, 3].carsCounter != 0) {
 
@@ -275,7 +275,7 @@ public class AI_two_multi : Agent
                 AI_two_multi.startCouting = true;
             }
             timeVariable[intersection] += Time.deltaTime;
-            if (timeVariable[intersection] < time[intersection] - yellowLightDuration - 1)
+            if (timeVariable[intersection] < time[intersection] - yellowLightDuration )
             {
 
                 ChangeLightGreen(intersection, direct[intersection]);
@@ -286,35 +286,35 @@ public class AI_two_multi : Agent
                 }
 
             }
-            else if (timeVariable[intersection] >= time[intersection] - yellowLightDuration - 1 && timeVariable[intersection] < time[intersection] - yellowLightDuration)
-            {
-                if (once[intersection] && request == -1)
-                {
-                    once[intersection] = false;
-                    request = intersection;
-                    RequestDecision();
-                }
+            //else if (timeVariable[intersection] >= time[intersection] - yellowLightDuration - 1 && timeVariable[intersection] < time[intersection] - yellowLightDuration)
+            //{
+             //   if (once[intersection] && request == -1)
+             //   {
+             //       once[intersection] = false;
+             //       request = intersection;
+             //       RequestDecision();
+             //   }
 
-            }
+           // }
             else if (timeVariable[intersection] >= time[intersection] - yellowLightDuration && timeVariable[intersection] < time[intersection])
             {
                 if (User_Controll.Intersection == intersection)
                 {
                     timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
                 }
-                if (direct[intersection] == nextDirect[intersection])
-                {
-                    time[intersection] = nextTime[intersection];
-                    direct[intersection] = nextDirect[intersection];
-                    nextTime[intersection] = -1;
-                    nextDirect[intersection] = -1;
-                    timeVariable[intersection] = 0;
-                    once[intersection] = true;
-                }
-                else
-                {
+                //if (direct[intersection] == nextDirect[intersection])
+               // {
+                //    time[intersection] = nextTime[intersection];
+                //    direct[intersection] = nextDirect[intersection];
+                 //   nextTime[intersection] = -1;
+                 //   nextDirect[intersection] = -1;
+                 //   timeVariable[intersection] = 0;
+                 //   once[intersection] = true;
+               // }
+                //else
+               // {
                     ChangeLightYellow(intersection, direct[intersection]);
-                }
+               // }
                 
 
             }
@@ -333,8 +333,12 @@ public class AI_two_multi : Agent
                 nextDirect[intersection] = -1;
                 timeVariable[intersection] = 0;
                 once[intersection] = true;
-                //request = intersection;
-                //RequestDecision();
+                if (request == -1)
+                {
+                    request = intersection;
+                    RequestDecision();
+                }
+                
             }
         }
     }

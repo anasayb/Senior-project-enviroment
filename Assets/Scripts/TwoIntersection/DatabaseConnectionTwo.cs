@@ -201,7 +201,7 @@ public class DatabaseConnectionTwo : MonoBehaviour
     /// /// <param name="TrafficLightController">Object of the traffic Light controller</param>
     public IEnumerator SaveWatingTime(Dictionary<string, dataTwoIntersection> watingTime)
     {
-        string table = "";
+        string table = "two_";
         if (TrafficLightController[0].GetComponent<Traditional_traffic_Controller>().enabled == true)
         {
 
