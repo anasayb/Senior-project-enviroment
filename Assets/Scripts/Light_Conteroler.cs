@@ -12,9 +12,7 @@ public class Light_Conteroler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         Lights();
-
     }
 
     // Update is called once per frame
@@ -27,7 +25,6 @@ public class Light_Conteroler : MonoBehaviour
     {   
         // Update the traffic light singals
         Lights();
-
     }
 
 

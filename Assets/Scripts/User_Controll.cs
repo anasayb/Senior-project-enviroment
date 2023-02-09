@@ -71,8 +71,6 @@ public class User_Controll : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
-
         MoveCamera(0);
         MoveCamera(1);
 
@@ -96,14 +94,11 @@ public class User_Controll : MonoBehaviour
         {
             simulationSpeed.SetActive(false);
         }
-
-
     }
 
     public void MoveCamera(int intersection)
     {
         // Camera Updating 
-        
         if (updatePostion[intersection] != "" && updatePostion[intersection] != currentPostionOfCamera[intersection])
         {
             if (User_Controll.Intersection == intersection) {
@@ -169,7 +164,7 @@ public class User_Controll : MonoBehaviour
 
     }
 
-
+    //This function speeds up the simulation up to 8x 
     public void speedUpSimultaion()
     {
         int temp = (int)(Time.timeScale * 2);
@@ -177,6 +172,7 @@ public class User_Controll : MonoBehaviour
         isKeyPressed = false;
     }
 
+    //This function slow down the simulation down to 1x 
     public void speedDownSimulation()
     {
         int temp = (int)(Time.timeScale / 2);
@@ -184,7 +180,7 @@ public class User_Controll : MonoBehaviour
         isKeyPressed = false;
     }
 
-
+    //?
     public void UpdatedIntersection()
     {
         // Disable current Intersection camera
