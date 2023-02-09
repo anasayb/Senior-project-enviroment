@@ -58,7 +58,7 @@ public class Basic_algo : MonoBehaviour
         Debug.Log(CarCount[0].carsCounter);
         time[queue.Peek().direction] = GreenTimeCalc(CarCount[queue.Peek().direction].carsCounter) - 2;
         Intersection = transform.parent.name[transform.parent.name.Length - 1] - '0' - 1;
-        if (Scence_Manger.algorthim != "CarLoad Based Traffic Light System")
+        if (Scence_Manger.algorthim != "Carload based Traffic Light System")
         {
             GetComponent<Basic_algo>().enabled = false;
             return;

@@ -29,36 +29,36 @@ public class User_Controll : MonoBehaviour
             IntersectionText.GetComponent<TMP_Text>().text = "Intersection 1";
         }
 
-        if (currentPostionOfCamera[User_Controll.Intersection] == "North")
+        if (Scence_Manger.dir == 0)
         {
 
             MainCamera[User_Controll.Intersection].transform.localPosition = new Vector3(0,30,50);
             MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30,180,0);
-            streetText.GetComponent<TMP_Text>().text = "University Street\n("+currentPostionOfCamera[User_Controll.Intersection] + ")";
+            streetText.GetComponent<TMP_Text>().text = "University Street\n(North)";
 
         }
-        else if (currentPostionOfCamera[User_Controll.Intersection] == "West")
+        else if (Scence_Manger.dir == 1)
         {
 
             MainCamera[User_Controll.Intersection].transform.localPosition = new Vector3(-50, 30, 0);
             MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, 90, 0);
-            streetText.GetComponent<TMP_Text>().text = "Stadium Street\n("+currentPostionOfCamera[User_Controll.Intersection] + ")";
+            streetText.GetComponent<TMP_Text>().text = "Stadium Street\n(West)";
 
         }
-        else if (currentPostionOfCamera[User_Controll.Intersection] == "South")
+        else if (Scence_Manger.dir == 2)
         {
 
             MainCamera[User_Controll.Intersection].transform.localPosition = new Vector3(0, 30, -50);
             MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, 0, 0);
-            streetText.GetComponent<TMP_Text>().text = "University Street\n("+currentPostionOfCamera[User_Controll.Intersection] + ")";
+            streetText.GetComponent<TMP_Text>().text = "University Street\n(South)";
 
         }
-        else if (currentPostionOfCamera[User_Controll.Intersection] == "East")
+        else if (Scence_Manger.dir == 3)
         {
 
             MainCamera[User_Controll.Intersection].transform.localPosition = new Vector3(50, 30, 0);
             MainCamera[User_Controll.Intersection].transform.rotation = Quaternion.Euler(30, -90, 0);
-            streetText.GetComponent<TMP_Text>().text = "Stadium Street\n(" + currentPostionOfCamera[User_Controll.Intersection] + ")";
+            streetText.GetComponent<TMP_Text>().text = "Stadium Street\n(East)";
 
         }
 
