@@ -14,8 +14,8 @@ public class Basic_algo : MonoBehaviour
 
     public Component[] trafficLights;
 
-    private float[] time = { 0, 0, 0, 0 }; // i assumed we will show him without the menu because its not fixed as u know 
-    public float delay = 1; // im not sure if we need this 
+    private float[] time = { 0, 0, 0, 0 }; 
+    public float delay = 1; 
     public float yellowLightDuration = 2f;
     public static int carNumberNorth;
     private float timeVariable = 0f;

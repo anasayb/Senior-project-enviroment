@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
+// this class is dedicated for the Priority Queue to carry the direction with its car load
 public class NodeClass : IComparable<NodeClass>
 {
     
@@ -18,7 +19,7 @@ public class NodeClass : IComparable<NodeClass>
 
     }
 
- 
+    //this function prioritize based on car number
     public int CompareTo(NodeClass other)
     {
         if (this.CarCount > other.CarCount) return -1;

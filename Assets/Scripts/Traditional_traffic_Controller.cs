@@ -33,7 +33,6 @@ public class Traditional_traffic_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
         Traditional_traffic_Controller.startCouting = false;
         time = Scence_Manger.providedTime;
         direction = Scence_Manger.dir;
@@ -63,10 +62,7 @@ public class Traditional_traffic_Controller : MonoBehaviour
             GetComponent<Traditional_traffic_Controller>().enabled = false;
             return;
         }
-
-
         ChangeLightGreen(direction);
-       
     }
 
     // Update is called once per frame
