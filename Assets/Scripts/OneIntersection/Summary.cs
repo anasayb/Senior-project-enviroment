@@ -182,6 +182,10 @@ public class Summary : MonoBehaviour
 
         // Destroy the template record
         row.SetActive(false);
+
+        // Update the compare button
+        UnityEngine.Events.UnityAction action2 = () => { compare(tablename); };
+        summary.transform.Find("Compare").GetComponent<Button>().onClick.AddListener(action2);
     }
 
 
@@ -349,32 +353,99 @@ public class Summary : MonoBehaviour
         row.SetActive(false);
 
 
+        // get table name
+        string CurrenttableName = DatabaseConnection.tabelsNames[DatabaseConnection.tabelsNames.Count-1];
+
         // compare button
-        UnityEngine.Events.UnityAction action2 = () => { compare(Scence_Manger.startingNumberOfCars); };
+        UnityEngine.Events.UnityAction action2 = () => { compare(CurrenttableName); };
         summary.transform.Find("Compare").GetComponent<Button>().onClick.AddListener(action2);
 
     }
 
 
-    public static void compare(int CarsNum)
+    public static void compare(string tablename)
     {
 
         // Get the comapre panel and activate it
         GameObject compare = GameObject.Find("Canvas").transform.Find("Compare").gameObject;
         compare.SetActive(true);
 
+        // Reset all teh data
+        compare.transform.Find("Data1").gameObject.SetActive(false);
+        compare.transform.Find("Data2").gameObject.SetActive(false);
+        compare.transform.Find("Data3").gameObject.SetActive(false);
+
+        // Get the number of cars form the name
+        int CarsNum = int.Parse(tablename.Split('_')[0]);
+
         List<string> tables = new List<string>();
+        tables.Add(tablename);
 
         // get Tradional
-        foreach (var item in DatabaseConnection.tabelsNames) {  if (item.StartsWith(CarsNum + "_traditional")) { tables.Add(item); break; } }
+        if (tablename.Split('_')[1] != "traditional") {
+            foreach (var item in DatabaseConnection.tabelsNames) {
+                if (item.StartsWith(CarsNum + "_traditional")) {
+                    if (tablename.EndsWith("emergency") ) {
+                        if (item.EndsWith("emergency")) { 
+                            tables.Add(item);
+                            break;
+                        }
+                    }
+                    else if (!item.EndsWith("emergency"))
+                    {
+                        tables.Add(item);
+                        break;
+                    }
+                } 
+            }
+        }
 
         // get carload
-        foreach (var item in DatabaseConnection.tabelsNames) { if (item.StartsWith(CarsNum + "_carload")) { tables.Add(item); break; } }
+        if (tablename.Split('_')[1] != "carload#based")
+        {
+            foreach (var item in DatabaseConnection.tabelsNames) {
+                if (item.StartsWith(CarsNum + "_carload")) {
+                    if (tablename.EndsWith("emergency"))
+                    {
+                        if (item.EndsWith("emergency"))
+                        {
+                            tables.Add(item);
+                            break;
+                        }
+                    }
+                    else if(!item.EndsWith("emergency"))
+                    {
+                        tables.Add(item);
+                        break;
+                    }
+                } 
+            }
+        }
 
         // get AI
-        foreach (var item in DatabaseConnection.tabelsNames) { if (item.StartsWith(CarsNum + "_ai")) { tables.Add(item); break; } }
+        if (tablename.Split('_')[1] != "ai#based")
+        {
+            foreach (var item in DatabaseConnection.tabelsNames) {
+                if (item.StartsWith(CarsNum + "_ai")) {
+                    if (tablename.EndsWith("emergency"))
+                    {
+                        if (item.EndsWith("emergency"))
+                        {
+                            tables.Add(item);
+                            break;
+                        }
+                    }
+                    else if (!item.EndsWith("emergency"))
+                    {
+                        tables.Add(item);
+                        break;
+                    }
+                } 
+            }
+        }
 
-            int count = 1;
+
+        int count = 1;
         foreach (var item in tables)
         {
 
@@ -385,7 +456,8 @@ public class Summary : MonoBehaviour
                 continue;
             }
 
-            GameObject compareData = compare.transform.Find("Data"+count).gameObject; 
+            GameObject compareData = compare.transform.Find("Data"+count).gameObject;
+            compareData.SetActive(true);
 
             // Name of the method
             string nameOfAlgo = tableInfo[1].Replace("#", " ");
