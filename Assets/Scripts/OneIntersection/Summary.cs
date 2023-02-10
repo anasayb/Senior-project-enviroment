@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -219,6 +220,7 @@ public class Summary : MonoBehaviour
     /// </summary>
     public static void CurrentRunSummary()
     {
+        
 
         // Name of the method
         GameObject summary = GameObject.Find("Canvas").transform.Find("Summary").gameObject;
@@ -347,6 +349,110 @@ public class Summary : MonoBehaviour
         row.SetActive(false);
 
 
+        // compare button
+        UnityEngine.Events.UnityAction action2 = () => { compare(Scence_Manger.startingNumberOfCars); };
+        summary.transform.Find("Compare").GetComponent<Button>().onClick.AddListener(action2);
+
+    }
+
+
+    public static void compare(int CarsNum)
+    {
+
+        // Get the comapre panel and activate it
+        GameObject compare = GameObject.Find("Canvas").transform.Find("Compare").gameObject;
+        compare.SetActive(true);
+
+        List<string> tables = new List<string>();
+
+        // get Tradional
+        foreach (var item in DatabaseConnection.tabelsNames) {  if (item.StartsWith(CarsNum + "_traditional")) { tables.Add(item); break; } }
+
+        // get carload
+        foreach (var item in DatabaseConnection.tabelsNames) { if (item.StartsWith(CarsNum + "_carload")) { tables.Add(item); break; } }
+
+        // get AI
+        foreach (var item in DatabaseConnection.tabelsNames) { if (item.StartsWith(CarsNum + "_ai")) { tables.Add(item); break; } }
+
+            int count = 1;
+        foreach (var item in tables)
+        {
+
+            string[] tableInfo = item.Split("_");
+            string[] CarsData = DatabaseConnection.data[item].Split(" ");
+            if (int.Parse(tableInfo[0]) != CarsNum)
+            {
+                continue;
+            }
+
+            GameObject compareData = compare.transform.Find("Data"+count).gameObject; 
+
+            // Name of the method
+            string nameOfAlgo = tableInfo[1].Replace("#", " ");
+            if (nameOfAlgo == "ai based")
+            {
+                nameOfAlgo = "AI based";
+            }
+            compareData.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = nameOfAlgo[0].ToString().ToUpper() + nameOfAlgo.Substring(1) + " System";
+
+            // Starting Direction
+            bool EmergencyCar = false;
+            if (tableInfo[tableInfo.Length - 1] == "emergency")
+            {
+                compareData.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = tableInfo[tableInfo.Length - 2][0].ToString().ToUpper() + tableInfo[tableInfo.Length - 2].Substring(1);
+                EmergencyCar = true;
+            }
+            else
+            {
+                compareData.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = tableInfo[tableInfo.Length - 1][0].ToString().ToUpper() + tableInfo[tableInfo.Length - 1].Substring(1);
+            }
+
+            // Avg_waiting
+            float Avg_wating = 0;
+            foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "AVG#Waiting#time") Avg_wating = float.Parse(s.Split("_")[1]);
+            compareData.transform.Find("AVG").Find("Time").GetComponent<TMP_Text>().text = (((int)(Avg_wating * 100)) / 100f).ToString("F2") + " s";
+
+            // Flow Rate
+            float trafficFlow = 0;
+            foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Flow#rate") trafficFlow = float.Parse(s.Split("_")[1]);
+            compareData.transform.Find("TrafficFlow").Find("Rate").GetComponent<TMP_Text>().text = trafficFlow.ToString() + " Car/Minute";
+
+            // Avrage Congestion
+            float CongestionNorth = 0, CongestionWest = 0, CongestionSouth = 0, CongestionEast = 0;
+            foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#north") CongestionNorth = float.Parse(s.Split("_")[1]);
+            foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#west") CongestionWest = float.Parse(s.Split("_")[1]);
+            foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#south") CongestionSouth = float.Parse(s.Split("_")[1]);
+            foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#east") CongestionEast = float.Parse(s.Split("_")[1]);
+            float[] congestionData = { CongestionNorth, CongestionWest, CongestionSouth, CongestionEast };
+            Transform congestion = compareData.transform.Find("Congestion");
+            for (int i = 0; i < congestion.childCount; i++)
+            {
+                congestion.GetChild(i).GetChild(1).GetComponent<TMP_Text>().text = congestionData[i].ToString("F2");
+            }
+
+
+            // Cars Number
+            if (EmergencyCar)
+            {
+                compareData.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = (int.Parse(tableInfo[0]) - 1).ToString() + " Cars + 1 Emergency Car";
+            }
+            else
+            {
+                compareData.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = tableInfo[0] + " Cars";
+            }
+
+            count++;
+
+        }
+
+
+    }
+
+    public static void ReturnBack()
+    {
+        // Get the comapre panel and disable it
+        GameObject compare = GameObject.Find("Canvas").transform.Find("Compare").gameObject;
+        compare.SetActive(false);
     }
 
 }
