@@ -5,7 +5,6 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Integrations.Match3;
 using Unity.MLAgents.Sensors;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 public class AI_two_multi : Agent

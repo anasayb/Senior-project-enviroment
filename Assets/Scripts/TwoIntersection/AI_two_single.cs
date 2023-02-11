@@ -4,9 +4,6 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
-using System;
-using static UnityEditor.PlayerSettings;
-using UnityEditor;
 using TMPro;
 
 public class AI_two_single : Agent

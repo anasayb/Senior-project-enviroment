@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
-using static UnityEditor.Progress;
 
 
 public class DatabaseConnectionTwo : MonoBehaviour

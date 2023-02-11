@@ -4,9 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
-using UnityEditor;
-using UnityEditor.AssetImporters;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class CarController : MonoBehaviour
