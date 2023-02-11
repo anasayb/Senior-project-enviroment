@@ -241,6 +241,10 @@ public class SummaryTwo : MonoBehaviour
 
         // Destroy the template record
         row.SetActive(false);
+
+        // Update the compare button
+        UnityEngine.Events.UnityAction action2 = () => { compare(tablename); };
+        summary.transform.Find("Compare").GetComponent<Button>().onClick.AddListener(action2);
     }
 
 
@@ -439,6 +443,221 @@ public class SummaryTwo : MonoBehaviour
         row.SetActive(false);
 
 
+        // get table name
+        string CurrenttableName = DatabaseConnectionTwo.tabelsNames[DatabaseConnectionTwo.tabelsNames.Count - 1];
+
+        // compare button
+        UnityEngine.Events.UnityAction action2 = () => { compare(CurrenttableName); };
+        summary.transform.Find("Compare").GetComponent<Button>().onClick.AddListener(action2);
+
+    }
+
+
+    public static void compare(string tablename)
+    {
+
+        // Get the comapre panel and activate it
+        GameObject compare = GameObject.Find("Canvas").transform.Find("Compare").gameObject;
+        compare.SetActive(true);
+
+        // Reset all teh data
+        compare.transform.Find("Data1").gameObject.SetActive(false);
+        compare.transform.Find("Data2").gameObject.SetActive(false);
+        compare.transform.Find("Data3").gameObject.SetActive(false);
+        compare.transform.Find("Data4").gameObject.SetActive(false);
+
+        // Get the number of cars form the name
+        int CarsNum = int.Parse(tablename.Split('_')[0]);
+
+        List<string> tables = new List<string>();
+        tables.Add(tablename);
+
+        // Get Tradional
+        if (tablename.Split('_')[1] != "traditional")
+        {
+            foreach (var item in DatabaseConnectionTwo.tabelsNames)
+            {
+                if (item.StartsWith(CarsNum + "_traditional"))
+                {
+                    if (tablename.EndsWith("emergency"))
+                    {
+                        if (item.EndsWith("emergency"))
+                        {
+                            tables.Add(item);
+                            break;
+                        }
+                    }
+                    else if (!item.EndsWith("emergency"))
+                    {
+                        tables.Add(item);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Get carload
+        if (tablename.Split('_')[1] != "carload#based")
+        {
+            foreach (var item in DatabaseConnectionTwo.tabelsNames)
+            {
+                if (item.StartsWith(CarsNum + "_carload"))
+                {
+                    if (tablename.EndsWith("emergency"))
+                    {
+                        if (item.EndsWith("emergency"))
+                        {
+                            tables.Add(item);
+                            break;
+                        }
+                    }
+                    else if (!item.EndsWith("emergency"))
+                    {
+                        tables.Add(item);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Get AI
+        if (tablename.Split('_')[1] != "ai#based")
+        {
+            foreach (var item in DatabaseConnectionTwo.tabelsNames)
+            {
+                if (item.StartsWith(CarsNum + "_ai#based_"))
+                {
+                    if (tablename.EndsWith("emergency"))
+                    {
+                        if (item.EndsWith("emergency"))
+                        {
+                            tables.Add(item);
+                            break;
+                        }
+                    }
+                    else if (!item.EndsWith("emergency"))
+                    {
+                        tables.Add(item);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Get AI multi
+        if (tablename.Split('_')[1] != "ai#based#multi")
+        {
+            foreach (var item in DatabaseConnectionTwo.tabelsNames)
+            {
+                if (item.StartsWith(CarsNum + "_ai#based#multi_"))
+                {
+                    if (tablename.EndsWith("emergency"))
+                    {
+                        if (item.EndsWith("emergency"))
+                        {
+                            tables.Add(item);
+                            break;
+                        }
+                    }
+                    else if (!item.EndsWith("emergency"))
+                    {
+                        tables.Add(item);
+                        break;
+                    }
+                }
+            }
+        }
+
+        int count = 1;
+        foreach (var item in tables)
+        {
+
+            string[] tableInfo = item.Split("_");
+            string[] CarsData = DatabaseConnectionTwo.data[item].Split(" ");
+            if (int.Parse(tableInfo[0]) != CarsNum)
+            {
+                continue;
+            }
+
+            GameObject compareData = compare.transform.Find("Data" + count).gameObject;
+            compareData.SetActive(true);
+
+            // Name of the method
+            string nameOfAlgo = tableInfo[1].Replace("#", " ");
+            if (nameOfAlgo == "ai based")
+            {
+                nameOfAlgo = "AI based";
+            }
+            else if (nameOfAlgo == "ai based multi")
+            {
+                nameOfAlgo = "AI-Multi based";
+            }
+            compareData.transform.Find("TLC").Find("Algo Name").GetComponent<TMP_Text>().text = nameOfAlgo[0].ToString().ToUpper() + nameOfAlgo.Substring(1) + " System";
+
+            // Starting Direction
+            bool EmergencyCar = false;
+            if (tableInfo[tableInfo.Length - 1] == "emergency")
+            {
+                compareData.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = tableInfo[tableInfo.Length - 2][0].ToString().ToUpper() + tableInfo[tableInfo.Length - 2].Substring(1);
+                EmergencyCar = true;
+            }
+            else
+            {
+                compareData.transform.Find("Direction").Find("Direction").GetComponent<TMP_Text>().text = tableInfo[tableInfo.Length - 1][0].ToString().ToUpper() + tableInfo[tableInfo.Length - 1].Substring(1);
+            }
+
+            // Avg_waiting
+            float Avg_wating = 0;
+            foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Overall#AVG#Waiting#time") Avg_wating = float.Parse(s.Split("_")[1]);
+            compareData.transform.Find("AVG").Find("Time").GetComponent<TMP_Text>().text = (((int)(Avg_wating * 100)) / 100f).ToString("F2") + " s";
+
+            // Flow Rate
+            float trafficFlow = 0;
+            foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Flow#rate") trafficFlow = (float.Parse(s.Split("_")[1]) + float.Parse(s.Split("_")[2]))/2;
+            compareData.transform.Find("TrafficFlow").Find("Rate").GetComponent<TMP_Text>().text = trafficFlow.ToString() + " Car/Minute";
+
+            // Avrage Congestion
+            float CongestionNorth = 0, CongestionWest = 0, CongestionSouth = 0, CongestionEast = 0;
+            foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#north") CongestionNorth = (float.Parse(s.Split("_")[1])+ float.Parse(s.Split("_")[2]))/2;
+            foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#west") CongestionWest = (float.Parse(s.Split("_")[1]) + float.Parse(s.Split("_")[2])) / 2;
+            foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#south") CongestionSouth = (float.Parse(s.Split("_")[1]) + float.Parse(s.Split("_")[2])) / 2;
+            foreach (string s in CarsData) if (s != "" && s.Split("_")[0] == "Congestion#east") CongestionEast = (float.Parse(s.Split("_")[1]) + float.Parse(s.Split("_")[2])) / 2;
+            float[] congestionData = { CongestionNorth, CongestionWest, CongestionSouth, CongestionEast };
+            Transform congestion = compareData.transform.Find("Congestion");
+            for (int i = 0; i < congestion.childCount; i++)
+            {
+                congestion.GetChild(i).GetChild(1).GetComponent<TMP_Text>().text = congestionData[i].ToString("F2");
+            }
+
+
+            // Cars Number
+            if (Scence_Manger.EmergencyCar)
+            {
+                // Emergency car exist
+                compareData.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = (int.Parse(tableInfo[0])*2 - 2).ToString() + " Cars + 2 Emergency Car";
+            }
+            else
+            {
+
+                // No emergency car
+                compareData.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = (int.Parse(tableInfo[0]) * 2).ToString() + " Cars";
+            }
+
+
+            count++;
+
+        }
+
+
+    }
+
+
+
+    public static void ReturnBack()
+    {
+        // Get the comapre panel and disable it
+        GameObject compare = GameObject.Find("Canvas").transform.Find("Compare").gameObject;
+        compare.SetActive(false);
     }
 
 }
