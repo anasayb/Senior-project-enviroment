@@ -15,10 +15,8 @@ public class AI_two_single : Agent
     public static bool startCouting = false;
 
     // Enviroment Varaibles
-    //public GameObject prefab;
     public GameObject cars;
-    //public GameObject newEnv;
-    //public int episodeNumber = 0;
+
 
     [Header("Cameras")]
     public GameObject cameraController;
@@ -37,7 +35,6 @@ public class AI_two_single : Agent
     private float timeVariable = 0;
 
 
-    //private bool finish = true;
     private int direct = 0;
     private int nextDirect = 0;
     private int time = 0;
@@ -51,9 +48,12 @@ public class AI_two_single : Agent
 
     public void Start()
     {
+        // Initialize variables
         AI_two_single.startCouting = false;
         cars = GameObject.Find("Cars");
         Intersection = (transform.parent.name[transform.name.Length - 1] - '0') - 1;
+
+        // If the system chose a system other than this system, disable the script
         if (Scence_Manger.algorthim != "AI based Traffic Light System")
         {
             GetComponent<AI_two_single>().enabled = false;
@@ -73,6 +73,7 @@ public class AI_two_single : Agent
 
     public void FixedUpdate()
     {
+        // Start when cars are generated
         if (CarCount[0].carsCounter + CarCount[1].carsCounter + CarCount[2].carsCounter + CarCount[3].carsCounter != 0)
         {
             // This piece of code job is to check if there is emergency car if true it wil give it priority without specific time 
@@ -113,6 +114,7 @@ public class AI_two_single : Agent
                     }
                     else
                     {
+                        // Reset varaible
                         timeVariable = 0f;
                         EmegencyTimeVariable = 0;
                         time = 0;
@@ -126,6 +128,7 @@ public class AI_two_single : Agent
             }
             else
             {
+                // Check for emergency cars
                 for (int i = 0; i < 4; i++)
                 {
                     if (CarCount[i].emergencyExist)
@@ -146,8 +149,7 @@ public class AI_two_single : Agent
                 SetReward(1 - (Avg_wating_time_two.Avg_wating / 160));
 
                 //EndEpisode();
-                //Destroy(temp);
-                //cars.GetComponent<Avg_wating_time_two>().Avg_wating = 0;
+
 
             }
             else
@@ -163,15 +165,16 @@ public class AI_two_single : Agent
         }
     }
 
+
+    // This function is override from agent class
     public override void OnEpisodeBegin()
     {
 
-        // Resest variabels
-        //time = 0;
-        //direct = 0;
 
     }
 
+
+    // Observatison (number of cars)
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(GetComponent<AI_TLC_two_single>().CarCount[0].carsCounter);
@@ -180,13 +183,15 @@ public class AI_two_single : Agent
         sensor.AddObservation(GetComponent<AI_TLC_two_single>().CarCount[3].carsCounter);
     }
 
-
+    // Called when action is requested
     public override void OnActionReceived(ActionBuffers actions)
     {
-
+        // Direction
         nextDirect = actions.DiscreteActions[0];
-
+        // Time
         int temp = actions.DiscreteActions[1];
+
+        // Check if time less than yellowDurtaion, make it equle to zero
         if (temp < 4)
         {
             nextTime = 0;
@@ -199,10 +204,16 @@ public class AI_two_single : Agent
 
     }
 
+
+    /// <summary>
+    /// Method <c>TrafficLightControlling</c> This method handel the traffi light and request action form AI when needed.
+    /// </summary>
     private void TrafficLightControlling()
     {
+        // If time is zero, request new descion
         if (time == 0 || time == -1)
         {
+            // Next descion has been already made
             if (nextTime != 0 && nextTime != -1)
             {
                 time = nextTime;
@@ -218,6 +229,7 @@ public class AI_two_single : Agent
 
         }
 
+        // Start waitng time couting
         if (AI_two_single.startCouting == false)
         {
             AI_two_single.startCouting = true;
@@ -236,6 +248,7 @@ public class AI_two_single : Agent
         }
         else if (timeVariable >= time - yellowLightDuration - 1 && timeVariable < time - yellowLightDuration)
         {
+            // Last second of green time, request the next descion
             if (once)
             {
                 once = false;
@@ -249,6 +262,8 @@ public class AI_two_single : Agent
             {
                 timer.GetComponentInChildren<TMP_Text>().color = new Color(0.885f, 0.434f, 0f);
             }
+
+            // If the next descion direction is the same as the current, change variables to go back to green light
             if (direct == nextDirect)
             {
                 time = nextTime;
@@ -272,6 +287,7 @@ public class AI_two_single : Agent
         }
         else
         {
+            // Reset Varaibles
             time = nextTime;
             direct = nextDirect;
             nextTime = -1;

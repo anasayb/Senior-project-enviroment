@@ -11,11 +11,9 @@ public class AI_TLC_two_multi : MonoBehaviour
     
 
     [Header("Cameras")]
-    //public GameObject Maincameras;
-    //public GameObject CameraController;
+
 
     [Header("GUI")]
-    //public GameObject text;
 
 
     // used by AI
@@ -27,13 +25,6 @@ public class AI_TLC_two_multi : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //updateCarsNumbers();
-        /*
-            for (int i = 0; i < cameras.Length; i++)
-            {
-                cameras[i].SetActive(false);
-            }
-        */
 
     }
 
@@ -41,9 +32,6 @@ public class AI_TLC_two_multi : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //updateCarsNumbers();
-
-        
 
     }
 

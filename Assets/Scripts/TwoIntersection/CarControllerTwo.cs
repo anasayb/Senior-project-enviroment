@@ -764,30 +764,4 @@ public class CarControllerTwo : MonoBehaviour
     }
 
 
-
-    /*
-    /// <summary>
-    /// Method <c>DrawLine</c> This function Draw ray lines in the game mode.
-    /// </summary>
-    /// <param name="start">the vector where the length start</param>
-    /// <param name="length">the lien length</param>
-    /// <param name="start">the clor of the line</param>
-    /// <param name="duration">the duration on which the line apears in the screen</param>
-    private void DrawLine(Vector3 start, Vector3 length, Color color, float duration = 0.1f)
-    {
-
-        GameObject myLine = new GameObject();
-        myLine.transform.position = start;
-        myLine.AddComponent<LineRenderer>();
-        LineRenderer lr = myLine.GetComponent<LineRenderer>();
-        lr.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
-        lr.startColor = color; lr.endColor = color;
-        lr.startWidth = 0.1f; lr.endWidth = 0.1f;
-        lr.SetPosition(0, start);
-        lr.SetPosition(1, start + length);
-        GameObject.Destroy(myLine, duration);
-
-    }
-    */
-
     }

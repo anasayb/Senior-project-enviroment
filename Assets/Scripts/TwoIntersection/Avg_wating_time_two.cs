@@ -38,7 +38,6 @@ public class Avg_wating_time_two : MonoBehaviour
 
     [Header("GUI")]
     public GameObject summary;
-    //public GameObject AvgWaitingTimeText;
     public GameObject runningTimeText;
     public GameObject CarInfo;
     public GameObject timer;
@@ -46,6 +45,8 @@ public class Avg_wating_time_two : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        // inizlize variables
         Avg_wating_time_two.Avg_wating = 0;
         for (int i = 0; i < 2; i++)
         {
@@ -132,7 +133,8 @@ public class Avg_wating_time_two : MonoBehaviour
                 // store the run inforamtion and show the summary
                 StartCoroutine(db.SaveWatingTime(new Dictionary<string, dataTwoIntersection>(waitingTimes))); ;
                 //while (e.MoveNext()) ;
-                
+
+                // Dispaly the summary
                 SummaryTwo.CurrentRunSummary();
                 stored = true;
 

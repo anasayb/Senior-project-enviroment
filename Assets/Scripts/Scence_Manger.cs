@@ -44,11 +44,12 @@ public class Scence_Manger : MonoBehaviour
 
     public void FixedUpdate()
     {
-    
+        
+        // if the current active interface is the Menu
         if (SceneManager.GetActiveScene().name == "Menu")
         {
 
-
+            // Update the algorithm description, according to the selcted
             if (method.GetComponent<TMP_Dropdown>().value == 0)
             {
                 TradionalSystem.SetActive(true);
@@ -81,7 +82,7 @@ public class Scence_Manger : MonoBehaviour
                 AISystem2.SetActive(true);
             }
 
-
+            // If user choosee two intersections enviroment, then update the options to add the Ai-multi
             if (Enviroment.transform.GetChild(1).GetComponent<TMP_Dropdown>().value == 1 )
             {
                 if (notadded) {
@@ -169,14 +170,17 @@ public class Scence_Manger : MonoBehaviour
             carNumberError.SetActive(true);
         }
 
+        // Check if an error in the input happend, if yes dont load simulation scecne
         if (carNumberError.activeSelf == true || timeError.activeSelf == true)
         {
             return;
         }
 
+        // Replace the start button, with loading screen
         startButton.SetActive(false);
         Loading.SetActive(true);
 
+        // Update global variable of emregency car
         if (CheckBox.GetComponent<Toggle>().isOn)
         {
             EmergencyCar = true;
@@ -186,6 +190,7 @@ public class Scence_Manger : MonoBehaviour
             EmergencyCar = false;
         }
 
+        // Load the interface according to the user chose
         if (Enviroment.transform.GetChild(1).GetComponent<TMP_Dropdown>().value == 0) {
             inv = 0;
             SceneManager.LoadScene("OneIntersectionScene");
@@ -198,13 +203,19 @@ public class Scence_Manger : MonoBehaviour
 
     }
 
-
+    /// <summary>
+    /// Method <c>ReturnToMenu</c> Load teh Menue scene.
+    /// </summary>
     public void ReturnToMenu()
     {
         //SceneManager.LoadScene("Menu");
         SceneManager.LoadScene("Menu");
     }
 
+
+    /// <summary>
+    /// Method <c>startprogram</c> Reload the current active simulation with same variables.
+    /// </summary>
     public void Rerun()
     {
         //SceneManager.LoadScene("SampleScene");
@@ -218,22 +229,5 @@ public class Scence_Manger : MonoBehaviour
         }
     }
 
-    /*
-    IEnumerator LoadYourAsyncScene(string name)
-    {
-        // The Application loads the Scene in the background as the current Scene runs.
-        // This is particularly good for creating loading screens.
-        // You could also load the Scene by using sceneBuildIndex. In this case Scene2 has
-        // a sceneBuildIndex of 1 as shown in Build Settings.
-
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(name);
-
-        // Wait until the asynchronous scene fully loads
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-        }
-    }
-    */
 
 }

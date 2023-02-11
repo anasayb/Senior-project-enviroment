@@ -40,6 +40,7 @@ public class Summary : MonoBehaviour
         //reset
         reset();
 
+        // Get teh table info and Cars Info
         string[] tableInfo = tablename.Split("_");
         string[] CarsData = DatabaseConnection.data[tablename].Split(" ");
 
@@ -362,7 +363,9 @@ public class Summary : MonoBehaviour
 
     }
 
-
+    /// <summary>
+    /// Method <c>Compare</c> Display the Compare interface.
+    /// </summary>
     public static void compare(string tablename)
     {
 
@@ -378,6 +381,7 @@ public class Summary : MonoBehaviour
         // Get the number of cars form the name
         int CarsNum = int.Parse(tablename.Split('_')[0]);
 
+        // Create a list
         List<string> tables = new List<string>();
         tables.Add(tablename);
 
@@ -444,7 +448,8 @@ public class Summary : MonoBehaviour
             }
         }
 
-
+           
+        // Show the data of the diffrent runs
         int count = 1;
         foreach (var item in tables)
         {
@@ -520,6 +525,9 @@ public class Summary : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Method <c>ReturnBack</c> hid the comparison interface.
+    /// </summary>
     public static void ReturnBack()
     {
         // Get the comapre panel and disable it

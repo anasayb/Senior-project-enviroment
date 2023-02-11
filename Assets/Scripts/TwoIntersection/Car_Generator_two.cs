@@ -37,12 +37,12 @@ public class Car_Generator_two : MonoBehaviour
     {
 
         // selector
-        //selector = GameObject.Find("Selector").gameObject;
-        //selector.SetActive(false);
         emergency = Scence_Manger.EmergencyCar;
 
+        // Min the number if it exceed the max possible car generation
         CarsToGenerate = System.Math.Min(Scence_Manger.startingNumberOfCars, 45 * 4);
 
+        // Inizilie varibels
         parents = new Transform[4];
         parents[0] = transform.Find("North").transform;
         parents[1] = transform.Find("West").transform;
@@ -61,67 +61,8 @@ public class Car_Generator_two : MonoBehaviour
         TurningPathsRight[2] = Intersection.transform.Find("Turning Paths").Find("Right").Find("Turnining Right Path South").transform;
         TurningPathsRight[3] = Intersection.transform.Find("Turning Paths").Find("Right").Find("Turnining Right Path East").transform;
 
-        
-
-        /*
-        if (CarsToGenerate == 22)
-        {
-            Transform template = CarsTemplate.transform;
-            for (int direction = 0; direction < template.childCount; direction++)
-            {
-                foreach (Transform car in template.GetChild(direction))
-                {
-
-                    Vector3 rot = new Vector3(0, 0, 0);
-                    Vector3 st = Streats[direction].transform.right;
-                    if (st.x == 1f)
-                    {
-                        rot.y = 90;
-                    }
-                    else if (st.x == -1)
-                    {
-                        rot.y = -90;
-                    }
-                    else if (st.z < 0)
-                    {
-                        rot.y = 180;
-                    }
-
-                    GameObject newCar = Instantiate(car.gameObject, car.position , Quaternion.Euler(rot));
-                    newCar.transform.SetParent(transform.GetChild(direction), true);
-                    newCar.name += "colne " + Intersection.name;
-                    //newCar.transform.SetParent(transform);
-                    //newCar.transform.localPosition = car.localPosition;
-                    //newCar.transform.rotation = Quaternion.Euler(rot);
-                    /*
-                    if (newCar.tag == "Truck")
-                    {
-                        newCar.name = "Truck " + NameTruckNumber++;
-
-                    }
-                    else if (newCar.tag == "Emergency")
-                    {
-                        newCar.name = "Poilice " + NameEmergencyNumber++;
-                    }
-                    else if (newCar.tag == "Bus")
-                    {
-                        newCar.name = "Bus " + NameBusNumber++;
-                    }
-                    else
-                    {
-                        newCar.name = "Car " + NameCarNumber++;
-                    }
-
-                }
-            }
-
-
-            CarsToGenerate = 0;
-            return;
-        }
-         */
-
-         GenerateCar();
+        // generate cars
+        GenerateCar();
 
     }
 
@@ -141,6 +82,8 @@ public class Car_Generator_two : MonoBehaviour
 
         CarsToGenerate -= (nums["northCars"] + nums["westCars"] + nums["southCars"] + nums["eastCars"]);
 
+        // If the sumation of cars in each direction still hasen't reached teh "CarsToGenerate" value, add cars to teh lowest direction
+
         if (CarsToGenerate != 0)
         {
             Dictionary<string, int> sorted = nums.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
@@ -153,14 +96,15 @@ public class Car_Generator_two : MonoBehaviour
 
         }
 
-        
 
+        // Generate cars for each direction
         GenerateCrsForDirection(nums["northCars"], 0, selector);
         GenerateCrsForDirection(nums["westCars"], 1, selector);
         GenerateCrsForDirection(nums["southCars"], 2, selector);
         GenerateCrsForDirection(nums["eastCars"], 3, selector);
 
 
+        // Reset naming variables
         Car_Generator_two.num++;
         if (Car_Generator_two.num == 2)
         {
@@ -176,16 +120,26 @@ public class Car_Generator_two : MonoBehaviour
 
     }
 
-
+    /// <summary>
+    /// Method <c>GenerateCrsForDirection</c> Generate the cars for the specified direction.
+    /// </summary>
+    /// <param name="numOfCars"> the number of cars to be generated</param>
+    /// <param name="streat"> the direction on whcih cars are generated </param>
+    /// <param name="selector"> the object which get activate when the car is selected </param>
     void GenerateCrsForDirection(int numOfCars, int streat, GameObject selector)
     {
+        // starting postion, right, and left
         Vector3 frontCarLeft = startPos[streat*2];
         Vector3 frontCarRight = startPos[streat*2+1];
+
+        // Generate two cars at a time, on lef, one right
         for (int j = 0; j < numOfCars; j+=2)
         {
 
             // Random values for the need variables
             int carIndex = Random.Range(0, CarsPrefabs.Length);
+
+            // if emrgency car is check, if the selcted car is emergency make false and generate the car, else look for a car that is not emergency
             if (emergency == true)
             {
                 if (CarsPrefabs[carIndex].tag == "Emergency")
@@ -209,6 +163,8 @@ public class Car_Generator_two : MonoBehaviour
                     carIndex = Random.Range(0, CarsPrefabs.Length);
                 }
             }
+
+            // Decide if the car turn or not
             int a = Random.Range(0, 2);  // Random number from 0 to 1
             bool turn = false;
             if (a == 1) // if a is 0 make the bool false
@@ -224,7 +180,7 @@ public class Car_Generator_two : MonoBehaviour
                 turn2 = false;
 
 
-
+            // Rotation of the car
             Vector3 rot = new Vector3(0, 0, 0);
             Vector3 st = Streats[streat].transform.right;
             if (st.x == 1f)
@@ -240,8 +196,10 @@ public class Car_Generator_two : MonoBehaviour
                 rot.y = 180;
             }
 
+            // Set the postion of the car to half the prefab colide box
             frontCarLeft.y = CarsPrefabs[carIndex].GetComponent<BoxCollider>().size.y / 2 + 0.5f;
 
+            // Generate the car, and name it
             GameObject newCar = Instantiate(CarsPrefabs[carIndex], transform.localPosition + frontCarLeft, Quaternion.Euler(rot));
             newCar.GetComponent<CarControllerTwo>().enabled = true;
             newCar.GetComponent<CarControllerTwo>().pathGourpLeft = TurningPathsLeft[streat];
@@ -263,15 +221,17 @@ public class Car_Generator_two : MonoBehaviour
             {
                 newCar.name = "Car " + NameCarNumber++ ;
             }
-            
+
+            // Add the necesarry object
             newCar.transform.SetParent(parents[streat], true);
             newCar.GetComponent<CarControllerTwo>().sel = selector;
             newCar.GetComponent<CarControllerTwo>().carInfo = GameObject.Find("Canvas").transform.Find("CarInfo").gameObject;
             newCar.GetComponent<CarControllerTwo>().left[0] = turn;
             newCar.GetComponent<CarControllerTwo>().left[1] = turn;
             newCar.GetComponent<CarControllerTwo>().CurrentIntersection = Intersection.name[Intersection.name.Length-1] - '0';
-            newCar.GetComponent<CarControllerTwo>().CurrentDirection = streat;    
+            newCar.GetComponent<CarControllerTwo>().CurrentDirection = streat;
 
+            // Increase the postion of the next car by the length of the current car
             frontCarLeft -= (newCar.transform.forward * (newCar.GetComponent<BoxCollider>().size.z + 3));
 
             // check if finsih
@@ -280,10 +240,13 @@ public class Car_Generator_two : MonoBehaviour
                 break;
             }
 
-            // Right
+            // Right part
 
             // Random values for the need variables
             carIndex = Random.Range(0, CarsPrefabs.Length-1);
+
+            // if emrgency car is check, if the selcted car is emergency make false and generate the car, else look for a car that is not emergency
+
             if (emergency == true)
             {
                 if (CarsPrefabs[carIndex].tag == "Emergency")
@@ -308,6 +271,8 @@ public class Car_Generator_two : MonoBehaviour
                     carIndex = Random.Range(0, CarsPrefabs.Length-1);
                 }
             }
+
+            // Decide if the car turn or not
             a = Random.Range(0, 2);  // Random number from 0 to 1
             turn = false;
             if (a == 1) // if a is 0 make the bool false
@@ -322,6 +287,7 @@ public class Car_Generator_two : MonoBehaviour
             else       // if a is not 0, make the bool true
                 turn2 = false;
 
+            // Rotation of the car
             rot = new Vector3(0, 0, 0);
             st = Streats[streat].transform.right;
             if (st.x == 1f)
@@ -337,8 +303,10 @@ public class Car_Generator_two : MonoBehaviour
                 rot.y = 180;
             }
 
+            // Set the postion of the car to half the prefab colide box
             frontCarRight.y = CarsPrefabs[carIndex].GetComponent<BoxCollider>().size.y / 2 + 0.5f;
 
+            // Generate the car, and name it
             newCar = Instantiate(CarsPrefabs[carIndex], transform.position + frontCarRight, Quaternion.Euler(rot));
             newCar.GetComponent<CarControllerTwo>().enabled = true;
             newCar.GetComponent<CarControllerTwo>().pathGourpLeft = TurningPathsLeft[streat];
@@ -367,6 +335,7 @@ public class Car_Generator_two : MonoBehaviour
                 newCar.name = "Car " + NameCarNumber++;
             }
 
+            // Increase the postion of the next car by the length of the current car
             frontCarRight -= (newCar.transform.forward * (newCar.GetComponent<BoxCollider>().size.z + 3));
 
            

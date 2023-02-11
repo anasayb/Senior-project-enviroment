@@ -25,17 +25,19 @@ public class Traditional_traffic_Controller : MonoBehaviour
     public GameObject cameraContoller;
 
     private int Intersection = 0;
-    //public GameObject CameraController;
 
     private float timeVariable = 0;
     private int direction = 0;
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
+        // Setting variables
         Traditional_traffic_Controller.startCouting = false;
         time = Scence_Manger.providedTime;
         direction = Scence_Manger.dir;
+        
+        // Inizilied the Camera postion
         Intersection = transform.parent.name[transform.parent.name.Length - 1] - '0' - 1;
         if (direction == 0)
         {
@@ -57,6 +59,7 @@ public class Traditional_traffic_Controller : MonoBehaviour
 
         }
 
+        // If the selected system by the user is not this system, disable this script
         if (Scence_Manger.algorthim != "Traditional Traffic Light System")
         {
             GetComponent<Traditional_traffic_Controller>().enabled = false;
@@ -67,7 +70,7 @@ public class Traditional_traffic_Controller : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate()
-    {
+    {   
         Traditional_traffic_Controller.startCouting = true;
         timeVariable += Time.deltaTime;
         if (User_Controll.Intersection == transform.parent.name[transform.parent.name.Length-1]-'0'-1) {

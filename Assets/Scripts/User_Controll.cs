@@ -18,17 +18,20 @@ public class User_Controll : MonoBehaviour
     
 
     private string[] updatePostion = { "", "" };
-    private bool isKeyPressed = false;
+
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
+        // Start at intersection 0
         User_Controll.Intersection = 0;
 
+        // check if the user chose Two intersection enviroment
         if (Scence_Manger.inv == 1) {
             IntersectionText.GetComponent<TMP_Text>().text = "Intersection 1";
         }
 
+        // Start the camera form the starting direction
         if (Scence_Manger.dir == 0)
         {
 
@@ -64,13 +67,13 @@ public class User_Controll : MonoBehaviour
 
         // Reset the simultaion speed
         Time.timeScale = 1;
-        //simulationSpeed.SetActive(true);
 
     }
 
     // Update is called once per frame
     void FixedUpdate()
-    {
+    {   
+        // Updating Cameras
         MoveCamera(0);
         MoveCamera(1);
 
@@ -80,22 +83,32 @@ public class User_Controll : MonoBehaviour
             // Simultaion speed
             simulationSpeed.SetActive(true);
             simulationSpeed.GetComponent<TMP_Text>().text = "x" + Time.timeScale.ToString();
-            if (Input.GetKeyDown(KeyCode.Equals) && !isKeyPressed)
+            // If user press '='
+            if (Input.GetKeyDown(KeyCode.Equals))
             {
                 speedUpSimultaion();
+                Input.ResetInputAxes();  // Reset Input
             }
-            else if (Input.GetKeyDown(KeyCode.Minus) && !isKeyPressed)
+            // If user press '-'
+            else if (Input.GetKeyDown(KeyCode.Minus))
             {
                 speedDownSimulation();
+                Input.ResetInputAxes();  // Reset Input
             }
 
         }
         else
         {
+            // Simulation finish, disapear the simulation speed text
             simulationSpeed.SetActive(false);
         }
     }
 
+
+    /// <summary>
+    /// Method <c>MoveCamera</c> change the postion of the camera according to updatePostion array.
+    /// <param name="intersection">the number of the intersection/param>
+    /// </summary>
     public void MoveCamera(int intersection)
     {
         // Camera Updating 
@@ -164,23 +177,32 @@ public class User_Controll : MonoBehaviour
 
     }
 
-    //This function speeds up the simulation up to 8x 
+
+    /// <summary>
+    /// Method <c>speedUpSimultaion</c> Speed up simulation.
+    /// </summary>
     public void speedUpSimultaion()
     {
-        int temp = (int)(Time.timeScale * 2);
+        int temp = (int)(Time.timeScale * 2f);
         Time.timeScale = Mathf.Min(8, temp);
-        isKeyPressed = false;
+
     }
 
-    //This function slow down the simulation down to 1x 
+    /// <summary>
+    /// Method <c>speedDownSimulation</c> slow down simulatio.
+    /// </summary>
     public void speedDownSimulation()
     {
-        int temp = (int)(Time.timeScale / 2);
+        int temp = (int)(Time.timeScale / 2f);
         Time.timeScale = Mathf.Max( 1, temp);
-        isKeyPressed = false;
+
     }
 
-    //?
+
+
+    /// <summary>
+    /// Method <c>UpdatedIntersection</c> change teh camera from one intersection to the other in the two intersection enviroment.
+    /// </summary>
     public void UpdatedIntersection()
     {
         // Disable current Intersection camera
@@ -244,6 +266,7 @@ public class User_Controll : MonoBehaviour
         // Update Name of the intersection
         IntersectionText.GetComponent<TMP_Text>().text = "Intersection " + (User_Controll.Intersection + 1);
 
+        // Chane the arrowrd buttons
         if (User_Controll.Intersection == 0)
         {
             RightButton.SetActive(true);

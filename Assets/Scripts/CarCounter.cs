@@ -20,28 +20,33 @@ public class CarCounter : MonoBehaviour
 
 
     }
+
+    /// <summary>
+    /// Method <c>OnTriggerEnter</c> the method called when another object colide with the current object.
+    /// </summary>
     private void OnTriggerEnter(Collider other)
-    {
+    {   
+        // Increase the number of cars in that direction
         carsCounter++;
         if (other.tag == "Emergency")
         {
             emergencyExist = true;
         }
-        //Debug.Log(other.gameObject.tag);
-        //Debug.Log("Car after Enter Count = " + carsCounter + "At this intersection " + tag);
 
     }
+
+    /// <summary>
+    /// Method <c>OnTriggerExit</c> the method called when another object exist the colider box of the current object.
+    /// </summary>
     private void OnTriggerExit(Collider other)
     {
+        // Decrease the number of cars in that direction
         carsCounter--;
         leaveCarsCounter++;
         if (other.tag == "Emergency")
         {
             emergencyExist = false;
         }
-        //Debug.Log(other.gameObject.tag);
-        //Debug.Log("Car after Exit Count = " + carsCounter + "At this intersection " + tag);
-
 
     }
 

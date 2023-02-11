@@ -8,10 +8,6 @@ using UnityEngine.UI;
 
 public class SummaryTwo : MonoBehaviour
 {
-    //public static GameObject summary;
-
-    //private static Response res;
-    //private static DatabaseConnectionTwo database;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +35,7 @@ public class SummaryTwo : MonoBehaviour
         //reset
         reset();
 
+        // Get the table info and the car info
         string[] tableInfo = tablename.Split("_");
         string[] CarsData = DatabaseConnectionTwo.data[tablename].Split(" ");
 
@@ -452,7 +449,9 @@ public class SummaryTwo : MonoBehaviour
 
     }
 
-
+    /// <summary>
+    /// Method <c>Compare</c> Display the Compare interface.
+    /// </summary>
     public static void compare(string tablename)
     {
 
@@ -568,6 +567,7 @@ public class SummaryTwo : MonoBehaviour
             }
         }
 
+        // Shows the data of the tables in the comprison
         int count = 1;
         foreach (var item in tables)
         {
@@ -631,7 +631,7 @@ public class SummaryTwo : MonoBehaviour
 
 
             // Cars Number
-            if (Scence_Manger.EmergencyCar)
+            if (tablename.EndsWith("emergency"))
             {
                 // Emergency car exist
                 compareData.transform.Find("Cars Number").Find("number").GetComponent<TMP_Text>().text = (int.Parse(tableInfo[0])*2 - 2).ToString() + " Cars + 2 Emergency Car";
@@ -651,8 +651,9 @@ public class SummaryTwo : MonoBehaviour
 
     }
 
-
-
+    /// <summary>
+    /// Method <c>ReturnBack</c> hid the comparison interface.
+    /// </summary>
     public static void ReturnBack()
     {
         // Get the comapre panel and disable it

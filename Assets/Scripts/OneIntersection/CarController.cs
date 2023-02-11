@@ -124,8 +124,6 @@ public class CarController : MonoBehaviour
         if (   Physics.Raycast(posForwardCenter, dir, out hit, (sensorLength + speed.velocity.magnitude)) 
             || Physics.Raycast(posForwardRight,  dir, out hit, (sensorLength + speed.velocity.magnitude)) 
             || Physics.Raycast(posForwardleft,  dir, out hit, (sensorLength + speed.velocity.magnitude))  
-            // || Physics.Raycast(posRight, rightDir, out hit, (6.5f / 2.0f)) 
-            // || Physics.Raycast(posLeft, leftDir, out hit, (6.5f / 2.0f))
             )
         {
 
@@ -146,8 +144,6 @@ public class CarController : MonoBehaviour
             else if (hit.collider.name != transform.name)
             {
                 //Debug Code
-                //print("hello its me the freaking " + transform.gameObject.name);
-
                 //Debug.DrawRay(posForwardCenter, dir * (sensorLength + speed.velocity.magnitude), Color.red);
                 //Debug.DrawRay(posForwardRight, dir * (sensorLength + speed.velocity.magnitude), Color.red);
                 //Debug.DrawRay(posForwardleft, dir * (sensorLength + speed.velocity.magnitude), Color.red);
@@ -181,10 +177,7 @@ public class CarController : MonoBehaviour
         // Turning Code
         if (Physics.Raycast(posForwardCenter, -(transform.up), out hit, sensorLength))
         {
-            if (hit.collider.tag == "NorthTrafficLight")
-            {
-                Basic_algo.carNumberNorth += 1;
-            }
+
             // If the car enter the intersection sqaure 
             if (hit.collider.tag == "IntersectionArea")
             {
@@ -323,7 +316,7 @@ public class CarController : MonoBehaviour
         
         float force = 0;
        
-
+        // If the distance is less than the senseor length, force stop
         if (colide < sensorLength && sensorLength != 2)
         {
             force = FORCE_STOP;
@@ -377,10 +370,10 @@ public class CarController : MonoBehaviour
     /// </summary>
     private void turnLeft()
     {
-
+        // If the car is not turning yet
         if (!turning)
         {
-           
+            // Slown down if the distance is less than 30
             if (transform.InverseTransformPoint(LeftPath[0].position.x, transform.position.y, LeftPath[0].position.z).magnitude <= 30)
             {   
                 Rigidbody speed = GetComponent<Rigidbody>();
@@ -394,7 +387,7 @@ public class CarController : MonoBehaviour
             }
             else
             {
-
+                // Start turning
                 sensorLength = tempSensorLength;
                 GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
                 GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezePosition;
@@ -414,6 +407,9 @@ public class CarController : MonoBehaviour
         }
         else
         {
+
+            // Turning part
+
 
             sensorLength = 2;
 
@@ -447,7 +443,7 @@ public class CarController : MonoBehaviour
 
             }
 
-            // if the distance to teh point is less than the specifed distance go to next point
+            // if the distance to the point is less than the specifed distance go to next point
             if (nextPoint.magnitude <= distanceFromPath)
             {
                 currentIndexLeft++;
@@ -472,9 +468,10 @@ public class CarController : MonoBehaviour
     private void turnRight()
     {
 
+        // If the car is not turning yet
         if (!turning)
         {
-
+            // Slown down if the distance is less than 30
             if (transform.InverseTransformPoint(RightPath[0].position.x, transform.position.y, RightPath[0].position.z).magnitude <= 20 && !doneTurning)
             {
                 Rigidbody speed = GetComponent<Rigidbody>();
@@ -487,7 +484,7 @@ public class CarController : MonoBehaviour
             }
             else
             {
-
+                // Start turning
                 sensorLength = tempSensorLength;
                 GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
                 GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezePosition;
@@ -505,6 +502,8 @@ public class CarController : MonoBehaviour
         }
         else
         {
+            // Turning part
+
             doneTurning = true;
             sensorLength = 2;
 
@@ -532,7 +531,7 @@ public class CarController : MonoBehaviour
                 wheels[3].steerAngle = stear + 10;
             }
 
-            // if the distance to teh point is less than the specifed distance go to next point
+            // if the distance to the point is less than the specifed distance go to next point
             if (nextPoint.magnitude <= distanceFromPath)
             {
                 currentIndexRight++;
@@ -571,7 +570,7 @@ public class CarController : MonoBehaviour
 
 
     /// <summary>
-    /// Method <c>roundToFullAngle</c> This function reset the stear angle to zeros.
+    /// Method <c>resetAllWheelsAngles</c> This function reset the stear angle to zeros.
     /// </summary>
     private void resetAllWheelsAngles()
     {
@@ -593,19 +592,6 @@ public class CarController : MonoBehaviour
             carInfo.transform.Find("Waiting Time").GetComponent<TMP_Text>().text = "Waiting Time: " + waitngTime.ToString("0.00") + " s";
             sel.transform.position = new Vector3(transform.position.x, 5f, transform.position.z);
 
-            /*
-            if (colide == -1)
-            {
-                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
-            }
-            else
-            {
-                Ray ray = new Ray(transform.position, transform.forward);
-                RaycastHit h;
-                Physics.Raycast(ray, out h, 200, ~CarLay);
-                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: " + h.distance + " m";
-            }
-            */
 
             // To enbale the animation
             sel.GetComponentInChildren<Animation>().enabled = true;
@@ -657,22 +643,6 @@ public class CarController : MonoBehaviour
                 carInfo.transform.Find("Intersection Exit").GetComponent<TMP_Text>().text = "Intersection Exit Direction: " + direction[(index + 3) % 4];
             }
 
-            //carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
-
-            /*
-            if (colide == -1)
-            {
-                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: UNKNOWN";
-            }
-            else
-            {
-                Ray ray = new Ray(transform.position, transform.forward);
-                RaycastHit h;
-                Physics.Raycast(ray, out h, 200, ~CarLay);
-                carInfo.transform.Find("Distance to Traffic Light").GetComponent<TMP_Text>().text = "Distance to The Next Traffic Light: " + h.distance + " m";
-            }
-            */
-
         }
     }
 
@@ -721,30 +691,5 @@ public class CarController : MonoBehaviour
     }
 
 
-
-    /*
-    /// <summary>
-    /// Method <c>DrawLine</c> This function Draw ray lines in the game mode.
-    /// </summary>
-    /// <param name="start">the vector where the length start</param>
-    /// <param name="length">the lien length</param>
-    /// <param name="start">the clor of the line</param>
-    /// <param name="duration">the duration on which the line apears in the screen</param>
-    private void DrawLine(Vector3 start, Vector3 length, Color color, float duration = 0.1f)
-    {
-
-        GameObject myLine = new GameObject();
-        myLine.transform.position = start;
-        myLine.AddComponent<LineRenderer>();
-        LineRenderer lr = myLine.GetComponent<LineRenderer>();
-        lr.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
-        lr.startColor = color; lr.endColor = color;
-        lr.startWidth = 0.1f; lr.endWidth = 0.1f;
-        lr.SetPosition(0, start);
-        lr.SetPosition(1, start + length);
-        GameObject.Destroy(myLine, duration);
-
-    }
-    */
 
     }

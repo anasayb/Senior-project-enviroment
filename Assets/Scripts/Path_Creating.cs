@@ -41,7 +41,7 @@ public class Path_Creating : MonoBehaviour
     }
 
 
-  
+    // Function is used for drawing the path, used for debug only
     private void OnDrawGizmosSelected() 
     {
         getObjects();

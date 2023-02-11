@@ -204,7 +204,9 @@ public class DatabaseConnection : MonoBehaviour
     /// <param name="watingTime">All the cars in the simulation with thier corresponidng info</param>
     /// /// <param name="TrafficLightController">Object of the traffic Light controller</param>
     public IEnumerator SaveWatingTime(Dictionary<string, data> watingTime, GameObject TrafficLightController)
-    {
+    {   
+
+        // Generate the table name
         string table = "";
         if (TrafficLightController.GetComponent<Traditional_traffic_Controller>().enabled == true)
         {
@@ -255,7 +257,7 @@ public class DatabaseConnection : MonoBehaviour
         }
         DatabaseConnection.tabelsNames.Add(table);
 
-
+        // Create table
         if (DatabaseConnection.connection)
         {
             WWWForm form = new WWWForm();
@@ -267,7 +269,7 @@ public class DatabaseConnection : MonoBehaviour
             }            
         }
 
-
+        // Add teh data of each car
         string carsData = "";
         foreach (var item in watingTime)
         {
@@ -294,10 +296,10 @@ public class DatabaseConnection : MonoBehaviour
 
         }
 
-
+        // Save the cars data to the tble
         StartCoroutine(saveToDatabase(table, carsData));
 
-
+        // If table exist in the progrms data update it
         if (DatabaseConnection.data.ContainsKey(table))
         {
             DatabaseConnection.data[table] = carsData;

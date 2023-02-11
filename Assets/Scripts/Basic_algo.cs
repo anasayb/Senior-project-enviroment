@@ -50,7 +50,9 @@ public class Basic_algo : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
+
+        // Inizilied the vaiables
         Basic_algo.startCouting = false;
         direction = Scence_Manger.dir;
         NodeClass North = new NodeClass(0, CarCount[0].carsCounter);
@@ -58,6 +60,8 @@ public class Basic_algo : MonoBehaviour
         Debug.Log(CarCount[0].carsCounter);
         time[queue.Peek().direction] = GreenTimeCalc(CarCount[queue.Peek().direction].carsCounter) - 2;
         Intersection = transform.parent.name[transform.parent.name.Length - 1] - '0' - 1;
+
+        // If the system chose by the user is not this system, disable this script
         if (Scence_Manger.algorthim != "Carload based Traffic Light System")
         {
             GetComponent<Basic_algo>().enabled = false;
@@ -68,7 +72,8 @@ public class Basic_algo : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate()
-    {
+    {   
+        // Start the system when cars has been generated
         if (CarCount[0].carsCounter + CarCount[1].carsCounter + CarCount[2].carsCounter + CarCount[3].carsCounter != 0)
         {
             // This piece of code job is to check if there is emergency car if true it wil give it priority without specific time 
@@ -118,7 +123,9 @@ public class Basic_algo : MonoBehaviour
                 return;
             }
             else
-            {
+            {   
+
+                // Check if emergency car exist
                 for (int i = 0; i < 4; i++)
                 {
                     if (CarCount[i].emergencyExist)
@@ -133,6 +140,8 @@ public class Basic_algo : MonoBehaviour
                 }
             }
             // End of the Emergency car control
+
+
             Basic_algo.startCouting = true;
             Timer();
             // Normal System Behaviour 
@@ -154,7 +163,6 @@ public class Basic_algo : MonoBehaviour
             {
                 if (oneTimeRun)
                 {
-                    Debug.Log("TEST");
                     oneTimeRun = false;
                     ResetQueue();
                     if (temp == direction)
@@ -222,10 +230,11 @@ public class Basic_algo : MonoBehaviour
 
     }
 
+    // Calulate the green time for a direction based on the number of cars
     private float GreenTimeCalc(int carNo)
     {
         // Just temp simple formula 
-        float greenTime = (carNo) + yellowLightDuration + delay; // here is our simple formula so far i need more time to dig and get the proper and suitable one , i substracted the yellow time so it does not count up there
+        float greenTime = (carNo) + yellowLightDuration + delay; // here is our simple formula so far 
         if (greenTime >= 30)
         {
             return 30 + 1;
@@ -240,6 +249,8 @@ public class Basic_algo : MonoBehaviour
         }
 
     }
+
+
     // Resetting the queue and inserting the peak value to direction and its time
     private void ResetQueue()
     {
@@ -256,6 +267,8 @@ public class Basic_algo : MonoBehaviour
         time[queue.Peek().direction] = GreenTimeCalc(queue.Peek().CarCount);
 
     }
+
+
     //Values need to be resetted to its basic value after doing the emergency car process so we ensure everything else back to the normal behaviour 
     private void ResetEmergency()
     {

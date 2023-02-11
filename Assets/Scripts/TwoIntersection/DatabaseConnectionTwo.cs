@@ -200,7 +200,8 @@ public class DatabaseConnectionTwo : MonoBehaviour
     /// <param name="watingTime">All the cars in the simulation with thier corresponidng info</param>
     /// /// <param name="TrafficLightController">Object of the traffic Light controller</param>
     public IEnumerator SaveWatingTime(Dictionary<string, dataTwoIntersection> watingTime)
-    {
+    {   
+        // Table Name
         string table = "two_";
         if (TrafficLightController[0].GetComponent<Traditional_traffic_Controller>().enabled == true)
         {
@@ -278,7 +279,7 @@ public class DatabaseConnectionTwo : MonoBehaviour
             }            
         }
 
-
+        // Cars Data
         string carsData = "";
         float sum0 = 0, sum1 = 0, max0 = 0, max1= 0 ;
         int count0 = 0, count1 = 0;
@@ -331,10 +332,11 @@ public class DatabaseConnectionTwo : MonoBehaviour
 
         }
 
-
+        // Save Cars Data
         StartCoroutine(saveToDatabase(table, carsData));
 
 
+        // Add the table to programs data
         if (DatabaseConnectionTwo.data.ContainsKey(table))
         {
             DatabaseConnectionTwo.data[table] = carsData;

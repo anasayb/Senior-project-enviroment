@@ -35,15 +35,13 @@ public class AI_TLC_two_single : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //direct = Scence_Manger.dir;
+
         Intersection = (transform.parent.name[transform.name.Length - 1] - '0') - 1;
     }
 
     // Update is called once per frame
-
     private void FixedUpdate()
     {
-        //updateCarsNumbers();
 
         timeVariable += Time.deltaTime;
         if (User_Controll.Intersection == Intersection) {
@@ -70,7 +68,6 @@ public class AI_TLC_two_single : MonoBehaviour
         {
 
             ChangeLightRed(direct);
-            //timeVariable = 0;
 
         }
         else

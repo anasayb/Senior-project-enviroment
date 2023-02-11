@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 
-
+// Used to store the waiting tiem of cars
 public struct data
 {
     public float waiting_time;
@@ -30,7 +30,6 @@ public class Avg_wating_time : MonoBehaviour
 
     [Header("GUI")]
     public GameObject summary;
-    //public GameObject AvgWaitingTimeText;
     public GameObject runningTimeText;
     public GameObject CarInfo;
     public GameObject timer;
@@ -40,7 +39,8 @@ public class Avg_wating_time : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
+        // inizlize variables
         Avg_wating_time.Avg_wating = 0;
         Avg_wating_time.numberOfCars = 0;
         Avg_wating_time.waitingTimes = new Dictionary<string, data>();
@@ -94,6 +94,7 @@ public class Avg_wating_time : MonoBehaviour
                 StartCoroutine(db.SaveWatingTime(new Dictionary<string, data>(waitingTimes), GameObject.Find("Traffic Lights"))); ;
                 //while (e.MoveNext()) ;
                 
+                // Dispaly the summary
                 Summary.CurrentRunSummary();
                 stored = true;
 
