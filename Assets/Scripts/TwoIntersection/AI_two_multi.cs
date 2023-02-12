@@ -205,7 +205,7 @@ public class AI_two_multi : Agent
                 AI_two_multi.startCouting = true;
             }
             timeVariable[intersection] += Time.deltaTime;
-            if (timeVariable[intersection] < time[intersection] - yellowLightDuration )
+            if (timeVariable[intersection] < time[intersection] - yellowLightDuration -1 )
             {
 
                 ChangeLightGreen(intersection, direct[intersection]);
@@ -267,11 +267,11 @@ public class AI_two_multi : Agent
                 nextDirect[intersection] = -1;
                 timeVariable[intersection] = 0;
                 once[intersection] = true;
-                if (request == -1)
-                {
-                    request = intersection;
-                    RequestDecision();
-                }
+                //if (request == -1)
+                //{
+                //    request = intersection;
+                //    RequestDecision();
+                //}
                 
             }
         }
